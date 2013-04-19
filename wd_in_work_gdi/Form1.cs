@@ -3,18 +3,84 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
+//using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows.Forms;
+using kibicom.tlib;
 
 namespace wd_in_work_gdi
 {
 	public partial class Form1 : Form
 	{
+		t_wd_josi_num wd_josi_num;
+
 		public Form1()
 		{
 			InitializeComponent();
+
+			wd_josi_num = new t_wd_josi_num(new t()
+			{
+				{"josi_end_point","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
+				{"login_name","dnclive"},
+				{"pass","135"},
+				{
+					"f_done",new t_f<t,t>(delegate(t args1)
+					{
+
+						MessageBox.Show("Залогинились...");
+
+						return new t();
+					})
+				}
+
+			});
 		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			wd_josi_num.f_get_num(new t()
+			{
+				{
+					"f_done",new t_f<t,t>(delegate(t args1)
+					{
+						//если необходима синхронизация потоков
+						if (txt_num.InvokeRequired)
+						{
+							txt_num.Invoke(new t_f<t,t>(delegate(t args2)
+							{
+
+								//если ответ null то не удалось связаться с сервером
+								//или если результаты показывать не нужно
+								if (args2["resp_json"].f_val() == null)
+								{
+									return null;
+								}
+
+								string order_full_num = t_dot.f_get_val_from_json_obj
+									(args1["resp_json"].f_val(), "order_full_num").ToString();
+
+								txt_num.Text = order_full_num;
+
+								return new t();
+							}), 
+							new object[] {args1});
+						}
+
+						return new t();
+					})
+				},
+				{
+					"f_fail",new t_f<t,t>(delegate(t args1)
+					{
+						//если необходима синхронизация потоков
+						MessageBox.Show("Номер получить не удалось");
+
+						return null;
+					})
+				}
+			});
+		}
+
 	}
 }
