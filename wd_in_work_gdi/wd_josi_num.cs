@@ -38,7 +38,8 @@ namespace wd_in_work_gdi
 				{"login_name",login_name}, 
 				{"pass",pass},
 				{"login_on_cre", true},		//логинимся
-				{"f_done", args["f_done"].f_f()}
+				{"f_done", args["f_done"].f_f()},
+				{"f_fail", args["f_fail"].f_f()}
 			});
 
 			this["login_name"] = new t(login_name);
@@ -59,12 +60,11 @@ namespace wd_in_work_gdi
 			josi_store.f_query(new t 
 			{
 				{"res_dot_key_query_str",res_dot_key_query_str},
-				//когда возвращен ответ зовем callback
-				{"f_done",args["f_done"].f_f()},
+				{"f_done",args["f_done"].f_f()},	//когда возвращен ответ зовем callback
+				{"f_fail",args["f_fail"].f_f()},	//когда возвращен ответ зовем callback
 				{"encode_json",true},
 				{"cancel_prev",false},
-				//{"when_login",true},
-				{"needs", new t(){"is_auth"}}
+				{"needs", new t(){"is_auth"}}		//выполниться когда авторизуемся
 			});
 
 			return new t();

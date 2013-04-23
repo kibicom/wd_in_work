@@ -8,6 +8,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
 using kibicom.tlib;
+using fastJSON;
 
 namespace wd_in_work_gdi
 {
@@ -21,19 +22,28 @@ namespace wd_in_work_gdi
 
 			wd_josi_num = new t_wd_josi_num(new t()
 			{
-				{"josi_end_point","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
+				//{"josi_end_point_","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
+				{"josi_end_point","http://kibicom.com/order_store_339/index.php"},
 				{"login_name","dnclive"},
-				{"pass","135"},
+				{"pass","4947"},
 				{
 					"f_done",new t_f<t,t>(delegate(t args1)
 					{
 
-						MessageBox.Show("Залогинились...");
+						//MessageBox.Show("Залогинились...");
 
 						return new t();
 					})
-				}
+				},
+				{
+					"f_fail",new t_f<t,t>(delegate(t args1)
+					{
 
+						MessageBox.Show("Войти не удалось");
+
+						return new t();
+					})
+				},
 			});
 		}
 
@@ -73,13 +83,19 @@ namespace wd_in_work_gdi
 				{
 					"f_fail",new t_f<t,t>(delegate(t args1)
 					{
-						//если необходима синхронизация потоков
 						MessageBox.Show("Номер получить не удалось");
 
 						return null;
 					})
 				}
 			});
+
+			/*
+			fastJSON.JSON.Instance.ToJSON(new t()
+			{
+
+			});
+			*/
 		}
 
 	}
