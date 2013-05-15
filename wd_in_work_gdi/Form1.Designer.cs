@@ -30,6 +30,7 @@
 		{
 			this.btn_get_num = new System.Windows.Forms.Button();
 			this.txt_num = new System.Windows.Forms.TextBox();
+			this.btn_order_to_kibicom = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// btn_get_num
@@ -49,11 +50,22 @@
 			this.txt_num.Size = new System.Drawing.Size(200, 22);
 			this.txt_num.TabIndex = 1;
 			// 
+			// btn_order_to_kibicom
+			// 
+			this.btn_order_to_kibicom.Location = new System.Drawing.Point(12, 80);
+			this.btn_order_to_kibicom.Name = "btn_order_to_kibicom";
+			this.btn_order_to_kibicom.Size = new System.Drawing.Size(172, 59);
+			this.btn_order_to_kibicom.TabIndex = 2;
+			this.btn_order_to_kibicom.Text = "Выгрузить заказ";
+			this.btn_order_to_kibicom.UseVisualStyleBackColor = true;
+			this.btn_order_to_kibicom.Click += new System.EventHandler(this.btn_order_to_kibicom_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(659, 363);
+			this.Controls.Add(this.btn_order_to_kibicom);
 			this.Controls.Add(this.txt_num);
 			this.Controls.Add(this.btn_get_num);
 			this.Name = "Form1";
@@ -67,6 +79,7 @@
 
 		private System.Windows.Forms.Button btn_get_num;
 		private System.Windows.Forms.TextBox txt_num;
+		private System.Windows.Forms.Button btn_order_to_kibicom;
 	}
 }
 

@@ -14,6 +14,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "josi", "..\..\..\dnclive\jo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kibicom.tlib", "..\..\..\dnclive\tlib_sharp\tlib\kibicom.tlib.csproj", "{34281226-04DC-4EFD-B765-4AE4ACEC101D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tlib_deb", "..\..\..\dnclive\tlib_sharp\tlib_deb\tlib_deb.csproj", "{EFDF6FD7-26E6-4D5B-9FC2-AD9D657BD0EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kibicom_wd_console_deb", "..\..\..\dnclive\kibicom_wd\kibicom_wd_console_deb\kibicom_wd_console_deb.csproj", "{CCDB8CE9-15E8-4227-B3D3-BE1B9DF7F729}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kvl", "..\..\..\kibicom\kvl_sharp\kvl\kvl.csproj", "{508CBCE9-4FDE-4E12-A542-E104CE06BE85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +38,18 @@ Global
 		{34281226-04DC-4EFD-B765-4AE4ACEC101D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34281226-04DC-4EFD-B765-4AE4ACEC101D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34281226-04DC-4EFD-B765-4AE4ACEC101D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFDF6FD7-26E6-4D5B-9FC2-AD9D657BD0EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFDF6FD7-26E6-4D5B-9FC2-AD9D657BD0EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFDF6FD7-26E6-4D5B-9FC2-AD9D657BD0EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFDF6FD7-26E6-4D5B-9FC2-AD9D657BD0EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCDB8CE9-15E8-4227-B3D3-BE1B9DF7F729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCDB8CE9-15E8-4227-B3D3-BE1B9DF7F729}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCDB8CE9-15E8-4227-B3D3-BE1B9DF7F729}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCDB8CE9-15E8-4227-B3D3-BE1B9DF7F729}.Release|Any CPU.Build.0 = Release|Any CPU
+		{508CBCE9-4FDE-4E12-A542-E104CE06BE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{508CBCE9-4FDE-4E12-A542-E104CE06BE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{508CBCE9-4FDE-4E12-A542-E104CE06BE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{508CBCE9-4FDE-4E12-A542-E104CE06BE85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

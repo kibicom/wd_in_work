@@ -22,10 +22,13 @@ namespace wd_in_work_gdi
 
 			wd_josi_num = new t_wd_josi_num(new t()
 			{
-				//{"josi_end_point_","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
-				{"josi_end_point","http://kibicom.com/order_store_339/index.php"},
+				{"josi_end_point_","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
+				//{"josi_end_point","http://kibicom.com/order_store_339/index.php"},
 				{"login_name","dnclive"},
-				{"pass","4947"},
+				{"req_timeout", 3000},
+				{"auth_try_count", 3},
+				//{"pass","4947"},
+				{"pass","135"},
 				{
 					"f_done",new t_f<t,t>(delegate(t args1)
 					{
@@ -96,6 +99,16 @@ namespace wd_in_work_gdi
 
 			});
 			*/
+		}
+
+		private void btn_order_to_kibicom_Click(object sender, EventArgs e)
+		{
+			wd_josi_num.f_load_wd_order_ds(new t());
+
+			wd_josi_num.f_put_order(new t()
+			{
+				{"ds", wd_josi_num["ds"].f_val<DataSet>()}
+			});
 		}
 
 	}
