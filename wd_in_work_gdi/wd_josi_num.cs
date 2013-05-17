@@ -106,25 +106,26 @@ namespace wd_in_work_gdi
 			return new t();
 		}
 
-		public t f_put_order(t args)
+		private t _f_store_order(t args)
 		{
 
-			
 			DataSet ds = args["ds"].f_val<DataSet>();
-			//string idseller = args["idseller"].f_def(0).f_str();
+			string kibicom_order_id = args["kibicom_order_id"].f_def("").f_str();
 
 			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
 
-			string idseller = o_dr["idseller"].ToString();
+			//string idseller = o_dr["idseller"].ToString();
 			string order_name = o_dr["name"].ToString();
 			string order_dtcre = o_dr["dtcre"].ToString();
 			string order_comment = o_dr["comment"].ToString();
+			string order_guid = o_dr["guid"].ToString();
 
 			DataRow c_dr = ds.Tables["customer"].
 							Select("deleted is null and idcustomer="+o_dr["idcustomer"].ToString())[0];
 			string idcustomer=c_dr["idcustomer"].ToString();
 			string customer_name = c_dr["name"].ToString();
 			string address_name = c_dr["name"].ToString();
+			string customer_guid = c_dr["guid"].ToString();
 
 			/*** менеджер ***/
 			DataRow[] od_manager_dr = ds.Tables["orderdiraction"].
@@ -136,12 +137,15 @@ namespace wd_in_work_gdi
 				odp_manager_dr = ds.Tables["orderdiractionpeople"].
 							Select("deleted is null and idorder=" + o_dr["idorder"].ToString() +
 									" and idorderdiraction=" + od_manager_dr[0]["idorderdiraction"].ToString());
+
 			}
 
 			string manager_idpeople = "";
+			string manager_people_guid = "";
 			if (odp_manager_dr != null && odp_manager_dr.Length > 0)
 			{
 				manager_idpeople = odp_manager_dr[0]["idpeople"].ToString();
+				manager_people_guid = odp_manager_dr[0]["guid"].ToString();
 			}
 
 			/*** технолог ***/
@@ -157,9 +161,26 @@ namespace wd_in_work_gdi
 			}
 
 			string tech_idpeople = "";
+			string tech_people_guid = "";
 			if (odp_tech_dr != null && odp_tech_dr.Length > 0)
 			{
 				tech_idpeople = odp_tech_dr[0]["idpeople"].ToString();
+				tech_people_guid = odp_manager_dr[0]["guid"].ToString();
+			}
+
+			/*** продавец ***/
+
+			DataRow[] s_dr = ds.Tables["seller"].
+							Select("deleted is null and idseller=" + o_dr["idseller"].ToString());
+			
+			string idseller="";
+			string seller_guid="";
+			if (s_dr != null && s_dr.Length > 0)
+			{
+				idseller = s_dr[0]["idseller"].ToString();
+				//string customer_name = c_dr["name"].ToString();
+				//string address_name = c_dr["name"].ToString();
+				seller_guid = s_dr[0]["guid"].ToString();
 			}
 
 			/*** профиль ***/
@@ -190,7 +211,7 @@ namespace wd_in_work_gdi
 						}
 					}
 				},
-				{"id",""},
+				{"id",kibicom_order_id},
 				{"name",order_name},
 				{"dt_make",order_dtcre},
 				{"is_credit",""},
@@ -198,7 +219,7 @@ namespace wd_in_work_gdi
 				{"discount_zp",""},
 				{"terminal",""},
 				{"comment",order_comment},
-			
+				{"wd_order_guid",order_guid},
 				{
 					"tab_org_unit",new t()
 					{
@@ -220,7 +241,8 @@ namespace wd_in_work_gdi
 							//_update_if_empty:true,
 							{"id",""},
 							{"name",""},
-							{"wd_idseller", idseller}
+							//{"wd_idseller", idseller},
+							{"dw_seller_guid", seller_guid},
 						}
 					}
 				},
@@ -235,7 +257,8 @@ namespace wd_in_work_gdi
 							{"fio",""},
 							{"phone",""},
 							{"email",""},
-							{"wd_idcustomer", idcustomer}
+							//{"wd_idcustomer", idcustomer},
+							{"wd_customer_guid", customer_guid}
 						}
 					}
 				},
@@ -247,7 +270,8 @@ namespace wd_in_work_gdi
 							{"_update_if_empty",true},
 							{"id",""},
 							{"name",customer_name},
-							{"wd_idaddress", idcustomer}
+							//{"wd_idaddress", idcustomer},
+							{"wd_customer_guid", customer_guid}
 						}
 					}
 				},
@@ -278,7 +302,8 @@ namespace wd_in_work_gdi
 									{"_no_update",true},
 									{"id",""},
 									{"name",""},
-									{"wd_idpeople", manager_idpeople},
+									//{"wd_idpeople", manager_idpeople},
+									{"wd_people_guid", manager_people_guid},
 									{
 										"tab_people_prof", new t()
 										{
@@ -319,7 +344,8 @@ namespace wd_in_work_gdi
 										{"_no_update",true},
 										{"id",""},
 										{"name",""},
-										{"wd_idpeople", tech_idpeople},
+										//{"wd_idpeople", tech_idpeople},
+										{"wd_people_guid", tech_people_guid},
 										{
 											"tab_people_prof", new t()
 											{
@@ -337,7 +363,8 @@ namespace wd_in_work_gdi
 							}
 						}
 					}
-				},
+				}
+				/*,
 				{
 					"tab_wd_prof_sys", new t()
 					{
@@ -347,7 +374,7 @@ namespace wd_in_work_gdi
 							{"_no_update",true},
 							{"id",""},
 							{"name",""},
-							{"wd_idprofsys", ""},
+							//{"wd_idprofsys", ""},
 						}
 					}
 				},
@@ -374,7 +401,7 @@ namespace wd_in_work_gdi
 							{"name",""}
 						}
 					}
-				}
+				}*/
 			};
 
 
@@ -402,6 +429,57 @@ namespace wd_in_work_gdi
 			return new t();
 
 		}
+
+		public t f_put_order(t args)
+		{
+
+			DataSet ds = args["ds"].f_val<DataSet>();
+			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
+
+			string order_guid = o_dr["guid"].ToString();
+
+			t order_get = new t()
+			{
+				{"id",""},
+				{"wd_order_guid",order_guid}
+			};
+
+			//выполняем запрос kibicom id заказа по guid
+			josi_store.f_store(new t 
+			{
+				//{"res_dot_key_query_str",res_dot_key_query_str},
+				//когда возвращен ответ
+				{"method", "POST"},
+				{
+					"get_tab_arr", new t()
+					{
+						{"tab_order", new t(){order_get}}
+					}
+				},
+				{
+					//когда получен id
+					//сохраняем заказ с учетом полученного id
+					"f_done", new t_f<t,t>(delegate(t args1)
+					{
+						string kibicom_order_id = t_dot.f_get_val_from_json_obj
+						(
+							args1["resp_json"].f_val(),
+							"tab_order.0.id"
+						).ToString();
+
+						//выполняем сохранение текущей информации по заказу
+						_f_store_order(args.f_add(true, new t() { { "kibicom_order_id", kibicom_order_id } }));
+
+						return new t();
+					})
+				},
+				{"encode_json",true},
+				{"cancel_prev",false},
+			});
+
+			return new t();
+		}
+
 
 		public t f_put_order_diraction(t args)
 		{
