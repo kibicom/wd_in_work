@@ -161,6 +161,8 @@ namespace customer_info
 
 			args["is_done"].f_set(true);
 
+
+
 			//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");
 			Hide();
 

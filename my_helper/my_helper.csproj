@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DA2700E6-B433-4D6D-BB1A-89BF09D4B733}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>my_helper</RootNamespace>
     <AssemblyName>my_helper</AssemblyName>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="fastJSON">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
@@ -57,6 +60,24 @@
     <Compile Include="customer_info_form.designer.cs">
       <DependentUpon>customer_info_form.cs</DependentUpon>
     </Compile>
+    <Compile Include="frm_finder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_finder.designer.cs">
+      <DependentUpon>frm_finder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_finder_address.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_finder_address.Designer.cs">
+      <DependentUpon>frm_finder_address.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_finder_customer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_finder_customer.Designer.cs">
+      <DependentUpon>frm_finder_customer.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm_main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,10 +96,19 @@
     <Compile Include="josi_customer.Designer.cs">
       <DependentUpon>josi_customer.cs</DependentUpon>
     </Compile>
+    <Compile Include="my_helper_3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="my_helper_3.Designer.cs">
+      <DependentUpon>my_helper_3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="customer_info_form.resx">
       <DependentUpon>customer_info_form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_finder.resx">
+      <DependentUpon>frm_finder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>
@@ -88,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="josi_customer.resx">
       <DependentUpon>josi_customer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="my_helper_3.resx">
+      <DependentUpon>my_helper_3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

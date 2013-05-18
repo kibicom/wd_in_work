@@ -14,18 +14,18 @@ using kibicom.tlib;
 using kibicom.josi;
 
 
-namespace josi.store
+namespace my_helper
 {
 
 	
-	public partial class josi_customer : Form
+	public partial class frm_finder : Form
 	{
 
 		public bool is_shown = false;
 
 		//объект запросов к josi
 		//t_josi_store josi_store = new t_josi_store(new t_josi_auth_args("dnclive", "135"));
-		t_store josi_store =null;// new t_store(new t(){{"login_name","dnclive"}, {"pass","135"}});
+		public t_store josi_store =null;// new t_store(new t(){{"login_name","dnclive"}, {"pass","135"}});
 
 		//врем€ последнего нажати€ на клавишу
 		public TimeSpan last_key_down;
@@ -37,9 +37,9 @@ namespace josi.store
 		public bool show_result=true;
 
 		//выбранный, или созданный клиента
-		t selected_customer;
+		public t selected_item;
 
-		t tab_customer=new t();
+		public t tab=new t();
 
 		//предыдущее положение мыщи на listbox
 		Point last_lbx_mouse_point;
@@ -48,14 +48,15 @@ namespace josi.store
 		public t args=new t();
 
 		//форма ввода нового контрагента
-		customer_info.customer_info_form cif_form;
+		public Form frm_cre_edit_item;
 
-		public josi_customer()
+		public frm_finder()
 		{
 			InitializeComponent();
 		}
 
-		public josi_customer(t args):this()
+		public frm_finder(t args)
+			: this()
 		{
 			string login_name = args["login_name"].f_def("dnclive").f_str();
 			string pass = args["pass"].f_def("135").f_str();
@@ -121,7 +122,7 @@ namespace josi.store
 			if (e.KeyData == Keys.Enter)
 			{
 
-				f_select_cust();
+				f_select_item();
 
 			}
 			
@@ -159,55 +160,8 @@ namespace josi.store
 											"&kvl.1.where.tab_customer.0.phone=" +
 											"&kvl.1.where.tab_customer.0.email=";
 
-			t query = new t()
-			{
-				{
-					"_query",new t()
-					{
-						{
-							"entry", new t()
-							{
-								"name"
-							}
-						}
-					}
-				},
-				{"id", ""},
-				{"name", txt_query.Text},
-				{"phone", ""},
-				{"email", ""}
-			};
 
-			//выполн€ем запрос
-			josi_store.f_store(new t 
-			{
-				//{"res_dot_key_query_str",res_dot_key_query_str},
-				//когда возвращен ответ
-				{"needs", new t(){"is_auth_done"}},		//когда выполнитьс€ процесс авторизации
-				{"method", "POST"},
-				{
-					"get_tab_arr", new t()
-					{
-						{"tab_customer", new t(){query}}
-					}
-				},
-				{
-					//когда получен id
-					//сохран€ем заказ с учетом полученного id
-					"f_done", new t_f<t,t>(delegate(t args1)
-					{
-
-						if (lbx_items.InvokeRequired)
-						{
-							lbx_items.Invoke(new t_f<t,t>(ffill_lbx_items), new object[] {args1});
-						}
-
-						return new t();
-					})
-				},
-				{"encode_json",true},
-				{"cancel_prev",false},
-			});
+			f_get_items(new t());
 
 			/*
 			josi_store.f_store(new t 
@@ -259,111 +213,23 @@ namespace josi.store
 
 		}
 
-		//заполн€ем список результатами запроса
-		private t ffill_lbx_items(t args)
+		//получение элементов из источника
+		virtual public t f_get_items(t args)
 		{
 
-			pb_loading_2.Hide();
+			return new t();
+		}
 
-			//если ответ null то не удалось св€затьс€ с сервером
-			//или если результаты показывать не нужно
-			if (args["resp_json"].f_val() == null || !show_result)
-			{
-				return null;
-			}
-
-			richTextBox1.Text = args["query_str"].f_str() + "\r\n";
-
-			richTextBox1.Text += args["resp_str"].f_str();
-
-            
-			//очищаем список
-			lbx_items.Items.Clear();
-
-			//foreach (string tab in json_obj.Keys)
-			//{
-			string tab = "tab_customer";
-			ArrayList tab_rows = (ArrayList)args["resp_json"].f_val<Dictionary<string, object>>()[tab];
-
-			//если количество возвращенных результатов 0
-			//то предлагаем создать нового контрагента
-			if (tab_rows.Count == 0)
-			{
-				f_add_new();
-			}
-
-			//int lbx_items_selected_index==
-
-			foreach (Dictionary<string, object> row in tab_rows)
-			{
-				//string row_id = row.ContainsKey("id") && row["id"] != null ? row["id"].ToString() : "";
-
-				string row_id = row.ContainsKey("id") && row["id"] != null ? row["id"].ToString() : "";
-				string row_wd_idcustomer = row.ContainsKey("wd_idcustomer") && row["wd_idcustomer"] != null ? row["wd_idcustomer"].ToString() : "";
-				string row_name = row.ContainsKey("name") && row["name"] != null ? row["name"].ToString() : "";
-				string row_phone = row.ContainsKey("phone") && row["phone"] != null ? row["phone"].ToString() : "";
-				string row_email = row.ContainsKey("email") && row["email"] != null ? row["email"].ToString() : "";
-				//string row_address = row.ContainsKey("address") && row["address"] != null ? row["address"].ToString() : "";
-
-				
-				int int_wd_idcustomer = !int.TryParse(row_wd_idcustomer, out int_wd_idcustomer) ? int_wd_idcustomer : 0;
-
-
-				lbx_items.Items.Add(new t()
-				{
-					{"id",row_id},
-					{"wd_idcustomer",row_wd_idcustomer},
-					{"name",row_name},
-					{"phone",row_phone},
-					{"email",row_email}//,
-					//row_tab_address_id,
-					/*row_tab_address_name*/
-				});
-
-				/*
-				lbx_items.Items.Add(new t_customer(row_id,
-									row_wd_idcustomer,
-									row_name,
-									row_phone,
-									row_email//,
-					//row_tab_address_id,
-					/*row_tab_address_name));*/
-
-			}
-			lbx_items.SelectedIndex = 0;
-			//lbx_items.Refresh();
-			//}
-			return null;
+		//заполн€ем список результатами запроса
+		virtual public t ffill_lbx_items(t args)
+		{
+			return new t();
 		}
 
 		//если результ запроса пуст, предлагаем создать новый элемент ресурса
-		public void f_add_new()
+		virtual public void f_add_new()
 		{
-            try
-            {
-                tab_customer["id"] = new t(30);
-                //MessageBox.Show(tab_customer["id"].f_str());
-
-				lbx_items.Items.Add(new t()
-				{
-					{"name","ƒобавить нового клиента"},
-					{"phone",txt_query.Text},
-				});
-
-				/*
-                lbx_items.Items.Add(new t_customer
-                ("",
-                    "",
-                    "ƒобавить нового клиента",
-                    txt_query.Text,
-                    ""
-                ));*/
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
+			
 		}
 
 		//форма отображена
@@ -372,68 +238,12 @@ namespace josi.store
 			txt_query.Focus();
 		}
 
-	
 		//сохранение созданного клиента в josi_store
-		private void fstore_customer()
+		virtual public void fstore_customer()
 		{
-			//текст введенный менеджером - номер карты
-			//string fio = txt_fio.Text;
-			//string phone = txt_phone.Text;
-			//string email = txt_email.Text;
-			//string address = txt_address.Text;
-
-			josi_store.f_gen_id(new t()
-			{
-				{"res_name","tab_customer"}, 
-				{"id_key","id"},
-				{
-					"f_done",
-					new t_f<t,t>(delegate(t args)
-					{
-						MessageBox.Show(args["id_str"].f_str());
-						string id = args["id_str"].f_str();
-						string res_dot_key_query_str =	"&kvl.1.tab_arr.tab_customer.0.id=" + id +
-														"&kvl.1.tab_arr.tab_customer.0.name=" + selected_customer["name"].f_str() +
-														"&kvl.1.tab_arr.tab_customer.0.phone=" + selected_customer["phone"].f_str() +
-														"&kvl.1.tab_arr.tab_customer.0.email=" + selected_customer["email"].f_str();
-
-
-						josi_store.f_store(new t()
-						{
-							{"res_dot_key_query_str",res_dot_key_query_str},
-							{
-								"f_done",
-								new t_f<t,t>(delegate(t args1)
-								{
-									MessageBox.Show(args1["resp_str"].f_str());
-									return null;
-								})
-							},
-							{"encode_json",true},
-							{"cancel_prev",true},
-						});
-
-						/*
-						josi_store.f_store(new t_josi_store_req_args
-						(
-							res_dot_key_query_str,
-							delegate(t_josi_store_req_args args1)
-							{
-								MessageBox.Show(args1.resp_str);
-							}, 
-							true, 
-							true
-						));
-						 * */
-						return null;
-					})
-				}
-			});
-
-			return;
-
+			
 		}
-
+		
 		//вывод элементов в listbox
 		private void lbx_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
 		{
@@ -609,9 +419,9 @@ namespace josi.store
 		{
 			is_shown = false;
 			Hide();
-			if (cif_form != null)
+			if (frm_cre_edit_item != null)
 			{
-				cif_form.Activate();
+				frm_cre_edit_item.Activate();
 			}
 			
 		}
@@ -625,71 +435,62 @@ namespace josi.store
 
 		private void lbx_items_Click(object sender, EventArgs e)
 		{
-			f_select_cust();
+			f_select_item();
 		}
 
 
 		//выбор отмеченного контрагента
-		private t f_select_cust()
+		virtual public t f_select_item()
 		{
-			if (((t)lbx_items.SelectedItem)["name"].f_str() == "ƒобавить нового клиента")
-			{
-				//создаем форму ввода данных нового контрагента
-				cif_form = new customer_info.customer_info_form(txt_query.Text);
-				
-				//показываем форму как диалог
-				cif_form.ShowDialog();
-
-				if (cif_form.args["is_done"].f_bool())
-				{
-
-				
-
-					//в результате деактивации текущего окна (окна поиска)
-					//оно скроетс€ так как предыдущее окно было диалогом
-					//сюда мы попадем когда его закроют - данные введут
-					//поэтом вновь показываем себ€
-					Show();
-
-					selected_customer = cif_form.customer;
-
-					lbx_items.Items.Clear();
-
-					lbx_items.Items.Add(selected_customer);
-
-					lbx_items.SelectedIndex = 0;
-
-					fstore_customer();
-
-					args["customer"].f_set(selected_customer);
-
-					t.f_f("f_done", args);
-
-					Hide();
-
-
-				}
-
-			}
-			else
-			{
-				selected_customer = (t)lbx_items.SelectedItem;
-
-				args["customer"]=selected_customer;
-
-				t.f_f("f_done", args);
-
-				Hide();
-
-			}
-
-			
-
-
 			return new t();
 		}
 
 	}
 
+	public class t_customer
+	{
+		public string id;
+		public string wd_idcustomer;
+		public string name;
+		public string phone;
+		public List<string> phone_arr = new List<string>();
+		public string email;
+		//public string tab_address_id;
+		//public string tab_address_name;
+		//public string text = null;
+		//public string wd_name=null;
+
+		public t_customer()
+		{
+
+		}
+
+		public t_customer(string id, string wd_idcustomer, string name, string phone, string email)
+		{
+			this.id = id;
+			this.wd_idcustomer = wd_idcustomer;
+			this.name = name;
+			this.phone = phone;
+			this.email = email;
+			//MessageBox.Show(tab_address_name);
+			//this.tab_address_id = tab_address_id;
+			//this.tab_address_name = tab_address_name;
+			//MessageBox.Show(this.tab_address_name);
+		}
+
+		public override string ToString()
+		{
+			//
+			return fnotvarstr(name, 50, ' ') + fnotvarstr(phone, 30, ' ') + fnotvarstr(email, 30, ' ');// +tab_address_name;
+			return name + "       " + phone + "           " + email;// +"       " + tab_address_name;
+		}
+
+		string fnotvarstr(string str, int len, char fill)
+		{
+			int cnt = len - str.Length;
+			string conststr = str + new string(fill, cnt < 0 ? 0 : cnt);
+			return conststr;
+		}
+	}
 
 }
