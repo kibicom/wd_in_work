@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
+//using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows.Forms;
 using josi.store;
 using kibicom.tlib;
@@ -41,11 +41,20 @@ namespace my_helper
 		{
 			frm_customer_finder.Top = Top;
 			frm_customer_finder.Left = Left - frm_customer_finder.Width;
+			
+			//callback когда контрагент будет выбран
+			frm_customer_finder.args["f_done"]=new t(new t_f<t, t>(delegate(t args)
+			{
+				t cust=frm_customer_finder.args["customer"];
+
+				btn_add_customer.Text = cust["name"].f_str();
+
+				return new t();
+			}));
+
 
 			if (frm_customer_finder.is_shown)
 			{
-				//this.btn_add_customer.BackColor = System.Drawing.Color.Transparent;
-				//this.btn_add_customer.FlatAppearance.BorderSize = 1;
 				btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Regular);
 
 				frm_customer_finder.is_shown = false;
@@ -53,8 +62,6 @@ namespace my_helper
 			}
 			else
 			{
-				//this.btn_add_customer.BackColor = System.Drawing.Color.White;
-				//this.btn_add_customer.FlatAppearance.BorderSize = 3;
 				btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Bold);
 
 				frm_customer_finder.is_shown = true;
@@ -65,9 +72,31 @@ namespace my_helper
 
 		private void frm_main_Activated(object sender, EventArgs e)
 		{
-			//this.btn_add_customer.BackColor = System.Drawing.Color.Transparent;
-			//this.btn_add_customer.FlatAppearance.BorderSize = 1;
 			btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Regular);
+		}
+
+		private void frm_main_MouseEnter(object sender, EventArgs e)
+		{
+			/*
+			Height = 600;
+			 * */
+		}
+
+		private void frm_main_MouseLeave(object sender, EventArgs e)
+		{
+
+			/*
+			if (Cursor.Position.X < Location.X
+				  || Cursor.Position.Y < Location.Y
+				  || Cursor.Position.X > Location.X + Width
+				  || Cursor.Position.Y > Location.Y + Height)
+			{
+				//out of scope
+				Height = 311;
+			}
+			*/
+			
+			
 		}
 	}
 }

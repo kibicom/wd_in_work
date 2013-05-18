@@ -116,6 +116,8 @@
 			this.TopMost = true;
 			this.Activated += new System.EventHandler(this.frm_main_Activated);
 			this.Shown += new System.EventHandler(this.frm_main_Shown);
+			this.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
+			this.MouseLeave += new System.EventHandler(this.frm_main_MouseLeave);
 			this.ResumeLayout(false);
 
 		}

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>my_helper</RootNamespace>
     <AssemblyName>my_helper</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +35,9 @@
   <ItemGroup>
     <Reference Include="fastJSON">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom.josi">
+      <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\kibicom.josi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,6 +97,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -108,10 +113,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\dnclive\josi_sharp\josi\josi.csproj">
-      <Project>{8ad4b7d2-53e3-4643-a802-6712fa6e74ee}</Project>
-      <Name>josi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\dnclive\tlib_sharp\tlib\kibicom.tlib.csproj">
       <Project>{34281226-04dc-4efd-b765-4ae4acec101d}</Project>
       <Name>kibicom.tlib</Name>

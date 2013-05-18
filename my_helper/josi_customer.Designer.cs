@@ -56,6 +56,7 @@ namespace josi.store
 			this.lbx_items.Name = "lbx_items";
 			this.lbx_items.Size = new System.Drawing.Size(870, 359);
 			this.lbx_items.TabIndex = 1;
+			this.lbx_items.Click += new System.EventHandler(this.lbx_items_Click);
 			this.lbx_items.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbx_DrawItem);
 			this.lbx_items.Enter += new System.EventHandler(this.lbx_items_Enter);
 			this.lbx_items.MouseEnter += new System.EventHandler(this.lbx_items_MouseEnter);

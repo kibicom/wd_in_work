@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Atechnology.DBConnection">
-      <HintPath>..\..\..\..\venta\synchronize\orders\Dropbox\data\WinDraw2009\Atechnology.DBConnection.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\data\WinDraw2009\Atechnology.DBConnection.dll</HintPath>
     </Reference>
     <Reference Include="fastJSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

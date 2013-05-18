@@ -45,7 +45,10 @@ namespace josi.store
 		Point last_lbx_mouse_point;
 
 		//аргументы
-		t args;
+		public t args=new t();
+
+		//форма ввода нового контрагента
+		customer_info.customer_info_form cif_form;
 
 		public josi_customer()
 		{
@@ -57,7 +60,8 @@ namespace josi.store
 			string login_name = args["login_name"].f_def("dnclive").f_str();
 			string pass = args["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_end_point"].
-				f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
+				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
+				f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
 
 			josi_store = new t_store(new t()
 			{
@@ -117,22 +121,7 @@ namespace josi.store
 			if (e.KeyData == Keys.Enter)
 			{
 
-				if (((t)lbx_items.SelectedItem)["name"].f_str() == "ƒобавить нового клиента")
-				{
-					customer_info.customer_info_form cif_form = new customer_info.customer_info_form(txt_query.Text);
-					cif_form.ShowDialog();
-
-					selected_customer = cif_form.customer;
-
-					fstore_customer();
-
-				}
-				else
-				{
-					selected_customer = (t)lbx_items.SelectedItem;
-				}
-
-				Hide();
+				f_select_cust();
 
 			}
 			
@@ -620,6 +609,11 @@ namespace josi.store
 		{
 			is_shown = false;
 			Hide();
+			if (cif_form != null)
+			{
+				cif_form.Activate();
+			}
+			
 		}
 
 		private void josi_customer_FormClosing(object sender, FormClosingEventArgs e)
@@ -629,6 +623,71 @@ namespace josi.store
 			e.Cancel = true;
 		}
 
+		private void lbx_items_Click(object sender, EventArgs e)
+		{
+			f_select_cust();
+		}
+
+
+		//выбор отмеченного контрагента
+		private t f_select_cust()
+		{
+			if (((t)lbx_items.SelectedItem)["name"].f_str() == "ƒобавить нового клиента")
+			{
+				//создаем форму ввода данных нового контрагента
+				cif_form = new customer_info.customer_info_form(txt_query.Text);
+				
+				//показываем форму как диалог
+				cif_form.ShowDialog();
+
+				if (cif_form.args["is_done"].f_bool())
+				{
+
+				
+
+					//в результате деактивации текущего окна (окна поиска)
+					//оно скроетс€ так как предыдущее окно было диалогом
+					//сюда мы попадем когда его закроют - данные введут
+					//поэтом вновь показываем себ€
+					Show();
+
+					selected_customer = cif_form.customer;
+
+					lbx_items.Items.Clear();
+
+					lbx_items.Items.Add(selected_customer);
+
+					lbx_items.SelectedIndex = 0;
+
+					fstore_customer();
+
+					args["customer"].f_set(selected_customer);
+
+					t.f_f("f_done", args);
+
+					Hide();
+
+
+				}
+
+			}
+			else
+			{
+				selected_customer = (t)lbx_items.SelectedItem;
+
+				args["customer"]=selected_customer;
+
+				t.f_f("f_done", args);
+
+				Hide();
+
+			}
+
+			
+
+
+			return new t();
+		}
 
 	}
 

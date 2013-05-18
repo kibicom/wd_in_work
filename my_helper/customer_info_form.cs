@@ -17,6 +17,8 @@ namespace customer_info
 	{
 		public t customer =null;
 
+		public t args=new t();
+
 		public customer_info_form()
 		{
 			InitializeComponent();						
@@ -83,18 +85,19 @@ namespace customer_info
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			
+			/*
 			if (textBox1.Text.Length < 5 || textBox1.Text.Length < 5 || CountWords(maskedTextBox1.Text, " ") > 24)
 			{				
 				MessageBox.Show("Данные в форме некорректны!\nПроверьте правильность ввода!", "Ошибка заполнения полей");
 			}
 			else
+			*/
 			{
 				string telephone = maskedTextBox1.Text;
 				customer = new t()
 				{
 					{"name", textBox1.Text},
-					{"phone", maskedTextBox1.Text},
+					{"phone", txt_phone.Text},
 					{"email", textBox2.Text}
 				};
 				//customer = new t_customer();
@@ -112,7 +115,7 @@ namespace customer_info
 				//else
 				{
 
-					string[] result = telephone.Split(';');
+					string[] result = telephone.Split(new char[]{';',' ',','});
 					for (int i = 0; i < result.Length; i++)
 					{
 						int x = CountWords(result[i], " ");
@@ -121,6 +124,9 @@ namespace customer_info
 							customer["phone_arr"].Add(result[i]);
 						}
 					}
+
+					args["is_done"].f_set(true);
+
 					//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");
 					Hide();
 				}
@@ -130,6 +136,51 @@ namespace customer_info
 		private void button3_Click(object sender, EventArgs e)
 		{
 			Close();
+		}
+
+		private t f_make_cust()
+		{
+
+			string telephone = maskedTextBox1.Text;
+			customer = new t()
+			{
+				{"name", textBox1.Text},
+				{"phone", txt_phone.Text},
+				{"email", textBox2.Text}
+			};
+
+			string[] result = telephone.Split(new char[] { ';', ' ', ',' });
+			for (int i = 0; i < result.Length; i++)
+			{
+				int x = CountWords(result[i], " ");
+				if (x < 3)
+				{
+					customer["phone_arr"].Add(result[i]);
+				}
+			}
+
+			args["is_done"].f_set(true);
+
+			//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");
+			Hide();
+
+
+			return new t();
+		}
+
+		private void txt_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			if (e.KeyData == Keys.Enter)
+			{
+
+				f_make_cust();
+
+			}
+		}
+
+		private void customer_info_form_Activated(object sender, EventArgs e)
+		{
+			textBox1.SelectionStart = textBox1.Text.Length;
 		}		
 	}
 }
