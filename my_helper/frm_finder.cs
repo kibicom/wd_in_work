@@ -413,6 +413,8 @@ namespace my_helper
 		private void lbx_items_MouseHover(object sender, EventArgs e)
 		{
 			//MessageBox.Show("123");
+
+
 		}
 
 		private void josi_customer_Deactivate(object sender, EventArgs e)
