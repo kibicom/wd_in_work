@@ -102,7 +102,7 @@ namespace my_helper
 			//callback когда контрагент будет выбран
 			frm_customer_finder.args["f_done"]=new t(new t_f<t, t>(delegate(t args)
 			{
-				t cust=frm_customer_finder.args["customer"];
+				t cust=frm_customer_finder.args["selected_item"]["item"];
 
 				this.args["customer"] = args["customer"];
 
@@ -144,7 +144,7 @@ namespace my_helper
 			//callback когда адресс будет выбран
 			frm_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args)
 			{
-				t cust = frm_address_finder.args["address"];
+				t cust = frm_address_finder.args["selected_item"]["item"];
 				this.args["address"] = args["address"];
 
 				btn_add_address.Text = cust["name"].f_str();
@@ -194,18 +194,6 @@ namespace my_helper
 		private void frm_main_MouseLeave(object sender, EventArgs e)
 		{
 
-			
-			if (Cursor.Position.X < Location.X
-				  || Cursor.Position.Y < Location.Y
-				  || Cursor.Position.X > Location.X + Width
-				  || Cursor.Position.Y > Location.Y + Height)
-			{
-				//out of scope
-				Height = 50;
-			}
-			
-			
-			
 		}
 
 
@@ -213,19 +201,6 @@ namespace my_helper
 		private void frm_main_Click(object sender, EventArgs e)
 		{
 			//Height = 600;
-		}
-
-		private void frm_main_MouseMove(object sender, MouseEventArgs e)
-		{
-
-
-
-
-		}
-
-		private void flowLayoutPanel2_Paint(object sender, PaintEventArgs e)
-		{
-
 		}
 
 		private void btn_close_Click(object sender, EventArgs e)

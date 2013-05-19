@@ -19,6 +19,7 @@ namespace my_helper
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frm_main());
 			//Application.Run(new josi_customer());
+			//Application.Run(new frm_conf());
 		}
 	}
 }

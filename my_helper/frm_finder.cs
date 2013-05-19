@@ -27,6 +27,8 @@ namespace my_helper
 		//t_josi_store josi_store = new t_josi_store(new t_josi_auth_args("dnclive", "135"));
 		public t_store josi_store =null;// new t_store(new t(){{"login_name","dnclive"}, {"pass","135"}});
 
+		public t_kwj kwj = new t_kwj(new t(){{"local_db",new t(){{"file_name","kibicom_wd_josi.db"}}}});
+
 		//время последнего нажатия на клавишу
 		public TimeSpan last_key_down;
 
@@ -34,12 +36,12 @@ namespace my_helper
 		public string last_filter_val = "";
 
 		//флаг - нужно ли показывать возвращенные результаты запроса
-		public bool show_result=true;
+		//public bool show_result=true;
 
 		//выбранный, или созданный клиента
-		public t selected_item;
+		//public t selected_item;
 
-		public t tab=new t();
+		//public t tab=new t();
 
 		//предыдущее положение мыщи на listbox
 		Point last_lbx_mouse_point;
@@ -47,7 +49,7 @@ namespace my_helper
 		//аргументы
 		public t args=new t();
 
-		//форма ввода нового контрагента
+		//форма ввода нового/редактирования элемента
 		public Form frm_cre_edit_item;
 
 		public frm_finder()
@@ -61,8 +63,8 @@ namespace my_helper
 			string login_name = args["login_name"].f_def("dnclive").f_str();
 			string pass = args["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_end_point"].
-				f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
-				//f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
+				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
+				f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
 
 			josi_store = new t_store(new t()
 			{
@@ -80,6 +82,8 @@ namespace my_helper
 			args["pass"] = new t(pass);
 			args["josi_end_point"] = new t(josi_end_point);
 		}
+
+		#region события
 
 		//нажатие на кнопку в строке поиска
 		private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -121,8 +125,9 @@ namespace my_helper
 
 			if (e.KeyData == Keys.Enter)
 			{
-
-				f_select_item();
+				
+				//f_select_item();
+				f_touch_lbx_item();
 
 			}
 			
@@ -141,7 +146,8 @@ namespace my_helper
 			{
 
 				lbx_items.Items.Clear();
-				show_result = false;
+				btn_change.Visible = false;
+				//show_result = false;
 				return;
 			}
 
@@ -152,84 +158,11 @@ namespace my_helper
 			}
 
 			last_filter_val = txt_query.Text;
-			show_result = true;
 
-			string res_dot_key_query_str =	"&kvl.1.where.tab_customer.0._query.entry.0=name" +
-											"&kvl.1.where.tab_customer.0.id=" +
-											"&kvl.1.where.tab_customer.0.name=" + txt_query.Text +
-											"&kvl.1.where.tab_customer.0.phone=" +
-											"&kvl.1.where.tab_customer.0.email=";
-
-
-			f_get_items(new t());
-
-			/*
-			josi_store.f_store(new t 
-			{
-				{"res_dot_key_query_str",res_dot_key_query_str},
-				{
-					"f_done",	
-					new t_f<t,t>(delegate(t args)
-					{
-						//MessageBox.Show("123");
-						//string resp_str = ((t_josi_store_req_args)args).resp_str;
-						//Dictionary <string, object> resp_json=((t_josi_store_req_args)args).resp_json;
-						//TimeSpan query_start = ((t_josi_store_req_args)args).query_start;
-
-						if (lbx_items.InvokeRequired)
-						{
-							lbx_items.Invoke(new t_f<t,t>(ffill_lbx_items), new object[] {args});
-						}
-
-						return null;
-					})
-				},
-				{"encode_json",true},
-				{"cancel_prev",true},
-			});
-
-			*/
-
-			/*
-			josi_store.f_store(new t_josi_store_req_args
-			(
-				res_dot_key_query_str,
-				delegate(t_josi_store_req_args args)
-				{
-					//MessageBox.Show("123");
-					//string resp_str = ((t_josi_store_req_args)args).resp_str;
-					//Dictionary <string, object> resp_json=((t_josi_store_req_args)args).resp_json;
-					//TimeSpan query_start = ((t_josi_store_req_args)args).query_start;
-
-					if (lbx_items.InvokeRequired)
-					{
-						lbx_items.Invoke(new Action<t_josi_store_req_args>(ffill_lbx_items), new object[] {args});
-					}
-				},
-				true, true
-			));
-			*/
-			pb_loading_2.Show();
-
-		}
-
-		//получение элементов из источника
-		virtual public t f_get_items(t args)
-		{
-
-			return new t();
-		}
-
-		//заполняем список результатами запроса
-		virtual public t ffill_lbx_items(t args)
-		{
-			return new t();
-		}
-
-		//если результ запроса пуст, предлагаем создать новый элемент ресурса
-		virtual public void f_add_new()
-		{
+			f_find(new t());
 			
+			
+
 		}
 
 		//форма отображена
@@ -238,12 +171,6 @@ namespace my_helper
 			txt_query.Focus();
 		}
 
-		//сохранение созданного клиента в josi_store
-		virtual public void fstore_customer()
-		{
-			
-		}
-		
 		//вывод элементов в listbox
 		private void lbx_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
 		{
@@ -251,13 +178,13 @@ namespace my_helper
 			ListBox lbx = (ListBox)sender;
 
 			//если в списке нет элементов нечего прорисовывать выходим
-			if (lbx.Items.Count == 0||e.Index<0)
+			if (lbx.Items.Count == 0 || e.Index < 0)
 			{
 				return;
 			}
 
 			//приводим ткущий рисуемый элемент к t_customer
-			t customer = (t)lbx.Items[e.Index];
+			t item = (t)lbx.Items[e.Index];
 
 			// Draw the background of the ListBox control for each item.
 			e.DrawBackground();
@@ -276,12 +203,12 @@ namespace my_helper
 				//text_brush = SystemBrushes.HighlightText;
 				//text_brush = new System.Drawing.SolidBrush(ColorTranslator.FromHtml("#9cc"));
 				//text_font = new Font(e.Font, FontStyle.Bold);
-				
+
 				//выводим fio клиента в первой строчке
 				t_uti.f_draw_text
 				(
 					e.Graphics,
-					customer["name"].f_str(),
+					item["str1"].f_str(),
 					new Font(e.Font, FontStyle.Bold),	//текст делаем жирным
 					new SolidBrush(ColorTranslator.FromHtml("#fff")),	//цвет текста
 					new SolidBrush(ColorTranslator.FromHtml("#333")),	//цвет тени
@@ -293,13 +220,19 @@ namespace my_helper
 				t_uti.f_draw_text
 				(
 					e.Graphics,
-					customer["phone"].f_str(),
+					item["str2"].f_str(),
 					e.Font,			//текст оставляем нормальным
 					new SolidBrush(ColorTranslator.FromHtml("#eee")),	//цвет текста
 					new SolidBrush(ColorTranslator.FromHtml("#555")),	//цвет тени
 					//прямоугольник в который выводится текст - смещен на 31 пиксель по вертикали (вывод второй строки)
 					new Rectangle(e.Bounds.X, e.Bounds.Y + 31, e.Bounds.Width, e.Bounds.Height)
 				);
+
+				//выводим кнопку редактирования на выделенном элементе
+				RectangleF rect = e.Bounds;
+				btn_change.Top = Convert.ToInt32(lbx_items.Top + rect.Top + rect.Height / 2 - btn_change.Height / 2);
+				btn_change.Left = Convert.ToInt32(lbx_items.Left + rect.Right - rect.Height / 2 + btn_change.Height / 2 - btn_change.Width);
+
 			}
 			else	//отрисовываем не выделенные элементы
 			{
@@ -317,7 +250,7 @@ namespace my_helper
 				t_uti.f_draw_text
 				(
 					e.Graphics,
-					customer["name"].f_str(),
+					item["str1"].f_str(),
 					e.Font,
 					new SolidBrush(ColorTranslator.FromHtml("#333")),	//цвет текста
 					new SolidBrush(ColorTranslator.FromHtml("#fff")),	//цвет тени
@@ -327,7 +260,7 @@ namespace my_helper
 				t_uti.f_draw_text
 				(
 					e.Graphics,
-					customer["phone"].f_str(),
+					item["str2"].f_str(),
 					e.Font,
 					new SolidBrush(ColorTranslator.FromHtml("#555")),	//цвет текста
 					new SolidBrush(ColorTranslator.FromHtml("#fff")),	//цвет тени
@@ -344,6 +277,7 @@ namespace my_helper
 		private void lbx_items_Enter(object sender, EventArgs e)
 		{
 			//txt_query.Focus();
+			btn_change.Visible = true;
 		}
 
 		private void lbx_items_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -361,8 +295,8 @@ namespace my_helper
 			//var target = Keyboard.FocusedElement;    // Target element
 			//var routedEvent = Keyboard.KeyDownEvent; // Event to send
 
-			
-			
+
+
 
 			//target.RaiseEvent(new KeyEventArgs
 			//(
@@ -370,23 +304,17 @@ namespace my_helper
 			//	PresentationSource.FromVisual(target),
 			//	0,
 			//	key)//,
-				//{RoutedEvent=routedEvent }
-			 //);
+			//{RoutedEvent=routedEvent }
+			//);
 
-		}
-
-		private void lbx_items_MouseEnter(object sender, EventArgs e)
-		{
-			ListBox lbx = (ListBox)sender;
-			//lbx.Focus();
 		}
 
 		private void lbx_items_MouseMove(object sender, MouseEventArgs e)
 		{
-			
+
 			ListBox lbx = (ListBox)sender;
 
-			
+
 			if (last_lbx_mouse_point != null)
 			{
 				if (last_lbx_mouse_point.X == e.X && last_lbx_mouse_point.Y == e.Y)
@@ -394,7 +322,7 @@ namespace my_helper
 					return;
 				}
 			}
-			
+
 			//MessageBox.Show("move");
 
 			lbx.Focus();
@@ -410,13 +338,6 @@ namespace my_helper
 
 		}
 
-		private void lbx_items_MouseHover(object sender, EventArgs e)
-		{
-			//MessageBox.Show("123");
-
-
-		}
-
 		private void josi_customer_Deactivate(object sender, EventArgs e)
 		{
 			is_shown = false;
@@ -425,7 +346,7 @@ namespace my_helper
 			{
 				frm_cre_edit_item.Activate();
 			}
-			
+
 		}
 
 		private void josi_customer_FormClosing(object sender, FormClosingEventArgs e)
@@ -437,16 +358,159 @@ namespace my_helper
 
 		private void lbx_items_Click(object sender, EventArgs e)
 		{
-			f_select_item();
+			f_touch_lbx_item();
 		}
 
+		private void btn_change_Click(object sender, EventArgs e)
+		{
+			//выбираем затронутый элемент
+			t selected_item = this.args["selected_item"].f_set((t)lbx_items.SelectedItem);
 
-		//выбор отмеченного контрагента
+			//вызываем функцию редактирования
+			f_modify_item(new t() { { "item", selected_item } });
+		}
+
+		#endregion события
+
+		//выполнить поиск
+		public void f_find(t args)
+		{
+			btn_change.Visible = false;
+
+			this.args["items"].Clear();
+
+			//если есть новые элементы в кеше показываем их сразу
+			if (this.args["new_items"].Count > 0)
+			{
+				foreach (t new_item in (IList<t>) this.args["new_items"])
+				{
+					this.args["items"].Add(new_item);
+				}
+
+				this.args["new_items"].Clear();
+
+				f_fill_lbx(args);
+			}
+
+			pb_loading_2.Show();
+
+			f_get_items(new t());
+		}
+
+		//получение элементов из источника
+		virtual public t f_get_items(t args)
+		{
+
+			return new t();
+		}
+
+		//заполнение listbox полученными элементами
+		virtual public t f_fill_lbx(t args)
+		{
+
+			t_f<t,t> f=new t_f<t, t>(delegate(t args1)
+			{
+				pb_loading_2.Hide();
+
+				//если количество возвращенных результатов 0
+				//то добавляем новый элемент
+				if (this.args["items"].Count == 0)
+				{
+					f_add_new();
+				}
+
+				//очищаем
+				lbx_items.Items.Clear();
+
+				//наполняем и рендерим список
+				foreach (t item in (IList<t>)this.args["items"])
+				{
+					lbx_items.Items.Add(item);
+				}
+
+				lbx_items.SelectedIndex = 0;
+
+				t.f_f("f_done", args1);
+
+				return new t();
+
+			});
+
+			if (lbx_items.InvokeRequired)
+			{
+				lbx_items.Invoke(f, new object[] { args });
+			}
+			else
+			{
+				f(args);
+			}
+
+			return new t();
+		}
+
+		//если результ запроса пуст, предлагаем создать новый элемент ресурса
+		virtual public void f_add_new()
+		{
+			this.args["items"].Add(new t()
+			{
+				{"str1",this.args["new_item_caption"].f_def("Добавить новый элемент")},
+				{"str2",txt_query.Text},
+				{"is_new", true}
+			});
+		}
+
+		//выбор элемента listbox
+		virtual public void f_touch_lbx_item()
+		{
+			//выбираем затронутый элемент
+			t selected_item=this.args["selected_item"].f_set((t)lbx_items.SelectedItem);
+
+			//если он новый
+			if (selected_item["is_new"].f_bool())
+			{
+				//вызываем его сознание
+				f_cre_item(new t());
+			}
+			else
+			{
+				//иначе просто выбираем
+				f_select_item();
+			}
+		}
+
+		//выбор отмеченного элемента
 		virtual public t f_select_item()
 		{
 			return new t();
 		}
 
+		//создание нового элемента
+		virtual public t f_cre_item(t args)
+		{
+
+			t item = args["new item"];
+
+			this.args["items"][0] = item;
+
+			this.args["selected_item"] = item;
+
+			lbx_items.Items.Clear();
+
+			lbx_items.Items.Add(item);
+
+			lbx_items.SelectedIndex = 0;
+
+			t.f_f("f_done", this.args);
+
+			Hide();
+
+			return new t();
+		}
+
+		virtual public t f_modify_item(t args)
+		{
+			return new t();
+		}
 	}
 
 	public class t_customer

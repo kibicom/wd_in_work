@@ -123,8 +123,6 @@
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(242, 345);
 			this.flowLayoutPanel1.TabIndex = 1;
-			this.flowLayoutPanel1.MouseLeave += new System.EventHandler(this.frm_main_MouseLeave);
-			this.flowLayoutPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frm_main_MouseMove);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -135,7 +133,6 @@
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(260, 40);
 			this.flowLayoutPanel2.TabIndex = 2;
-			this.flowLayoutPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel2_Paint);
 			this.flowLayoutPanel2.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
 			// 
 			// btn_close

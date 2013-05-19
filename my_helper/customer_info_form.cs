@@ -30,6 +30,14 @@ namespace customer_info
 			//textBox1.
 		}
 
+		public customer_info_form(t args): this()
+		{
+			this.args["item"] = args["item"].f_def(new t());
+			textBox1.Text = args["item"]["name"].f_str();
+			txt_phone.Text = args["item"]["phone"].f_str();
+			textBox2.Text = args["item"]["email"].f_str();
+		}
+
 		public static bool isValid(string email)
 		{
 			string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
@@ -49,9 +57,10 @@ namespace customer_info
 		{
 			maskedTextBox1.Mask = "+7(000) 000-00-00; +7(000) 000-00-00; +7(000) 000-00-00";
 
-		maskedTextBox1.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
-		maskedTextBox1.KeyDown += new KeyEventHandler(maskedTextBox1_KeyDown);
+			maskedTextBox1.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
+			maskedTextBox1.KeyDown += new KeyEventHandler(maskedTextBox1_KeyDown);
 		}
+		
 		void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
 		{
 			if (maskedTextBox1.MaskFull)
@@ -85,54 +94,38 @@ namespace customer_info
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			/*
-			if (textBox1.Text.Length < 5 || textBox1.Text.Length < 5 || CountWords(maskedTextBox1.Text, " ") > 24)
-			{				
-				MessageBox.Show("Данные в форме некорректны!\nПроверьте правильность ввода!", "Ошибка заполнения полей");
-			}
-			else
-			*/
+
+			f_make_cust();
+
+			return;
+
+			string telephone = maskedTextBox1.Text;
+
+			this.args["item"] = new t()
 			{
-				string telephone = maskedTextBox1.Text;
-				customer = new t()
+				{"name", textBox1.Text},
+				{"phone", txt_phone.Text},
+				{"email", textBox2.Text}
+			};
+
+			string[] result = telephone.Split(new char[]{';',' ',','});
+			for (int i = 0; i < result.Length; i++)
+			{
+				int x = CountWords(result[i], " ");
+				if (x < 3)
 				{
-					{"name", textBox1.Text},
-					{"phone", txt_phone.Text},
-					{"email", textBox2.Text}
-				};
-				//customer = new t_customer();
-				
-				//customer.phone = telephone;
-				//MessageBox.Show(customer.phone, "Customer_phone");
-				//customer.name = textBox1.Text;
-				//MessageBox.Show(customer.name, "Customer_name");
-				//customer.email = textBox2.Text;
-				//MessageBox.Show(customer.email, "Customer_email");
-				//if (!isValid(textBox2.Text) || (!isValid(textBox2.Text)))
-				//{
-				//	MessageBox.Show("Email введён неверно!\nПовторите ввод!", "Ошибочный Email!");
-				//}
-				//else
-				{
-
-					string[] result = telephone.Split(new char[]{';',' ',','});
-					for (int i = 0; i < result.Length; i++)
-					{
-						int x = CountWords(result[i], " ");
-						if (x < 3)
-						{
-							customer["phone_arr"].Add(result[i]);
-						}
-					}
-
-					args["is_done"].f_set(true);
-
-					//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");
-					Hide();
+					this.args["item"]["phone_arr"].Add(result[i]);
 				}
 			}
 
+			args["is_done"].f_set(true);
+
+
+			//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");
+			Hide();
+
 		}
+		
 		private void button3_Click(object sender, EventArgs e)
 		{
 			Close();
@@ -142,9 +135,11 @@ namespace customer_info
 		{
 
 			string telephone = maskedTextBox1.Text;
-			customer = new t()
+
+			this.args["item"] = new t()
 			{
 				{"name", textBox1.Text},
+				{"fio", textBox1.Text},
 				{"phone", txt_phone.Text},
 				{"email", textBox2.Text}
 			};
@@ -155,12 +150,11 @@ namespace customer_info
 				int x = CountWords(result[i], " ");
 				if (x < 3)
 				{
-					customer["phone_arr"].Add(result[i]);
+					this.args["item"]["phone_arr"].Add(result[i]);
 				}
 			}
 
 			args["is_done"].f_set(true);
-
 
 
 			//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");

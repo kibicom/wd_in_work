@@ -32,6 +32,7 @@ namespace my_helper
 			this.lbx_items = new System.Windows.Forms.ListBox();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.pb_loading_2 = new System.Windows.Forms.ProgressBar();
+			this.btn_change = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// txt_query
@@ -59,7 +60,6 @@ namespace my_helper
 			this.lbx_items.Click += new System.EventHandler(this.lbx_items_Click);
 			this.lbx_items.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbx_DrawItem);
 			this.lbx_items.Enter += new System.EventHandler(this.lbx_items_Enter);
-			this.lbx_items.MouseEnter += new System.EventHandler(this.lbx_items_MouseEnter);
 			this.lbx_items.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lbx_items_MouseMove);
 			this.lbx_items.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.lbx_items_PreviewKeyDown);
 			// 
@@ -83,11 +83,24 @@ namespace my_helper
 			this.pb_loading_2.Value = 50;
 			this.pb_loading_2.Visible = false;
 			// 
-			// josi_customer
+			// btn_change
+			// 
+			this.btn_change.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_change.Location = new System.Drawing.Point(778, 52);
+			this.btn_change.Name = "btn_change";
+			this.btn_change.Size = new System.Drawing.Size(101, 29);
+			this.btn_change.TabIndex = 13;
+			this.btn_change.Text = "Изменить";
+			this.btn_change.UseVisualStyleBackColor = true;
+			this.btn_change.Visible = false;
+			this.btn_change.Click += new System.EventHandler(this.btn_change_Click);
+			// 
+			// frm_finder
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 27F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(894, 418);
+			this.Controls.Add(this.btn_change);
 			this.Controls.Add(this.pb_loading_2);
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.lbx_items);
@@ -97,7 +110,7 @@ namespace my_helper
 			this.Margin = new System.Windows.Forms.Padding(6);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "josi_customer";
+			this.Name = "frm_finder";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -117,5 +130,6 @@ namespace my_helper
 		public System.Windows.Forms.ListBox lbx_items;
 		public System.Windows.Forms.RichTextBox richTextBox1;
 		public System.Windows.Forms.ProgressBar pb_loading_2;
+		public System.Windows.Forms.Button btn_change;
 	}
 }
