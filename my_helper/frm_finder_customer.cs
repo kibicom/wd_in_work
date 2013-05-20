@@ -26,8 +26,8 @@ namespace my_helper
 
 		}
 
-		//получение элементов из источника
-		override public t f_get_items(t args)
+		//получение элементов из источника josi_store
+		public t f_get_items_(t args)
 		{
 
 			t query = new t()
@@ -127,6 +127,57 @@ namespace my_helper
 
 			return new t();
 		}
+
+		//получение элементов из источника local_store
+		override public t f_get_items(t args)
+		{
+
+			kwj.f_select_tab_customer(new t()
+			{
+				{
+					"where", " _nocase_search like '%"+txt_query.Text+"%' "
+				},
+				{
+					"f_each", new t_f<t,t>(delegate (t args1)
+					{
+						DataRow dr = args1["each"]["item"].f_val<DataRow>();
+
+						//создаем очередной элемент
+						this.args["items"].Add(new t()
+						{
+							{"str1", dr["name"].ToString()},
+							{"str2", dr["phone"].ToString()},
+							{
+								"item", new t()
+								{
+									{"id",dr["id"].ToString()},
+									{"name",dr["name"].ToString().Replace("\'", "'")},
+									{"phone",dr["phone"].ToString().Replace("\'", "'")},
+									{"email",dr["email"].ToString().Replace("\'", "'")},
+									{"wd_customer_guid",dr["wd_customer_guid"].ToString()}
+								}
+							}
+						});
+
+						return new t();
+					})
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args1)
+					{
+						
+						f_fill_lbx(new t());
+
+						return new t();
+					})
+				}
+			});
+
+			
+
+			return new t();
+		}
+
 
 		//сохранение созданного клиента в josi_store
 		public void fstore_customer()

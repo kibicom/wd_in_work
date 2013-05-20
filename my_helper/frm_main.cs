@@ -15,31 +15,61 @@ namespace my_helper
 {
 	public partial class frm_main : Form
 	{
-		frm_finder_customer frm_customer_finder = new frm_finder_customer(new t());
-
-		frm_finder_address frm_address_finder = new frm_finder_address(new t());
-
+		frm_finder_customer frm_customer_finder;
+		frm_finder_address frm_address_finder;
 		System.Threading.Timer timer = null;
+
+		public Atechnology.ecad.Document.OrderItemForm oif;
+		public Atechnology.ecad.Document.Classes.OrderClass order;
 
 		bool is_show_blocked=false;
 
 		public t args = new t();
 
+		//используется для тестов
 		public frm_main()
 		{
 			InitializeComponent();
 
 			this.args["top"].f_set(220);
 			this.args["right_offset"].f_set(30);
+
+			frm_customer_finder = new frm_finder_customer(new t());
+
+			frm_address_finder = new frm_finder_address(new t());
+
 		}
 
-		public frm_main(t args):this()
+		//production конструктор
+		public frm_main(t args)//:this()
 		{
+			InitializeComponent();
+
 			this.args["f_select_customer"] = args["f_select_customer"];
 			this.args["f_select_address"] = args["f_select_address"];
 
 			this.args["top"] = args["top"].f_def(220);
 			this.args["right_offset"] = args["right_offset"].f_def(30);
+
+			this.args["josi_store"]["josi_end_point"] = args["josi_end_point"].
+				f_def("http://kibicom.com/order_store_339/index.php");
+				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php");
+			this.args["josi_store"]["login"] = args["josi_end_point"].f_def("dnclive");
+			this.args["josi_store"]["pass"] = args["josi_end_point"].f_def("135");
+
+			this.args["local_store"]["file_name"] = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db");
+
+			frm_customer_finder = new frm_finder_customer(new t()
+			{
+				{"josi_store", this.args["josi_store"]},
+				{"local_store", this.args["local_store"]},
+			});
+
+			frm_address_finder = new frm_finder_address(new t()
+			{
+				{"josi_store", this.args["josi_store"]},
+				{"local_store", this.args["local_store"]},
+			});
 		}
 
 		private void button4_Click(object sender, EventArgs e)
@@ -74,6 +104,21 @@ namespace my_helper
 								{
 									Height = 40;
 									return new t();
+								}
+							}
+
+							//контроль активности основной формы WD
+							if (oif != null)
+							{
+
+								if (oif.OrderForm.mainForm.Focused)
+								//if (order.OrderItemForm.OrderForm.mainForm.Focused)
+								{
+									Hide();
+								}
+								else
+								{
+									Show();
 								}
 							}
 

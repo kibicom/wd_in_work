@@ -27,7 +27,7 @@ namespace my_helper
 		//t_josi_store josi_store = new t_josi_store(new t_josi_auth_args("dnclive", "135"));
 		public t_store josi_store =null;// new t_store(new t(){{"login_name","dnclive"}, {"pass","135"}});
 
-		public t_kwj kwj = new t_kwj(new t(){{"local_db",new t(){{"file_name","kibicom_wd_josi.db"}}}});
+		public t_kwj kwj;
 
 		//время последнего нажатия на клавишу
 		public TimeSpan last_key_down;
@@ -60,6 +60,51 @@ namespace my_helper
 		public frm_finder(t args)
 			: this()
 		{
+			string login_name = args["josi_store"]["login_name"].f_def("dnclive").f_str();
+			string pass = args["josi_store"]["pass"].f_def("135").f_str();
+			string josi_end_point = args["josi_store"]["josi_end_point"].
+				f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
+				//f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
+
+			josi_store = new t_store(new t()
+			{
+				{"josi_end_point", josi_end_point},		//точка подключения josi
+				{"req_timeout", args["josi_store"]["req_timeout"].f_def(5000).f_int()},	//таймаут запроса
+				{"login_name",login_name},				//имя для входа
+				{"pass",pass},							//пароль для входа
+				{"login_on_cre", true},					//логинимся
+				{"auth_try_count", args["josi_store"]["auth_try_count"].f_def(3).f_int()},	//количество попыток авторизации
+				{"f_done", args["f_done"].f_f()},		//вызываем когда авторизуемся успешно
+				{"f_fail", args["f_fail"].f_f()}		//вызываем если авторизация не удалась
+			});
+
+
+			//инициализируем локальное хранилище
+			f_cre_kwj(args);
+		}
+
+
+		public t f_cre_kwj(t args)
+		{
+			string file_name = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db").f_str();
+
+			//создаем клиента, подключаемся
+			kwj = new t_kwj(new t()
+			{
+				{"josi_store", args["josi_store"]},
+				{
+					"local_store", new t()
+					{
+						{"file_name", file_name}
+					}
+				}
+			});
+
+			return new t();
+		}
+
+		public t f_cre_josi_store(t args)
+		{
 			string login_name = args["login_name"].f_def("dnclive").f_str();
 			string pass = args["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_end_point"].
@@ -78,10 +123,11 @@ namespace my_helper
 				{"f_fail", args["f_fail"].f_f()}		//вызываем если авторизация не удалась
 			});
 
-			args["login_name"] = new t(login_name);
-			args["pass"] = new t(pass);
-			args["josi_end_point"] = new t(josi_end_point);
+			//this["josi_store"] = josi_store;
+
+			return new t();
 		}
+
 
 		#region события
 

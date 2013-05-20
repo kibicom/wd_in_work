@@ -29,7 +29,12 @@ namespace my_helper
 
 			kwj_conf.f_kwj_cre(new t()
 			{
-				{"file_name", fsd.FileName}
+				{
+					"local_store", new t()
+					{
+						{"file_name", fsd.FileName}
+					}
+				}
 			});
 		}
 
@@ -43,7 +48,12 @@ namespace my_helper
 
 			kwj_conf.f_fill_tab_customer(new t()
 			{
-				{"file_name", fsd.FileName}
+				{
+					"local_store", new t()
+					{
+						{"file_name", fsd.FileName}
+					}
+				}
 			});
 		}
 
@@ -57,7 +67,12 @@ namespace my_helper
 
 			kwj_conf.f_fill_tab_address(new t()
 			{
-				{"file_name", fsd.FileName}
+				{
+					"local_store", new t()
+					{
+						{"file_name", fsd.FileName}
+					}
+				}
 			});
 		}
 

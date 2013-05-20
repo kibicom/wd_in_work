@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+using System.Data;
 using System.Windows.Forms;
 using System.IO;
 
@@ -21,15 +22,15 @@ namespace my_helper
 
 		public t_kwj(t args)
 		{
-			f_cre_josi_store(args);
+			f_cre_josi_store(args["josi_store"]);
 
-			f_cre_local_db(args);
+			f_cre_local_db(args["local_store"]);
 
 		}
 
 		public t f_cre_local_db(t args)
 		{
-			string file_name = args["local_db"]["file_name"].f_str();
+			string file_name = args["file_name"].f_str();
 
 			//создаем клиента, подключаемся
 			t_sqlite_cli cli = new t_sqlite_cli(new t()
@@ -48,9 +49,10 @@ namespace my_helper
 			string login_name = args["login_name"].f_def("dnclive").f_str();
 			string pass = args["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_end_point"].
+				f_def("http://kibicom.com/order_store_339/index.php").f_str();
 				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
-				f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
-
+				//f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
+		
 			t_store josi_store = new t_store(new t()
 			{
 				{"josi_end_point", josi_end_point},		//точка подключения josi
@@ -71,7 +73,7 @@ namespace my_helper
 		public t f_kwj_cre(t args)
 		{
 
-			string file_name = args["file_name"].f_str();
+			string file_name = args["local_store"]["file_name"].f_str();
 
 			File.Delete(file_name);
 
@@ -79,7 +81,7 @@ namespace my_helper
 
 			if (cli==null)
 			{
-				cli = f_cre_local_db(args)["sqlite_cli"].f_val<t_sqlite_cli>();
+				cli = f_cre_local_db(args["local_store"])["sqlite_cli"].f_val<t_sqlite_cli>();
 			}
 
 			//создаем таблицу tab_customer
@@ -97,7 +99,8 @@ namespace my_helper
 						  email TEXT,
 						  site TEXT,
 						  wd_idcustomer INTEGER,
-						wd_customer_guid TEXT
+							wd_customer_guid TEXT,
+							_nocase_search TEXT
 						)"},
 				{
 					"f_done", new t_f<t,t>(delegate (t args1)
@@ -112,7 +115,7 @@ namespace my_helper
 					"f_fail", new t_f<t,t>(delegate (t args1)
 					{
 
-						t_deb.f_deb("unit_test", "table {0} create is fail...", "TEST_TABLE");
+						
 
 						return new t();
 					})
@@ -128,7 +131,8 @@ namespace my_helper
 						  dtcre INTEGER,
 						  deleted INTEGER,
 						  id_login INTEGER,
-						  name TEXT
+						  name TEXT,
+							_nocase_search
 						)"},
 				{
 					"f_done", new t_f<t,t>(delegate (t args1)
@@ -153,19 +157,21 @@ namespace my_helper
 			return new t();
 		}
 
+		#region наполнение базы
+
 		public t f_fill_tab_customer(t args)
 		{
 
 			t_store josi_store = this["josi_store"].f_val<t_store>();
 			if (josi_store == null)
 			{
-				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+				josi_store = f_cre_josi_store(args["josi_store"])["josi_store"].f_val<t_store>();
 			}
 
 			t_sqlite_cli cli = this["sqlite_cli"].f_val<t_sqlite_cli>();
 			if (cli == null)
 			{
-				cli = f_cre_local_db(args)["sqlite_cli"].f_val<t_sqlite_cli>();
+				cli = f_cre_local_db(args["local_store"])["sqlite_cli"].f_val<t_sqlite_cli>();
 			}
 
 			//запрос всех клиентов из Кибиком
@@ -208,7 +214,7 @@ namespace my_helper
 						string tab = "tab_customer";
 						ArrayList tab_rows = (ArrayList)args1["resp_json"].f_val<Dictionary<string, object>>()[tab];
 
-						//MessageBox.Show(tab_rows.Count.ToString());
+						MessageBox.Show("selected="+tab_rows.Count.ToString());
 
 						//если количество возвращенных результатов 0
 						//то предлагаем создать нового контрагента
@@ -239,13 +245,15 @@ namespace my_helper
 							{
 								//запрос блокирует клиента
 								{"block", true},
-								{"cmd", "insert into tab_customer (id, dtcre, name, phone, email, wd_customer_guid) values ("+
+								{"cmd", "insert into tab_customer (id, dtcre, name, phone, email, "+
+										"wd_customer_guid, _nocase_search) values ("+
 										row_id+","+
-										dtcre_ut+",'"+
-										row_name+"','"+
-										row_phone+"','"+
-										row_email+"','"+
-										row_wd_customer_guid+"') "
+										dtcre_ut+",\""+
+										row_name.Replace("'", "''").Replace("\"", "\"\"")+"\",\""+
+										row_phone.Replace("'", "''").Replace("\"", "\"\"")+"\",\""+
+										row_email.Replace("'", "''").Replace("\"", "\"\"")+"\",\""+
+										row_wd_customer_guid+"\",\""+
+										(row_name+row_phone+row_email).Replace("'", "''").Replace("\"", "\"\"").ToLower()+"\") "
 								},
 								{
 									"f_done", new t_f<t,t>(delegate (t args2)
@@ -259,7 +267,7 @@ namespace my_helper
 									"f_fail", new t_f<t,t>(delegate (t args2)
 									{
 
-										//MessageBox.Show("fail insert tab_customer row");
+										MessageBox.Show("fail get rows from kibicom");
 
 										return new t();
 									})
@@ -286,13 +294,13 @@ namespace my_helper
 			t_store josi_store = this["josi_store"].f_val<t_store>();
 			if (josi_store == null)
 			{
-				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+				josi_store = f_cre_josi_store(args["josi_store"])["josi_store"].f_val<t_store>();
 			}
 
 			t_sqlite_cli cli = this["sqlite_cli"].f_val<t_sqlite_cli>();
 			if (cli == null)
 			{
-				cli = f_cre_local_db(args)["sqlite_cli"].f_val<t_sqlite_cli>();
+				cli = f_cre_local_db(args["local_store"])["sqlite_cli"].f_val<t_sqlite_cli>();
 			}
 
 			//запрос все адреса из Кибиком
@@ -359,10 +367,11 @@ namespace my_helper
 							{
 								//запрос блокирует клиента
 								{"block", true},
-								{"cmd", "insert into tab_address (id, dtcre, name) values ("+
+								{"cmd", "insert into tab_address (id, dtcre, name, _nocase_search) values ("+
 										row_id+","+
 										dtcre_ut+",'"+
-										row_name+"') "
+										row_name.Replace("'", "\'")+",'"+
+										row_name.Replace("'", "\'").ToLower()+"') "
 								},
 								{
 									"f_done", new t_f<t,t>(delegate (t args2)
@@ -421,11 +430,12 @@ namespace my_helper
 			{
 				//запрос блокирует клиента
 				{"block", true},
-				{"cmd", "insert into tab_customer (name, phone, email, wd_customer_guid) values ('"+
+				{"cmd", "insert into tab_customer (name, phone, email, wd_customer_guid, _nocase_search) values ('"+
 						new_item["name"].f_str()+"','"+
 						new_item["phone"].f_str()+"','"+
 						new_item["email"].f_str()+"','"+
-						new_item["wd_customer_guid"].f_str()+"') "
+						new_item["wd_customer_guid"].f_str()+"','"+
+						(new_item["name"].f_str()+new_item["phone"].f_str()+new_item["email"].f_str()).ToLower()+"') "
 				},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
@@ -473,7 +483,10 @@ namespace my_helper
 			{
 				//запрос блокирует клиента
 				{"block", true},
-				{"cmd", "insert into tab_address (name) values ('"+new_item["name"].f_str()+"') "
+				{
+					"cmd", "insert into tab_address (name, _nocase_search) values ('"+
+							new_item["name"].f_str()+"','"+
+							new_item["name"].f_str().ToLower()+"') "
 				},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
@@ -499,6 +512,90 @@ namespace my_helper
 
 		}
 
+		#endregion наполнение базы
 
+		#region SELECT
+
+		public t f_select_tab_customer(t args)
+		{
+
+			string where = args["where"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sqlite_cli cli = this["sqlite_cli"].f_val<t_sqlite_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sqlite_cli"].f_val<t_sqlite_cli>();
+			}
+
+			cli.f_select(new t()
+			{
+				{"cmd","SELECT * FROM tab_customer where "+where},
+				{
+					"f_each", args["f_each"].f_f()
+				},
+				{
+					"f_done", args["f_done"].f_f()
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						
+
+						return new t();
+					})
+				}
+			});
+
+			return this;
+		}
+
+		public t f_select_tab_address(t args)
+		{
+
+			string where = args["where"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sqlite_cli cli = this["sqlite_cli"].f_val<t_sqlite_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sqlite_cli"].f_val<t_sqlite_cli>();
+			}
+
+			cli.f_select(new t()
+			{
+				{"cmd","SELECT * FROM tab_address where "+where},
+				{
+					"f_each", args["f_each"].f_f()
+				},
+				{
+					"f_done", args["f_done"].f_f()
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						
+
+						return new t();
+					})
+				}
+			});
+
+			return this;
+		}
+
+		#endregion SELECT
 	}
 }
