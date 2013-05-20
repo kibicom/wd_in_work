@@ -37,16 +37,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Atechnology.Components">
-      <HintPath>..\..\..\dnclive\windraw\WinDraw2009\Atechnology.Components.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\data\windraw_1.7\Atechnology.Components.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.ecad.Document">
-      <HintPath>..\..\..\..\venta\synchronize\orders\Dropbox\data\WinDraw2009\Atechnology.ecad.Document.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\data\windraw_1.7\Atechnology.ecad.Document.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.winDraw.Components">
+      <HintPath>..\..\..\..\..\Dropbox\data\WinDraw2009\Atechnology.winDraw.Components.dll</HintPath>
     </Reference>
     <Reference Include="fastJSON">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
     </Reference>
     <Reference Include="kibicom.josi">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\kibicom.josi.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom.tlib">
+      <HintPath>..\..\..\dnclive\tlib_sharp\tlib\bin\Debug\kibicom.tlib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -160,12 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\dnclive\tlib_sharp\tlib\kibicom.tlib.csproj">
-      <Project>{34281226-04dc-4efd-b765-4ae4acec101d}</Project>
-      <Name>kibicom.tlib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

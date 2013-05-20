@@ -98,10 +98,6 @@
       <Project>{ccdb8ce9-15e8-4227-b3d3-be1b9df7f729}</Project>
       <Name>kibicom_wd_console_deb</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\dnclive\tlib_sharp\tlib\kibicom.tlib.csproj">
-      <Project>{34281226-04dc-4efd-b765-4ae4acec101d}</Project>
-      <Name>kibicom.tlib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\kibicom\kvl_sharp\kvl\kvl.csproj">
       <Project>{508cbce9-4fde-4e12-a542-e104ce06be85}</Project>
       <Name>kvl</Name>

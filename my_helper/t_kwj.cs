@@ -248,12 +248,12 @@ namespace my_helper
 								{"cmd", "insert into tab_customer (id, dtcre, name, phone, email, "+
 										"wd_customer_guid, _nocase_search) values ("+
 										row_id+","+
-										dtcre_ut+",\""+
-										row_name.Replace("'", "''").Replace("\"", "\"\"")+"\",\""+
-										row_phone.Replace("'", "''").Replace("\"", "\"\"")+"\",\""+
-										row_email.Replace("'", "''").Replace("\"", "\"\"")+"\",\""+
-										row_wd_customer_guid+"\",\""+
-										(row_name+row_phone+row_email).Replace("'", "''").Replace("\"", "\"\"").ToLower()+"\") "
+										dtcre_ut+",'"+
+										row_name.Replace("'", "''")+"','"+
+										row_phone.Replace("'", "''")+"','"+
+										row_email.Replace("'", "''")+"','"+
+										row_wd_customer_guid+"','"+
+										(row_name+row_phone+row_email).Replace("'", "''").ToLower()+"') "
 								},
 								{
 									"f_done", new t_f<t,t>(delegate (t args2)
@@ -267,7 +267,7 @@ namespace my_helper
 									"f_fail", new t_f<t,t>(delegate (t args2)
 									{
 
-										MessageBox.Show("fail get rows from kibicom");
+										//MessageBox.Show("fail get rows from kibicom");
 
 										return new t();
 									})
