@@ -6,6 +6,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+
 using kibicom.tlib;
 using kibicom.josi;
 
@@ -120,11 +122,23 @@ namespace my_helper
 		override public t f_get_items(t args)
 		{
 
+			string query=txt_query.Text.Replace(' ', '%');
+			query = (new Regex("(\\d)")).Replace(query, "$1[- ,/]");
+
+			string where = "";
+			if (this.args["using_local_store"].f_str() == "mssql")
+			{
+				where = " name like '%" + query + "%' ";
+			}
+			else if (this.args["using_local_store"].f_str() == "sqlite")
+			{
+				where = " _nocase_search like '%" + query + "%' ";
+			}
+
 			kwj.f_select_tab_address(new t()
 			{
-				{
-					"where", " _nocase_search like '%"+txt_query.Text+"%' "
-				},
+				{"limit" , 20},
+				{"where", where},
 				{
 					"f_each", new t_f<t,t>(delegate (t args1)
 					{
@@ -139,8 +153,7 @@ namespace my_helper
 								"item", new t()
 								{
 									{"id",dr["id"].ToString()},
-									{"name",dr["name"].ToString().Replace("\'", "'")},
-									{"wd_customer_guid",dr["wd_customer_guid"].ToString()}
+									{"name",dr["name"].ToString()}
 								}
 							}
 						});
@@ -254,7 +267,7 @@ namespace my_helper
 
 				//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
-				t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
+				t created_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
 				//this.args["selected_item"]["str1"] = this.args["selected_item"]["item"]["name"];
 				//this.args["selected_item"]["str2"] = this.args["selected_item"]["item"]["phone"];
@@ -263,9 +276,9 @@ namespace my_helper
 				//запрос f_find() выполниться из кеша что бы не обращаться к серверу
 				this.args["new_items"].Add(new t()
 				{
-					{"str1", created_customer["name"]},
+					{"str1", created_item["name"]},
 					{"str2", ""},
-					{"item", created_customer}
+					{"item", created_item}
 				});
 
 
@@ -282,9 +295,74 @@ namespace my_helper
 					}
 				});
 
+				//сохраняем созданного контрагента
+				f_store(new t() { { "item", created_item } });
+
 			}
 
 			return new t();
 		}
+
+		override public t f_modify_item(t args)
+		{
+
+			t item = args["item"];
+
+			//создаем форму ввода данных нового контрагента
+			frm_cre_edit_item = new customer_info.customer_info_form(new t() { { "item", item["item"] } });
+
+			//показываем форму как диалог
+			frm_cre_edit_item.ShowDialog();
+
+			if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+			{
+				//в результате деактивации текущего окна (окна поиска)
+				//оно скроется так как предыдущее окно было диалогом
+				//сюда мы попадем когда его закроют - данные введут
+				//поэтом вновь показываем себя
+				Show();
+
+				//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
+
+				t created_item = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
+
+				//добавляем созданный элемент в кэш времени выполнения
+				//запрос f_find() выполниться из кеша что бы не обращаться к серверу
+				this.args["new_items"].Add(new t()
+				{
+					{"str1", created_item["name"]},
+					{"str2", ""},
+					{"item", created_item}
+				});
+
+
+				f_find(new t()
+				{
+					{
+						"f_done", new t_f<t,t> (delegate (t args1)
+							{
+
+								f_touch_lbx_item();
+
+								return new t();
+							})
+					}
+				});
+
+
+			}
+
+			return new t();
+
+		}
+
+		public t f_store(t args)
+		{
+
+			kwj.f_tab_customer_add_mssql(args);
+
+			return new t();
+		}
+
 	}
 }

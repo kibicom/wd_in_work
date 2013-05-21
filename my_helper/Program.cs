@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using josi.store;
 
+using kibicom.tlib;
+
 namespace my_helper
 {
 	static class Program
@@ -17,7 +19,7 @@ namespace my_helper
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frm_main());
+			Application.Run(new frm_main(new t()));
 			//Application.Run(new josi_customer());
 			Application.Run(new frm_conf());
 		}

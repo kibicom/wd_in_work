@@ -26,6 +26,8 @@ namespace my_helper
 
 		public t args = new t();
 
+		string using_store = "mssql";
+
 		//используется для тестов
 		public frm_main()
 		{
@@ -48,8 +50,11 @@ namespace my_helper
 			this.args["f_select_customer"] = args["f_select_customer"];
 			this.args["f_select_address"] = args["f_select_address"];
 
-			this.args["top"] = args["top"].f_def(220);
-			this.args["right_offset"] = args["right_offset"].f_def(30);
+			//this.args["top"] = args["top"].f_def(220);
+			//this.args["right_offset"] = args["right_offset"].f_def(30);
+
+			this.args["top"] = args["top"].f_def(0);
+			this.args["right_offset"] = args["right_offset"].f_def(150);
 
 			this.args["josi_store"]["josi_end_point"] = args["josi_end_point"].
 				f_def("http://kibicom.com/order_store_339/index.php");
@@ -62,13 +67,55 @@ namespace my_helper
 			frm_customer_finder = new frm_finder_customer(new t()
 			{
 				{"josi_store", this.args["josi_store"]},
-				{"local_store", this.args["local_store"]},
+				{
+					"local_store", new t()
+					{
+						{"store_type", using_store},
+						{
+							"sqlite_cli", new t()
+							{
+								this.args["local_store"]
+							}
+						},
+						{
+							"mssql_cli", new t()
+ 							{
+								{"server",					"192.168.1.201"},
+								{"server_name",				""},
+								{"login",					"sa"},
+								{"pass",					"82757662=z"},
+								{"db_name",					"kwj_test"}
+							}
+						}
+					}
+				},
 			});
 
 			frm_address_finder = new frm_finder_address(new t()
 			{
 				{"josi_store", this.args["josi_store"]},
-				{"local_store", this.args["local_store"]},
+				{
+					"local_store", new t()
+					{
+						{"store_type", using_store},
+						{
+							"sqlite_cli", new t()
+							{
+								this.args["local_store"]
+							}
+						},
+						{
+							"mssql_cli", new t()
+ 							{
+								{"server",					"192.168.1.201"},
+								{"server_name",				""},
+								{"login",					"sa"},
+								{"pass",					"82757662=z"},
+								{"db_name",					"kwj_test"}
+							}
+						}
+					}
+				},
 			});
 		}
 
@@ -251,6 +298,11 @@ namespace my_helper
 		private void btn_close_Click(object sender, EventArgs e)
 		{
 			Close();
+		}
+
+		private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+		{
+
 		}
 
 

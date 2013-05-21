@@ -6,6 +6,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+
 using kibicom.tlib;
 using kibicom.josi;
 
@@ -23,7 +25,7 @@ namespace my_helper
 		public frm_finder_customer(t args)
 			: base(args)
 		{
-
+			
 		}
 
 		//получение элементов из источника josi_store
@@ -131,12 +133,26 @@ namespace my_helper
 		//получение элементов из источника local_store
 		override public t f_get_items(t args)
 		{
+			string query = txt_query.Text.Replace(' ', '%');
+			query = (new Regex("(\\d)")).Replace(query, "$1%");
+			//query = (new Regex("(\\d)(?<=\\d)(\\d)")).Replace(query, "$1[-$2]");
+
+			string where = "";
+			if (this.args["using_local_store"].f_str() == "mssql")
+			{
+				where = " name like '%" + query + "%' " +
+						" or phone like '%" + query + "%' " +
+						" or email like '%" + query + "%' ";
+			}
+			else if (this.args["using_local_store"].f_str() == "sqlite")
+			{
+				where = " _nocase_search like '%" + query + "%' ";
+			}
 
 			kwj.f_select_tab_customer(new t()
 			{
-				{
-					"where", " _nocase_search like '%"+txt_query.Text+"%' "
-				},
+				{"limit" , 20},
+				{"where", where},
 				{
 					"f_each", new t_f<t,t>(delegate (t args1)
 					{
@@ -151,9 +167,9 @@ namespace my_helper
 								"item", new t()
 								{
 									{"id",dr["id"].ToString()},
-									{"name",dr["name"].ToString().Replace("\'", "'")},
-									{"phone",dr["phone"].ToString().Replace("\'", "'")},
-									{"email",dr["email"].ToString().Replace("\'", "'")},
+									{"name",dr["name"].ToString()},
+									{"phone",dr["phone"].ToString()},
+									{"email",dr["email"].ToString()},
 									{"wd_customer_guid",dr["wd_customer_guid"].ToString()}
 								}
 							}
@@ -366,7 +382,7 @@ namespace my_helper
 		public t f_store(t args)
 		{
 
-			kwj.f_tab_customer_add(args);
+			kwj.f_tab_customer_add_mssql(args);
 
 			return new t();
 		}

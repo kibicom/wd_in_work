@@ -78,6 +78,7 @@ namespace my_helper
 				{"f_fail", args["f_fail"].f_f()}		//вызываем если авторизация не удалась
 			});
 
+			this.args["using_local_store"] = args["local_store"]["store_type"].f_def("mssql");
 
 			//инициализируем локальное хранилище
 			f_cre_kwj(args);
@@ -86,17 +87,12 @@ namespace my_helper
 
 		public t f_cre_kwj(t args)
 		{
-			string file_name = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db").f_str();
-
 			//создаем клиента, подключаемся
 			kwj = new t_kwj(new t()
 			{
 				{"josi_store", args["josi_store"]},
 				{
-					"local_store", new t()
-					{
-						{"file_name", file_name}
-					}
+					"local_store", args["local_store"]
 				}
 			});
 
