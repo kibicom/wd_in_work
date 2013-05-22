@@ -21,6 +21,8 @@ namespace my_helper
 	public partial class frm_finder : Form
 	{
 
+		//DropShadow ds = new DropShadow();
+
 		public bool is_shown = false;
 
 		//объект запросов к josi
@@ -57,9 +59,10 @@ namespace my_helper
 			InitializeComponent();
 		}
 
-		public frm_finder(t args)
-			: this()
+		public frm_finder(t args): this()
 		{
+			Owner = args["owner"].f_val<Form>();
+
 			string login_name = args["josi_store"]["login_name"].f_def("dnclive").f_str();
 			string pass = args["josi_store"]["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_store"]["josi_end_point"].
@@ -188,7 +191,7 @@ namespace my_helper
 			{
 
 				lbx_items.Items.Clear();
-				btn_change.Visible = false;
+				fp_actions.Visible = false;
 				//show_result = false;
 				return;
 			}
@@ -211,6 +214,7 @@ namespace my_helper
 		private void josi_customer_Shown(object sender, EventArgs e)
 		{
 			txt_query.Focus();
+			//ds.f_show(this);
 		}
 
 		//вывод элементов в listbox
@@ -272,8 +276,8 @@ namespace my_helper
 
 				//выводим кнопку редактирования на выделенном элементе
 				RectangleF rect = e.Bounds;
-				btn_change.Top = Convert.ToInt32(lbx_items.Top + rect.Top + rect.Height / 2 - btn_change.Height / 2);
-				btn_change.Left = Convert.ToInt32(lbx_items.Left + rect.Right - rect.Height / 2 + btn_change.Height / 2 - btn_change.Width);
+				fp_actions.Top = Convert.ToInt32(lbx_items.Top + rect.Top + rect.Height / 2 - fp_actions.Height / 2);
+				fp_actions.Left = Convert.ToInt32(lbx_items.Left + rect.Right - rect.Height / 2 + fp_actions.Height / 2 - fp_actions.Width);
 
 			}
 			else	//отрисовываем не выделенные элементы
@@ -319,7 +323,10 @@ namespace my_helper
 		private void lbx_items_Enter(object sender, EventArgs e)
 		{
 			//txt_query.Focus();
-			btn_change.Visible = true;
+			if (lbx_items.Items.Count > 0)
+			{
+				fp_actions.Visible = true;
+			}
 		}
 
 		private void lbx_items_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -383,10 +390,15 @@ namespace my_helper
 		private void josi_customer_Deactivate(object sender, EventArgs e)
 		{
 			is_shown = false;
+			//ds.f_hide();
 			Hide();
 			if (frm_cre_edit_item != null)
 			{
 				frm_cre_edit_item.Activate();
+			}
+			if (Owner != null)
+			{
+				Owner.Activate();
 			}
 
 		}
@@ -394,8 +406,9 @@ namespace my_helper
 		private void josi_customer_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			is_shown = false;
+			//ds.f_hide();
 			Hide();
-			e.Cancel = true;
+			//e.Cancel = true;
 		}
 
 		private void lbx_items_Click(object sender, EventArgs e)
@@ -412,12 +425,37 @@ namespace my_helper
 			f_modify_item(new t() { { "item", selected_item } });
 		}
 
+		private void btn_change_MouseEnter(object sender, EventArgs e)
+		{
+			Button btn = (Button)sender;
+			//btn.Image = ((System.Drawing.Image)(Properties.Resources.btn_print_1));
+			btn.FlatAppearance.BorderSize = 3;
+		}
+
+		private void btn_change_MouseLeave(object sender, EventArgs e)
+		{
+			Button btn = (Button)sender;
+			//btn.Image = ((System.Drawing.Image)(Properties.Resources.btn_print_1));
+			btn.FlatAppearance.BorderSize = 0;
+		}
+
+		//border only
+		protected override void WndProc(ref Message message)
+		{
+			const int WM_NCHITTEST = 0x0084;
+
+			if (message.Msg == WM_NCHITTEST)
+				return;
+
+			base.WndProc(ref message);
+		}
+
 		#endregion события
 
 		//выполнить поиск
 		public void f_find(t args)
 		{
-			btn_change.Visible = false;
+			fp_actions.Visible = false;
 
 			this.args["items"].Clear();
 
@@ -436,7 +474,7 @@ namespace my_helper
 
 			pb_loading_2.Show();
 
-			f_get_items(new t());
+			f_get_items(args);
 		}
 
 		//получение элементов из источника
@@ -449,6 +487,8 @@ namespace my_helper
 		//заполнение listbox полученными элементами
 		virtual public t f_fill_lbx(t args)
 		{
+
+			//t_f<t,t> f_done=
 
 			t_f<t,t> f=new t_f<t, t>(delegate(t args1)
 			{
@@ -544,6 +584,8 @@ namespace my_helper
 
 			t.f_f("f_done", this.args);
 
+			//ds.f_hide();
+
 			Hide();
 
 			return new t();
@@ -552,6 +594,25 @@ namespace my_helper
 		virtual public t f_modify_item(t args)
 		{
 			return new t();
+		}
+
+	}
+
+	public partial class t_FlowLayoutPanel : FlowLayoutPanel
+	{
+		public t_FlowLayoutPanel()
+		{
+			this.SetStyle(ControlStyles.Opaque, true);
+		}
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				// Turn on the WS_EX_TRANSPARENT style
+				CreateParams cp = base.CreateParams;
+				cp.ExStyle |= 0x20;
+				return cp;
+			}
 		}
 	}
 

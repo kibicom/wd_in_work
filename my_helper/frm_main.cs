@@ -13,8 +13,11 @@ using kibicom.tlib;
 
 namespace my_helper
 {
-	public partial class frm_main : Form
+	public partial class kibicom_mwh_frm_main : Form
 	{
+
+		DropShadow ds = new DropShadow();
+
 		frm_finder_customer frm_customer_finder;
 		frm_finder_address frm_address_finder;
 		System.Threading.Timer timer = null;
@@ -29,7 +32,7 @@ namespace my_helper
 		string using_store = "mssql";
 
 		//используется для тестов
-		public frm_main()
+		public kibicom_mwh_frm_main()
 		{
 			InitializeComponent();
 
@@ -43,12 +46,16 @@ namespace my_helper
 		}
 
 		//production конструктор
-		public frm_main(t args)//:this()
+		public kibicom_mwh_frm_main(t args)//:this()
 		{
 			InitializeComponent();
 
+			this.args["f_activate"] = args["f_activate"];
 			this.args["f_select_customer"] = args["f_select_customer"];
 			this.args["f_select_address"] = args["f_select_address"];
+
+			this.args["wd_dbconn"] = args["wd_dbconn"];
+			this.args["wd_ds"] = args["wd_ds"];
 
 			//this.args["top"] = args["top"].f_def(220);
 			//this.args["right_offset"] = args["right_offset"].f_def(30);
@@ -66,6 +73,7 @@ namespace my_helper
 
 			frm_customer_finder = new frm_finder_customer(new t()
 			{
+				{"owner", this},
 				{"josi_store", this.args["josi_store"]},
 				{
 					"local_store", new t()
@@ -93,6 +101,7 @@ namespace my_helper
 
 			frm_address_finder = new frm_finder_address(new t()
 			{
+				{"owner", this},
 				{"josi_store", this.args["josi_store"]},
 				{
 					"local_store", new t()
@@ -128,10 +137,12 @@ namespace my_helper
 		private void frm_main_Shown(object sender, EventArgs e)
 		{
 			//MessageBox.Show(Screen.PrimaryScreen.Bounds.Width.ToString());
-			Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
-			Top = this.args["top"].f_int();
-			TopLevel = true;
-			Height = 40;
+			//Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
+			//Top = this.args["top"].f_int();
+			//TopLevel = true;
+			//Height = 60;
+
+			//f_drop_shadow();
 
 			timer = new System.Threading.Timer(new TimerCallback(delegate(object args)
 			{
@@ -149,7 +160,12 @@ namespace my_helper
 								  || Cursor.Position.X > Location.X + Width
 								  || Cursor.Position.Y > Location.Y + Height)
 								{
-									Height = 40;
+									Height = 60;
+
+									ds.f_hide();
+
+									//f_drop_shadow();
+
 									return new t();
 								}
 							}
@@ -184,6 +200,21 @@ namespace my_helper
 
 		}
 
+
+		private void f_ds_init()
+		{
+			
+		}
+
+
+		private void f_drop_shadow()
+		{
+			
+			ds.f_show(this);
+			this.BringToFront();
+
+		}
+
 		#region команды
 
 		private void btn_add_customer_Click(object sender, EventArgs e)
@@ -196,7 +227,7 @@ namespace my_helper
 			{
 				t cust=frm_customer_finder.args["selected_item"]["item"];
 
-				this.args["customer"] = args["customer"];
+				this.args["customer"] = cust;
 
 				btn_add_customer.Text = cust["name"].f_str();
 				btn_add_customer.Font = new Font(btn_add_address.Font.FontFamily, 10);
@@ -236,10 +267,11 @@ namespace my_helper
 			//callback когда адресс будет выбран
 			frm_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args)
 			{
-				t cust = frm_address_finder.args["selected_item"]["item"];
-				this.args["address"] = args["address"];
+				t address= frm_address_finder.args["selected_item"]["item"];
 
-				btn_add_address.Text = cust["name"].f_str();
+				this.args["address"] = address;
+
+				btn_add_address.Text = address["name"].f_str();
 				btn_add_address.Font = new Font(btn_add_address.Font.FontFamily, 10);
 				//btn_add_address.Height *= 2;
 
@@ -280,6 +312,10 @@ namespace my_helper
 		{
 			
 			Height = 600;
+
+			t.f_f("f_activate", this.args);
+
+			//f_drop_shadow();
 			
 		}
 
@@ -297,6 +333,11 @@ namespace my_helper
 
 		private void btn_close_Click(object sender, EventArgs e)
 		{
+			ds.Close();
+			foreach (Form frm in OwnedForms)
+			{
+				frm.Close();
+			}
 			Close();
 		}
 
@@ -305,6 +346,74 @@ namespace my_helper
 
 		}
 
+		//border only
+		protected override void WndProc(ref Message message)
+		{
+			const int WM_NCHITTEST = 0x0084;
+
+			if (message.Msg == WM_NCHITTEST)
+				return;
+
+			base.WndProc(ref message);
+		}
+
+		private void kibicom_mwh_frm_main_Load(object sender, EventArgs e)
+		{
+			Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
+			Top = this.args["top"].f_int();
+			TopLevel = true;
+			Height = 60;
+		}
+
+		public void f_tab_enter(object sender, EventArgs e)
+		{
+			this.args["wd"]["active_tab"].f_set(sender);
+			MessageBox.Show("123");
+		}
+	}
+
+	public class DropShadow : Form
+	{
+		public DropShadow()
+		{
+			return;
+			this.Opacity = 0.5;
+			this.BackColor = Color.Gray;
+			this.ShowInTaskbar = false;
+			this.FormBorderStyle = FormBorderStyle.None;
+			this.StartPosition = FormStartPosition.Manual;
+			this.TopMost = true;
+		}
+		private const int WS_EX_TRANSPARENT = 0x20;
+		private const int WS_EX_NOACTIVATE = 0x8000000;
+		protected override System.Windows.Forms.CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams cp = base.CreateParams;
+				cp.ExStyle = cp.ExStyle | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE;
+				return cp;
+			}
+		}
+
+		public void f_show(Form frm)
+		{
+			return;
+			Rectangle rc = frm.Bounds;
+			rc.Inflate(10, 10);
+			this.Bounds = rc;
+			//frm.le
+			//this.level
+			this.Show();
+			frm.Show();
+			this.BringToFront();
+		}
+
+		public void f_hide()
+		{
+			return;
+			this.Hide();
+		}
 
 	}
 }

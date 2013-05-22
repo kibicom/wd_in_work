@@ -182,7 +182,7 @@ namespace my_helper
 					"f_done", new t_f<t,t>(delegate (t args1)
 					{
 						
-						f_fill_lbx(new t());
+						f_fill_lbx(args);
 
 						return new t();
 					})
@@ -319,7 +319,8 @@ namespace my_helper
 				});
 
 				//сохраняем созданного контрагента
-				f_store(new t() { { "item", created_customer } });
+				kwj.f_tab_customer_add_mssql(new t() { { "item", created_customer } });
+				//f_store(new t() { { "item", created_customer } });
 
 			}
 
@@ -349,30 +350,13 @@ namespace my_helper
 
 				t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
 
-				//добавляем созданный элемент в кэш времени выполнения
-				//запрос f_find() выполниться из кеша что бы не обращаться к серверу
-				this.args["new_items"].Add(new t()
-				{
-					{"str1", created_customer["name"]},
-					{"str2", created_customer["phone"]},
-					{"item", created_customer}
-				});
 
+				lbx_items.SelectedItem = item;
 
-				f_find(new t()
-				{
-					{
-						"f_done", new t_f<t,t> (delegate (t args1)
-							{
+				f_touch_lbx_item();
 
-								f_touch_lbx_item();
-
-								return new t();
-							})
-					}
-				});
-
-
+				//сохраняем созданного контрагента
+				kwj.f_tab_customer_modify_mssql(new t() { { "item", created_customer } });
 			}
 
 			return new t();

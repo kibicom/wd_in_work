@@ -924,6 +924,7 @@ namespace my_helper
 
 		}
 
+
 		public t f_tab_customer_add_mssql(t args)
 		{
 			t new_item = args["item"];
@@ -1000,6 +1001,109 @@ namespace my_helper
 				{"block", true},
 				{
 					"cmd", "insert into tab_address (name) values ('"+
+							new_item["name"].f_str()+"') "
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+
+
+		}
+
+
+		public t f_tab_customer_modify_mssql(t args)
+		{
+			t new_item = args["item"];
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//сохраняем в локальный кеш
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "update tab_customer set "+
+						"name='"+new_item["name"].f_str()+
+						"', phone='"+new_item["phone"].f_str()+
+						"', email='"+new_item["email"].f_str()+
+						"' where id="+new_item["id"].f_str()+" "
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+
+
+		}
+
+		public t f_tab_address_modify_mssql(t args)
+		{
+			t new_item = args["item"];
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//сохраняем в локальный кеш
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{
+					"cmd", "update tab_address (name) values ('"+
 							new_item["name"].f_str()+"') "
 				},
 				{

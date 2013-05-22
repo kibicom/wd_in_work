@@ -19,7 +19,7 @@ namespace my_helper
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frm_main(new t()));
+			Application.Run(new kibicom_mwh_frm_main(new t()));
 			//Application.Run(new josi_customer());
 			Application.Run(new frm_conf());
 		}

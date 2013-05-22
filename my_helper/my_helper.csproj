@@ -5,13 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DA2700E6-B433-4D6D-BB1A-89BF09D4B733}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>my_helper</RootNamespace>
     <AssemblyName>my_helper</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -137,18 +137,22 @@
     <Compile Include="t_kwj.cs" />
     <EmbeddedResource Include="customer_info_form.resx">
       <DependentUpon>customer_info_form.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_conf.resx">
       <DependentUpon>frm_conf.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_finder.resx">
       <DependentUpon>frm_finder.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_customer_finder.resx">
       <DependentUpon>frm_customer_finder.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="josi_customer.resx">
       <DependentUpon>josi_customer.cs</DependentUpon>
@@ -196,6 +200,30 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_edit_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_150_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_015_print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_151_new_window.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_206_ok_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_207_remove_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_335_pushpin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_158_show_lines.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

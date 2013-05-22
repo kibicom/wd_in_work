@@ -251,34 +251,38 @@ namespace my_helper
 		override public t f_cre_item(t args)
 		{
 
+			t item = args["item"];
+
 			//создаем форму ввода данных нового контрагента
-			frm_cre_edit_item = new customer_info.customer_info_form(txt_query.Text);
+			//frm_cre_edit_item = new customer_info.customer_info_form(txt_query.Text);
 
 			//показываем форму как диалог
-			frm_cre_edit_item.ShowDialog();
+			//frm_cre_edit_item.ShowDialog();
 
-			if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+			//if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
 			{
 				//в результате деактивации текущего окна (окна поиска)
 				//оно скроется так как предыдущее окно было диалогом
 				//сюда мы попадем когда его закроют - данные введут
 				//поэтом вновь показываем себя
-				Show();
+				//Show();
 
 				//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
-				t created_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
+				//t created_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
 				//this.args["selected_item"]["str1"] = this.args["selected_item"]["item"]["name"];
 				//this.args["selected_item"]["str2"] = this.args["selected_item"]["item"]["phone"];
+
+				item["name"].f_set(txt_query.Text);
 
 				//добавляем созданный элемент в кэш времени выполнения
 				//запрос f_find() выполниться из кеша что бы не обращаться к серверу
 				this.args["new_items"].Add(new t()
 				{
-					{"str1", created_item["name"]},
+					{"str1", item["name"]},
 					{"str2", ""},
-					{"item", created_item}
+					{"item", item}
 				});
 
 
@@ -296,7 +300,8 @@ namespace my_helper
 				});
 
 				//сохраняем созданного контрагента
-				f_store(new t() { { "item", created_item } });
+				kwj.f_tab_address_add_mssql(new t() { { "item", item } });
+				//f_store(new t() { { "item", created_item } });
 
 			}
 
@@ -309,45 +314,31 @@ namespace my_helper
 			t item = args["item"];
 
 			//создаем форму ввода данных нового контрагента
-			frm_cre_edit_item = new customer_info.customer_info_form(new t() { { "item", item["item"] } });
+			//frm_cre_edit_item = new customer_info.customer_info_form(new t() { { "item", item["item"] } });
 
 			//показываем форму как диалог
-			frm_cre_edit_item.ShowDialog();
+			//frm_cre_edit_item.ShowDialog();
 
-			if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+			//if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
 			{
 				//в результате деактивации текущего окна (окна поиска)
 				//оно скроется так как предыдущее окно было диалогом
 				//сюда мы попадем когда его закроют - данные введут
 				//поэтом вновь показываем себя
-				Show();
+				//Show();
 
 				//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
-				t created_item = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
+				//t created_item = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
 
-				//добавляем созданный элемент в кэш времени выполнения
-				//запрос f_find() выполниться из кеша что бы не обращаться к серверу
-				this.args["new_items"].Add(new t()
-				{
-					{"str1", created_item["name"]},
-					{"str2", ""},
-					{"item", created_item}
-				});
+				item["name"].f_set(txt_query.Text);
 
+				lbx_items.SelectedItem = item;
 
-				f_find(new t()
-				{
-					{
-						"f_done", new t_f<t,t> (delegate (t args1)
-							{
+				f_touch_lbx_item();
 
-								f_touch_lbx_item();
-
-								return new t();
-							})
-					}
-				});
+				//сохраняем созданного контрагента
+				kwj.f_tab_address_modify_mssql(new t() { { "item", item } });
 
 
 			}

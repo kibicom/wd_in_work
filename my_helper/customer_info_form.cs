@@ -99,31 +99,6 @@ namespace customer_info
 
 			return;
 
-			string telephone = maskedTextBox1.Text;
-
-			this.args["item"] = new t()
-			{
-				{"name", textBox1.Text},
-				{"phone", txt_phone.Text},
-				{"email", textBox2.Text}
-			};
-
-			string[] result = telephone.Split(new char[]{';',' ',','});
-			for (int i = 0; i < result.Length; i++)
-			{
-				int x = CountWords(result[i], " ");
-				if (x < 3)
-				{
-					this.args["item"]["phone_arr"].Add(result[i]);
-				}
-			}
-
-			args["is_done"].f_set(true);
-
-
-			//MessageBox.Show(customer.phone_arr[0], "Customer_phone_arr");
-			Hide();
-
 		}
 		
 		private void button3_Click(object sender, EventArgs e)
@@ -136,13 +111,11 @@ namespace customer_info
 
 			string telephone = maskedTextBox1.Text;
 
-			this.args["item"] = new t()
-			{
-				{"name", textBox1.Text},
-				{"fio", textBox1.Text},
-				{"phone", txt_phone.Text},
-				{"email", textBox2.Text}
-			};
+			this.args["item"]["name"].f_set(textBox1.Text);
+			this.args["item"]["fio"].f_set(textBox1.Text);
+			this.args["item"]["phone"].f_set(txt_phone.Text);
+			this.args["item"]["email"].f_set(textBox2.Text);
+
 
 			string[] result = telephone.Split(new char[] { ';', ' ', ',' });
 			for (int i = 0; i < result.Length; i++)

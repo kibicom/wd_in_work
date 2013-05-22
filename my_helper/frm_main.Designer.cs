@@ -1,6 +1,6 @@
 ﻿namespace my_helper
 {
-	partial class frm_main
+	partial class kibicom_mwh_frm_main
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -33,10 +33,10 @@
 			this.btn_add_zamer = new System.Windows.Forms.Button();
 			this.btn_take_in_work = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.btn_events = new System.Windows.Forms.Button();
+			this.btn_add_pay = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_close = new System.Windows.Forms.Button();
-			this.btn_add_pay = new System.Windows.Forms.Button();
-			this.btn_events = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -105,7 +105,7 @@
 			this.btn_take_in_work.Name = "btn_take_in_work";
 			this.btn_take_in_work.Size = new System.Drawing.Size(237, 49);
 			this.btn_take_in_work.TabIndex = 0;
-			this.btn_take_in_work.Text = "В работу";
+			this.btn_take_in_work.Text = "Отправить в ПТО";
 			this.btn_take_in_work.UseVisualStyleBackColor = true;
 			this.btn_take_in_work.Click += new System.EventHandler(this.button4_Click);
 			// 
@@ -125,31 +125,24 @@
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(9, 46);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(242, 450);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(242, 527);
 			this.flowLayoutPanel1.TabIndex = 1;
 			this.flowLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
 			// 
-			// flowLayoutPanel2
+			// btn_events
 			// 
-			this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.flowLayoutPanel2.Controls.Add(this.btn_close);
-			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(260, 40);
-			this.flowLayoutPanel2.TabIndex = 2;
-			this.flowLayoutPanel2.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
-			// 
-			// btn_close
-			// 
-			this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_close.Location = new System.Drawing.Point(215, 3);
-			this.btn_close.Name = "btn_close";
-			this.btn_close.Size = new System.Drawing.Size(42, 37);
-			this.btn_close.TabIndex = 0;
-			this.btn_close.Text = "X";
-			this.btn_close.UseVisualStyleBackColor = true;
-			this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
+			this.btn_events.FlatAppearance.BorderSize = 0;
+			this.btn_events.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_events.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_events.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_events.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_events.Location = new System.Drawing.Point(3, 3);
+			this.btn_events.Name = "btn_events";
+			this.btn_events.Size = new System.Drawing.Size(238, 49);
+			this.btn_events.TabIndex = 0;
+			this.btn_events.Text = "Уведомления";
+			this.btn_events.UseVisualStyleBackColor = true;
+			this.btn_events.Click += new System.EventHandler(this.btn_add_address_Click);
 			// 
 			// btn_add_pay
 			// 
@@ -169,39 +162,50 @@
 			this.btn_add_pay.UseVisualStyleBackColor = true;
 			this.btn_add_pay.Click += new System.EventHandler(this.button4_Click);
 			// 
-			// btn_events
+			// flowLayoutPanel2
 			// 
-			this.btn_events.FlatAppearance.BorderSize = 0;
-			this.btn_events.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-			this.btn_events.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-			this.btn_events.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btn_events.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_events.Location = new System.Drawing.Point(3, 3);
-			this.btn_events.Name = "btn_events";
-			this.btn_events.Size = new System.Drawing.Size(238, 49);
-			this.btn_events.TabIndex = 0;
-			this.btn_events.Text = "Уведомления";
-			this.btn_events.UseVisualStyleBackColor = true;
-			this.btn_events.Click += new System.EventHandler(this.btn_add_address_Click);
+			this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.InactiveCaption;
+			this.flowLayoutPanel2.Controls.Add(this.btn_close);
+			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(260, 44);
+			this.flowLayoutPanel2.TabIndex = 2;
+			this.flowLayoutPanel2.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
 			// 
-			// frm_main
+			// btn_close
+			// 
+			this.btn_close.FlatAppearance.BorderSize = 0;
+			this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_close.Image = global::my_helper.Properties.Resources.btn_more_1;
+			this.btn_close.Location = new System.Drawing.Point(217, 3);
+			this.btn_close.Name = "btn_close";
+			this.btn_close.Size = new System.Drawing.Size(40, 40);
+			this.btn_close.TabIndex = 0;
+			this.btn_close.UseVisualStyleBackColor = true;
+			this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
+			// 
+			// kibicom_mwh_frm_main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.ClientSize = new System.Drawing.Size(260, 505);
+			this.ClientSize = new System.Drawing.Size(260, 582);
+			this.ControlBox = false;
 			this.Controls.Add(this.flowLayoutPanel2);
 			this.Controls.Add(this.flowLayoutPanel1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "frm_main";
+			this.Name = "kibicom_mwh_frm_main";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "My helper";
 			this.TopMost = true;
 			this.Activated += new System.EventHandler(this.frm_main_Activated);
+			this.Load += new System.EventHandler(this.kibicom_mwh_frm_main_Load);
 			this.Shown += new System.EventHandler(this.frm_main_Shown);
 			this.Click += new System.EventHandler(this.frm_main_Click);
 			this.flowLayoutPanel1.ResumeLayout(false);
