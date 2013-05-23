@@ -54,6 +54,10 @@
     <Reference Include="Atechnology.Components">
       <HintPath>..\..\..\dnclive\windraw\WinDraw2009\Atechnology.Components.dll</HintPath>
     </Reference>
+    <Reference Include="Atechnology.DBConnection, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\venta\synchronize\orders\Dropbox\data\WinDraw2009\Atechnology.DBConnection.dll</HintPath>
+    </Reference>
     <Reference Include="Atechnology.ecad.Document">
       <HintPath>..\..\..\..\venta\synchronize\orders\Dropbox\data\WinDraw2009\Atechnology.ecad.Document.dll</HintPath>
     </Reference>

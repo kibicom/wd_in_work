@@ -37,6 +37,7 @@ namespace my_helper
 			this.button2 = new System.Windows.Forms.Button();
 			this.btn_change = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
+			this.lbl_invite = new System.Windows.Forms.Label();
 			this.fp_actions.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,7 +45,7 @@ namespace my_helper
 			// 
 			this.txt_query.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txt_query.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txt_query.Location = new System.Drawing.Point(11, 12);
+			this.txt_query.Location = new System.Drawing.Point(11, 45);
 			this.txt_query.Name = "txt_query";
 			this.txt_query.Size = new System.Drawing.Size(871, 34);
 			this.txt_query.TabIndex = 0;
@@ -61,7 +62,7 @@ namespace my_helper
 			this.lbx_items.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lbx_items.FormattingEnabled = true;
 			this.lbx_items.ItemHeight = 63;
-			this.lbx_items.Location = new System.Drawing.Point(12, 47);
+			this.lbx_items.Location = new System.Drawing.Point(12, 85);
 			this.lbx_items.Name = "lbx_items";
 			this.lbx_items.Size = new System.Drawing.Size(870, 485);
 			this.lbx_items.TabIndex = 1;
@@ -81,9 +82,12 @@ namespace my_helper
 			// 
 			// pb_loading_2
 			// 
+			this.pb_loading_2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.pb_loading_2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.pb_loading_2.ForeColor = System.Drawing.SystemColors.Desktop;
-			this.pb_loading_2.Location = new System.Drawing.Point(779, 15);
+			this.pb_loading_2.Location = new System.Drawing.Point(776, 50);
 			this.pb_loading_2.Name = "pb_loading_2";
 			this.pb_loading_2.Size = new System.Drawing.Size(100, 23);
 			this.pb_loading_2.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
@@ -97,7 +101,7 @@ namespace my_helper
 			this.fp_actions.Controls.Add(this.button2);
 			this.fp_actions.Controls.Add(this.btn_change);
 			this.fp_actions.Controls.Add(this.button1);
-			this.fp_actions.Location = new System.Drawing.Point(679, 52);
+			this.fp_actions.Location = new System.Drawing.Point(682, 85);
 			this.fp_actions.Name = "fp_actions";
 			this.fp_actions.Padding = new System.Windows.Forms.Padding(3);
 			this.fp_actions.Size = new System.Drawing.Size(200, 45);
@@ -167,12 +171,24 @@ namespace my_helper
 			this.button1.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
 			this.button1.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
 			// 
+			// lbl_invite
+			// 
+			this.lbl_invite.AutoSize = true;
+			this.lbl_invite.Font = new System.Drawing.Font("Courier New", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.lbl_invite.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lbl_invite.Location = new System.Drawing.Point(12, 9);
+			this.lbl_invite.Name = "lbl_invite";
+			this.lbl_invite.Size = new System.Drawing.Size(348, 27);
+			this.lbl_invite.TabIndex = 15;
+			this.lbl_invite.Text = "Начните ввод в поле ниже";
+			// 
 			// frm_finder
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 27F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(894, 582);
 			this.ControlBox = false;
+			this.Controls.Add(this.lbl_invite);
 			this.Controls.Add(this.fp_actions);
 			this.Controls.Add(this.pb_loading_2);
 			this.Controls.Add(this.richTextBox1);
@@ -207,6 +223,7 @@ namespace my_helper
 		public System.Windows.Forms.FlowLayoutPanel fp_actions;
 		public System.Windows.Forms.Button button1;
 		public System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Label lbl_invite;
 		//public t_FlowLayoutPanel fp_actions;
 	}
 }

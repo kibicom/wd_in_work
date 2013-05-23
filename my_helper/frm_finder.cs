@@ -63,6 +63,10 @@ namespace my_helper
 		{
 			Owner = args["owner"].f_val<Form>();
 
+			this.args["caption"] = args["caption"];
+
+			lbl_invite.Text = this.args["caption"].f_def(lbl_invite.Text).f_str();
+
 			string login_name = args["josi_store"]["login_name"].f_def("dnclive").f_str();
 			string pass = args["josi_store"]["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_store"]["josi_end_point"].
@@ -396,7 +400,7 @@ namespace my_helper
 			{
 				frm_cre_edit_item.Activate();
 			}
-			if (Owner != null)
+			else if (Owner != null)
 			{
 				Owner.Activate();
 			}

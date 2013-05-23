@@ -289,6 +289,7 @@ namespace my_helper
 
 				t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
 
+
 				//формируем guid для нового контрагента
 				created_customer["wd_customer_guid"].f_set(Guid.NewGuid().ToString());
 
@@ -324,6 +325,8 @@ namespace my_helper
 
 			}
 
+			frm_cre_edit_item = null;
+
 			return new t();
 		}
 
@@ -350,6 +353,7 @@ namespace my_helper
 
 				t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
 
+				
 
 				lbx_items.SelectedItem = item;
 
@@ -358,6 +362,8 @@ namespace my_helper
 				//сохраняем созданного контрагента
 				kwj.f_tab_customer_modify_mssql(new t() { { "item", created_customer } });
 			}
+
+			frm_cre_edit_item = null;
 
 			return new t();
 

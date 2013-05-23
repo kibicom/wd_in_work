@@ -50,12 +50,14 @@ namespace my_helper
 		{
 			InitializeComponent();
 
+			this.args["self"].f_set(this);
+
 			this.args["f_activate"] = args["f_activate"];
 			this.args["f_select_customer"] = args["f_select_customer"];
 			this.args["f_select_address"] = args["f_select_address"];
 
-			this.args["wd_dbconn"] = args["wd_dbconn"];
-			this.args["wd_ds"] = args["wd_ds"];
+			this.args["wd"]["dbconn"] = args["wd"]["dbconn"];
+			this.args["wd"]["ds"] = args["wd"]["ds"];
 
 			//this.args["top"] = args["top"].f_def(220);
 			//this.args["right_offset"] = args["right_offset"].f_def(30);
@@ -74,6 +76,7 @@ namespace my_helper
 			frm_customer_finder = new frm_finder_customer(new t()
 			{
 				{"owner", this},
+				{"caption", "Выберите клиента"},
 				{"josi_store", this.args["josi_store"]},
 				{
 					"local_store", new t()
@@ -102,6 +105,7 @@ namespace my_helper
 			frm_address_finder = new frm_finder_address(new t()
 			{
 				{"owner", this},
+				{"caption", "Выберите адрес"},
 				{"josi_store", this.args["josi_store"]},
 				{
 					"local_store", new t()
@@ -235,6 +239,9 @@ namespace my_helper
 
 				t.f_f("f_select_customer", this.args);
 
+				//после выбора клиента вызываем окно выбора адреса
+				btn_add_address_Click(null, null);
+
 				return new t();
 			}));
 
@@ -281,7 +288,7 @@ namespace my_helper
 			}));
 
 
-			if (frm_customer_finder.is_shown)
+			if (frm_address_finder.is_shown)
 			{
 				btn_add_address.Font = new Font(btn_add_address.Font, FontStyle.Regular);
 
@@ -300,7 +307,55 @@ namespace my_helper
 			}
 		}
 
+		//событие активации вкладки wd
+		public void f_tab_enter(object sender, EventArgs e)
+		{
+			this.args["wd"]["active_tab"].f_set(sender);
+			Atechnology.ecad.Document.OrderItemForm oif = (Atechnology.ecad.Document.OrderItemForm)sender;
+
+			//MessageBox.Show(oif.Name.ToString());
+
+			//MessageBox.Show(oif.ds.Tables.Count.ToString());
+
+			//MessageBox.Show(oif.ds.Tables["orders"].Rows[0]["name"].ToString());
+
+			this.args["wd"]["dbconn"].f_set(oif.db);
+			this.args["wd"]["ds"].f_set(oif.ds);
+
+
+		}
+
+		public void f_set_context(t args)
+		{
+			try
+			{
+				f_set_context(args);
+				f_set_context(args);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		public void f_set_customer(t args)
+		{
+			string customer_name=args["customer_name"].f_str();
+
+			btn_add_customer.Text = customer_name;
+		}
+
+		public void f_set_address(t args)
+		{
+			string address_name = args["address_name"].f_str();
+
+			btn_add_address.Text = address_name;
+		}
+
 		#endregion команды
+
+
+		#region события
 
 		private void frm_main_Activated(object sender, EventArgs e)
 		{
@@ -323,7 +378,6 @@ namespace my_helper
 		{
 
 		}
-
 
 
 		private void frm_main_Click(object sender, EventArgs e)
@@ -365,11 +419,8 @@ namespace my_helper
 			Height = 60;
 		}
 
-		public void f_tab_enter(object sender, EventArgs e)
-		{
-			this.args["wd"]["active_tab"].f_set(sender);
-			MessageBox.Show("123");
-		}
+		#endregion события
+
 	}
 
 	public class DropShadow : Form
