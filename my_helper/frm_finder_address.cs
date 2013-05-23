@@ -123,7 +123,8 @@ namespace my_helper
 		{
 
 			string query=txt_query.Text.Replace(' ', '%');
-			query = (new Regex("(\\d)")).Replace(query, "$1[- ,/]");
+			query = (new Regex("(\\d)")).Replace(query, "$1%");
+			//query = (new Regex("(\\d)")).Replace(query, "$1[- ,/]");
 
 			string where = "";
 			if (this.args["using_local_store"].f_str() == "mssql")
