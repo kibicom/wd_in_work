@@ -34,11 +34,14 @@ namespace my_helper
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.pb_loading_2 = new System.Windows.Forms.ProgressBar();
 			this.fp_actions = new System.Windows.Forms.FlowLayoutPanel();
-			this.button2 = new System.Windows.Forms.Button();
+			this.btn_pick = new System.Windows.Forms.Button();
 			this.btn_change = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
+			this.btn_drop = new System.Windows.Forms.Button();
+			this.btn_revert = new System.Windows.Forms.Button();
 			this.lbl_invite = new System.Windows.Forms.Label();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.fp_actions.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// txt_query
@@ -98,36 +101,34 @@ namespace my_helper
 			// fp_actions
 			// 
 			this.fp_actions.BackColor = System.Drawing.Color.White;
-			this.fp_actions.Controls.Add(this.button2);
-			this.fp_actions.Controls.Add(this.btn_change);
-			this.fp_actions.Controls.Add(this.button1);
+			this.fp_actions.Controls.Add(this.btn_pick);
+			this.fp_actions.Controls.Add(this.flowLayoutPanel1);
 			this.fp_actions.Location = new System.Drawing.Point(682, 85);
 			this.fp_actions.Name = "fp_actions";
-			this.fp_actions.Padding = new System.Windows.Forms.Padding(3);
 			this.fp_actions.Size = new System.Drawing.Size(200, 45);
 			this.fp_actions.TabIndex = 14;
 			this.fp_actions.Visible = false;
 			// 
-			// button2
+			// btn_pick
 			// 
-			this.button2.BackColor = System.Drawing.Color.White;
-			this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.button2.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-			this.button2.FlatAppearance.BorderSize = 0;
-			this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.button2.Image = global::my_helper.Properties.Resources.btn_pick_1;
-			this.button2.Location = new System.Drawing.Point(3, 3);
-			this.button2.Margin = new System.Windows.Forms.Padding(0, 0, 30, 0);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(39, 39);
-			this.button2.TabIndex = 13;
-			this.button2.UseVisualStyleBackColor = false;
-			this.button2.Click += new System.EventHandler(this.btn_change_Click);
-			this.button2.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
-			this.button2.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
+			this.btn_pick.BackColor = System.Drawing.Color.White;
+			this.btn_pick.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.btn_pick.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+			this.btn_pick.FlatAppearance.BorderSize = 0;
+			this.btn_pick.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this.btn_pick.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this.btn_pick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_pick.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_pick.Image = global::my_helper.Properties.Resources.btn_pick_1;
+			this.btn_pick.Location = new System.Drawing.Point(3, 3);
+			this.btn_pick.Margin = new System.Windows.Forms.Padding(3, 3, 28, 3);
+			this.btn_pick.Name = "btn_pick";
+			this.btn_pick.Size = new System.Drawing.Size(39, 39);
+			this.btn_pick.TabIndex = 13;
+			this.btn_pick.UseVisualStyleBackColor = false;
+			this.btn_pick.Click += new System.EventHandler(this.btn_pick_Click);
+			this.btn_pick.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
+			this.btn_pick.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
 			// 
 			// btn_change
 			// 
@@ -140,7 +141,7 @@ namespace my_helper
 			this.btn_change.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_change.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.btn_change.Image = ((System.Drawing.Image)(resources.GetObject("btn_change.Image")));
-			this.btn_change.Location = new System.Drawing.Point(72, 3);
+			this.btn_change.Location = new System.Drawing.Point(7, 3);
 			this.btn_change.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_change.Name = "btn_change";
 			this.btn_change.Size = new System.Drawing.Size(39, 39);
@@ -150,26 +151,49 @@ namespace my_helper
 			this.btn_change.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
 			this.btn_change.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
 			// 
-			// button1
+			// btn_drop
 			// 
-			this.button1.BackColor = System.Drawing.Color.White;
-			this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.button1.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-			this.button1.FlatAppearance.BorderSize = 0;
-			this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.button1.Image = global::my_helper.Properties.Resources.btn_drop_1;
-			this.button1.Location = new System.Drawing.Point(111, 3);
-			this.button1.Margin = new System.Windows.Forms.Padding(0);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(39, 39);
-			this.button1.TabIndex = 13;
-			this.button1.UseVisualStyleBackColor = false;
-			this.button1.Click += new System.EventHandler(this.btn_change_Click);
-			this.button1.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
-			this.button1.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
+			this.btn_drop.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.btn_drop.BackColor = System.Drawing.Color.White;
+			this.btn_drop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.btn_drop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+			this.btn_drop.FlatAppearance.BorderSize = 0;
+			this.btn_drop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this.btn_drop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this.btn_drop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_drop.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_drop.Image = global::my_helper.Properties.Resources.btn_drop_1;
+			this.btn_drop.Location = new System.Drawing.Point(46, 3);
+			this.btn_drop.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_drop.Name = "btn_drop";
+			this.btn_drop.Size = new System.Drawing.Size(39, 39);
+			this.btn_drop.TabIndex = 13;
+			this.btn_drop.UseVisualStyleBackColor = false;
+			this.btn_drop.Click += new System.EventHandler(this.btn_drop_Click);
+			this.btn_drop.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
+			this.btn_drop.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
+			// 
+			// btn_revert
+			// 
+			this.btn_revert.BackColor = System.Drawing.Color.White;
+			this.btn_revert.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.btn_revert.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+			this.btn_revert.FlatAppearance.BorderSize = 0;
+			this.btn_revert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this.btn_revert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this.btn_revert.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_revert.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_revert.Image = global::my_helper.Properties.Resources.btn_revert_1;
+			this.btn_revert.Location = new System.Drawing.Point(85, 3);
+			this.btn_revert.Margin = new System.Windows.Forms.Padding(0);
+			this.btn_revert.Name = "btn_revert";
+			this.btn_revert.Size = new System.Drawing.Size(39, 39);
+			this.btn_revert.TabIndex = 13;
+			this.btn_revert.UseVisualStyleBackColor = false;
+			this.btn_revert.Visible = false;
+			this.btn_revert.Click += new System.EventHandler(this.btn_revert_Click);
+			this.btn_revert.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
+			this.btn_revert.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
 			// 
 			// lbl_invite
 			// 
@@ -181,6 +205,20 @@ namespace my_helper
 			this.lbl_invite.Size = new System.Drawing.Size(348, 27);
 			this.lbl_invite.TabIndex = 15;
 			this.lbl_invite.Text = "Начните ввод в поле ниже";
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.BackColor = System.Drawing.Color.White;
+			this.flowLayoutPanel1.Controls.Add(this.btn_revert);
+			this.flowLayoutPanel1.Controls.Add(this.btn_drop);
+			this.flowLayoutPanel1.Controls.Add(this.btn_change);
+			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(70, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(130, 45);
+			this.flowLayoutPanel1.TabIndex = 14;
 			// 
 			// frm_finder
 			// 
@@ -208,6 +246,7 @@ namespace my_helper
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.josi_customer_FormClosing);
 			this.Shown += new System.EventHandler(this.josi_customer_Shown);
 			this.fp_actions.ResumeLayout(false);
+			this.flowLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -221,9 +260,11 @@ namespace my_helper
 		public System.Windows.Forms.ProgressBar pb_loading_2;
 		public System.Windows.Forms.Button btn_change;
 		public System.Windows.Forms.FlowLayoutPanel fp_actions;
-		public System.Windows.Forms.Button button1;
-		public System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Label lbl_invite;
+		public System.Windows.Forms.Button btn_drop;
+		public System.Windows.Forms.Button btn_pick;
+		public System.Windows.Forms.Label lbl_invite;
+		public System.Windows.Forms.Button btn_revert;
+		public System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		//public t_FlowLayoutPanel fp_actions;
 	}
 }

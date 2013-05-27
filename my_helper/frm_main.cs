@@ -77,6 +77,7 @@ namespace my_helper
 			{
 				{"owner", this},
 				{"caption", "Выберите клиента"},
+				{"wd_seller_guid", args["wd_seller_guid"].f_def("1DC71FEB-2F5C-413E-AF1A-39B43B272C9B")},
 				{"josi_store", this.args["josi_store"]},
 				{
 					"local_store", new t()
@@ -106,6 +107,7 @@ namespace my_helper
 			{
 				{"owner", this},
 				{"caption", "Выберите адрес"},
+				{"wd_seller_guid", args["wd_seller_guid"]},
 				{"josi_store", this.args["josi_store"]},
 				{
 					"local_store", new t()

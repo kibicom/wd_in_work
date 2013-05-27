@@ -297,7 +297,109 @@ namespace my_helper
 				}
 			});
 
-			
+			//tab_pick
+			cli.f_exec_cmd(new t()
+			{
+				{
+					"cmd",@"
+								IF (EXISTS (SELECT * 
+												 FROM INFORMATION_SCHEMA.TABLES 
+												 WHERE TABLE_SCHEMA = 'dbo' 
+												 AND  TABLE_NAME = 'tab_pick'))
+								BEGIN
+								   drop table tab_pick
+								END
+								CREATE TABLE [dbo].[tab_pick](
+									[id_tab] [int] IDENTITY(1,1) NOT NULL,
+									[id] [int] NULL,
+									[dtcre] [datetime] NULL,
+									[deleted] [datetime] NULL,
+									[id_login] [int] NULL,
+									tab_address_id int null,
+									tab_customer_id int null,
+									tab_customer_id int null,
+									[wd_customer_guid] [uniqueidentifier] NULL,
+									[wd_seller_guid] [uniqueidentifier] NULL,
+								 CONSTRAINT [PK_tab_pick] PRIMARY KEY CLUSTERED 
+								(
+									[id_tab] ASC
+								)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+								) ON [PRIMARY]
+
+								"
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args1)
+					{
+
+						//t_deb.f_deb("unit_test", "table {0} created successfull...", "TEST_TABLE");
+
+						MessageBox.Show("tab_pick пересоздан");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						//t_deb.f_deb("unit_test", "table {0} create is fail...", "TEST_TABLE");
+
+						return new t();
+					})
+				}
+			});
+
+			//tab_relat_391
+			cli.f_exec_cmd(new t()
+			{
+				{
+					"cmd",@"
+								IF (EXISTS (SELECT * 
+												 FROM INFORMATION_SCHEMA.TABLES 
+												 WHERE TABLE_SCHEMA = 'dbo' 
+												 AND  TABLE_NAME = 'tab_relat_391'))
+								BEGIN
+								   drop table tab_relat_391
+								END
+								CREATE TABLE [dbo].[tab_relat_391](
+									[id_tab] [int] IDENTITY(1,1) NOT NULL,
+									[id] [int] NULL,
+									[dtcre] [datetime] NULL,
+									[deleted] [datetime] NULL,
+									[id_login] [int] NULL,
+									[name] [varchar](1000) NULL,
+									tab_address_id int null,
+									tab_customer_id int null
+								 CONSTRAINT [PK_tab_relat_391] PRIMARY KEY CLUSTERED 
+								(
+									[id_tab] ASC
+								)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+								) ON [PRIMARY]
+
+								"
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args1)
+					{
+
+						//t_deb.f_deb("unit_test", "table {0} created successfull...", "TEST_TABLE");
+
+						MessageBox.Show("tab_pick пересоздан");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						//t_deb.f_deb("unit_test", "table {0} create is fail...", "TEST_TABLE");
+
+						return new t();
+					})
+				}
+			});
 
 			return new t();
 		}
@@ -1155,7 +1257,7 @@ namespace my_helper
 
 			cli.f_select(new t()
 			{
-				{"cmd","SELECT top "+limit+" * FROM tab_customer where "+where},
+				{"cmd","SELECT top "+limit+" * FROM view_tab_customer where "+where},
 				{
 					"f_each", args["f_each"].f_f()
 				},
@@ -1216,5 +1318,222 @@ namespace my_helper
 		}
 
 		#endregion SELECT
+
+		#region взаимодействие
+
+		public t f_tab_customer_pick_mssql(t args)
+		{
+
+			t new_item = args["item"];
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//сохраняем в локальный кеш
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "insert into tab_pick (tab_customer_id, wd_seller_guid) values ('"+
+						new_item["id"].f_str()+"','"+
+						wd_seller_guid+"') "
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["tab_pick_id"].f_set(1);
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+
+
+			return new t();
+		}
+
+		public t f_tab_customer_unpick_mssql(t args)
+		{
+
+			t new_item = args["item"];
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//удаляем все строки из tab_pick для данного сочетания продавца и контрагента
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "update tab_pick set deleted=getdate() where deleted is null"+
+							" and wd_seller_guid='"+wd_seller_guid+
+							"' and tab_customer_id="+new_item["id"].f_str()},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["tab_pick_id"].f_set("");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+
+
+			return new t();
+		}
+
+
+		public t f_tab_customer_drop_mssql(t args)
+		{
+
+			t new_item = args["item"];
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//сохраняем в локальный кеш
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "update tab_customer set deleted=getdate() where deleted is null"+
+							" and id="+new_item["id"].f_str()
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["deleted"].f_set(DateTime.Now);
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+		}
+
+		public t f_tab_customer_revert_mssql(t args)
+		{
+			t new_item = args["item"];
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//удаляем все строки из tab_pick для данного сочетания продавца и контрагента
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "update tab_customer set deleted=null where deleted is not null"+
+							" and id="+new_item["id"].f_str()
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["deleted"].f_set("");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+		}
+
+
+		#endregion взаимодействие
+
 	}
 }

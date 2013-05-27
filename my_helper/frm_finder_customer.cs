@@ -25,7 +25,7 @@ namespace my_helper
 		public frm_finder_customer(t args)
 			: base(args)
 		{
-			
+			this.args["wd_seller_guid"] = args["wd_seller_guid"];
 		}
 
 		//получение элементов из источника josi_store
@@ -170,7 +170,9 @@ namespace my_helper
 									{"name",dr["name"].ToString()},
 									{"phone",dr["phone"].ToString()},
 									{"email",dr["email"].ToString()},
-									{"wd_customer_guid",dr["wd_customer_guid"].ToString()}
+									{"deleted",dr["deleted"].ToString()},
+									{"wd_customer_guid",dr["wd_customer_guid"].ToString()},
+									{"tab_pick_id",dr["tab_pick_id"].ToString()}
 								}
 							}
 						});
@@ -194,6 +196,24 @@ namespace my_helper
 			return new t();
 		}
 
+		//курсон переведен на другой элемента
+		override public t f_mouse_change_selected_item(t args)
+		{
+
+			f_check_pick_btn(new t()
+			{
+				{"item", args["item"]},
+				{"btn", btn_pick}
+			});
+
+			f_check_drop(new t()
+			{
+				{"item", args["item"]},
+				{"btn", btn_pick}
+			});
+
+			return new t();
+		}
 
 		//сохранение созданного клиента в josi_store
 		public void fstore_customer()
@@ -367,6 +387,132 @@ namespace my_helper
 
 			return new t();
 
+		}
+
+		override public t f_pick_item(t args)
+		{
+
+			t item = args["item"];
+			Button btn = args["btn"].f_val<Button>();
+
+			//если элемен сейчас пришпилин
+			//отшпиливаем. и наоборот
+			if (item["item"]["tab_pick_id"].f_is_empty())
+			{
+				//нажимаем кнопку визуально
+				f_btn_push(btn);
+
+				//крепим элемент
+				kwj.f_tab_customer_pick_mssql(new t() 
+				{ 
+					{ "item", item["item"] },
+					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+				});
+			}
+			else
+			{
+				//отпускаем кнопку визуально
+				f_btn_up(btn);
+
+				//открепляем элемент
+				kwj.f_tab_customer_unpick_mssql(new t() 
+				{ 
+					{ "item", item["item"] },
+					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+				});
+			}
+			
+			return new t();
+
+		}
+
+		//удаление элемента
+		override public t f_drop_item(t args)
+		{
+
+			t item = args["item"];
+			Button btn = args["btn"].f_val<Button>();
+
+			
+			//удаляем элемент
+			kwj.f_tab_customer_drop_mssql(new t() 
+			{ 
+				{ "item", item["item"] },
+				{ "wd_seller_guid", this.args["wd_seller_guid"]}
+			});
+			
+			//вызываем проверку удаления, чтобы выключить ненужные теперь кнопки
+			f_check_drop(args);
+
+			return new t();
+
+		}
+
+		//восстановление элемента
+		override public t f_revert_item(t args)
+		{
+
+			t item = args["item"];
+			Button btn = args["btn"].f_val<Button>();
+
+
+			//восстанавливаем элемент
+			kwj.f_tab_customer_revert_mssql(new t() 
+			{ 
+				{ "item", item["item"] },
+				{ "wd_seller_guid", this.args["wd_seller_guid"]}
+			});
+
+			//вызываем проверку удаления, чтобы включить кнопки
+			f_check_drop(args);
+
+			return new t();
+
+		}
+
+
+		public t f_check_pick_btn(t args)
+		{
+			t item = args["item"];
+			Button btn = args["btn"].f_val<Button>();
+
+			if (item["item"]["tab_pick_id"].f_is_empty())
+			{
+				f_btn_up(btn);
+			}
+			else
+			{
+				f_btn_push(btn);
+			}
+
+			return new t();
+		}
+
+		public t f_check_drop(t args)
+		{
+			t item = args["item"];
+			Button btn = args["btn"].f_val<Button>();
+
+			//если deleted пуст то показываем кнопки
+			if (item["item"]["deleted"].f_is_empty())
+			{
+				btn_pick.Visible = true;
+				btn_change.Visible = true;
+				btn_drop.Visible = true;
+
+				btn_revert.Visible = false;
+
+			}
+			else
+			{
+				btn_pick.Visible = false;
+				btn_change.Visible = false;
+				btn_drop.Visible = false;
+
+				btn_revert.Visible = true;
+			}
+
+			return new t();
 		}
 
 		public t f_store(t args)

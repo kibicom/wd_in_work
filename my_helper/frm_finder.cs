@@ -387,6 +387,10 @@ namespace my_helper
 			if (itemIndex >= 0 && itemIndex != 65535)
 			{
 				lbx.SelectedIndex = itemIndex;
+				f_mouse_change_selected_item(new t()
+				{
+					{"item", (t)(lbx.Items[itemIndex])}
+				});
 			}
 
 		}
@@ -420,6 +424,8 @@ namespace my_helper
 			f_touch_lbx_item();
 		}
 
+		#region кнопки
+
 		private void btn_change_Click(object sender, EventArgs e)
 		{
 			//выбираем затронутый элемент
@@ -432,17 +438,65 @@ namespace my_helper
 		private void btn_change_MouseEnter(object sender, EventArgs e)
 		{
 			Button btn = (Button)sender;
-			//btn.Image = ((System.Drawing.Image)(Properties.Resources.btn_print_1));
-			btn.FlatAppearance.BorderSize = 3;
+			f_btn_push(btn);
 		}
 
 		private void btn_change_MouseLeave(object sender, EventArgs e)
 		{
 			Button btn = (Button)sender;
+			f_btn_up(btn);
+		}
+
+		//pick
+		private void btn_pick_Click(object sender, EventArgs e)
+		{
+			//вызываем функцию редактирования
+			f_pick_item(new t() 
+			{ 
+				{ "item", (t)lbx_items.SelectedItem },
+				{"btn", sender}
+			});
+		}
+
+		//делаем кнопку нажатой
+		public void f_btn_push(Button btn)
+		{
+			//btn.Image = ((System.Drawing.Image)(Properties.Resources.btn_print_1));
+			btn.FlatAppearance.BorderSize = 3;
+		}
+
+		//делаем отпущенной
+		public void f_btn_up(Button btn)
+		{
 			//btn.Image = ((System.Drawing.Image)(Properties.Resources.btn_print_1));
 			btn.FlatAppearance.BorderSize = 0;
 		}
 
+		//drop
+		private void btn_drop_Click(object sender, EventArgs e)
+		{
+			//вызываем функцию редактирования
+			f_drop_item(new t() 
+			{ 
+				{"item", (t)lbx_items.SelectedItem},
+				{"btn", sender}
+			});
+		}
+
+		//восстановление
+		private void btn_revert_Click(object sender, EventArgs e)
+		{
+			//вызываем функцию редактирования
+			f_revert_item(new t() 
+			{ 
+				{"item", (t)lbx_items.SelectedItem},
+				{"btn", sender}
+			});
+		}
+
+		#endregion кнопки
+
+		
 		//border only
 		protected override void WndProc(ref Message message)
 		{
@@ -454,7 +508,15 @@ namespace my_helper
 			base.WndProc(ref message);
 		}
 
+
+
 		#endregion события
+
+		//курсон переведен на другой элемента
+		virtual public t f_mouse_change_selected_item(t args)
+		{
+			return new t();
+		}
 
 		//выполнить поиск
 		public void f_find(t args)
@@ -595,10 +657,31 @@ namespace my_helper
 			return new t();
 		}
 
+		//редактирование
 		virtual public t f_modify_item(t args)
 		{
 			return new t();
 		}
+
+		//прикрепление
+		virtual public t f_pick_item(t args)
+		{
+			return new t();
+		}
+
+		//удаление
+		virtual public t f_drop_item(t args)
+		{
+			return new t();
+		}
+
+		//восстановление
+		virtual public t f_revert_item(t args)
+		{
+			return new t();
+		}
+
+		
 
 	}
 
