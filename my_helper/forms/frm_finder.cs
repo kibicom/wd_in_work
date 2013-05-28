@@ -64,7 +64,6 @@ namespace my_helper
 			Owner = args["owner"].f_val<Form>();
 
 			this.args["caption"] = args["caption"];
-
 			lbl_invite.Text = this.args["caption"].f_def(lbl_invite.Text).f_str();
 
 			string login_name = args["josi_store"]["login_name"].f_def("dnclive").f_str();
@@ -130,7 +129,6 @@ namespace my_helper
 
 			return new t();
 		}
-
 
 		#region событи€
 
@@ -205,6 +203,14 @@ namespace my_helper
 				//show_result = false;
 				return;
 			}
+
+			/*
+			this.args["eimit"].f_set(false);
+			if (!f_check_speed_dial(new t())["emit"].f_bool())
+			{
+				return;
+			}
+			*/
 
 			last_filter_val = txt_query.Text;
 
@@ -391,6 +397,7 @@ namespace my_helper
 				{
 					{"item", (t)(lbx.Items[itemIndex])}
 				});
+				fp_actions.Visible = true;
 			}
 
 		}
@@ -398,8 +405,12 @@ namespace my_helper
 		private void josi_customer_Deactivate(object sender, EventArgs e)
 		{
 			is_shown = false;
-			//ds.f_hide();
-			Hide();
+			if (!this.args["is_blocked"].f_def(false).f_bool())
+			{
+				//ds.f_hide();
+				f_leaved(this.args);
+				Hide();
+			}
 			if (frm_cre_edit_item != null)
 			{
 				frm_cre_edit_item.Activate();
@@ -496,7 +507,19 @@ namespace my_helper
 
 		#endregion кнопки
 
+
+		private void frm_finder_Load(object sender, EventArgs e)
+		{
+
+		}
+
+		private void lbx_items_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
 		
+
 		//border only
 		protected override void WndProc(ref Message message)
 		{
@@ -508,12 +531,32 @@ namespace my_helper
 			base.WndProc(ref message);
 		}
 
-
-
 		#endregion событи€
+
+		public t f_check_speed_dial(t args)
+		{
+
+			TimeSpan last_key_down= this.args["last_key_down"].
+					f_def_set(new TimeSpan(DateTime.Now.Ticks)).f_val<TimeSpan>();
+
+			if (DateTime.Now.Ticks - last_key_down.Ticks > 10000000)
+			{
+				this.args["emit"].f_set(true);
+			}
+
+			this.args["last_key_down"].f_set(new TimeSpan(DateTime.Now.Ticks));
+
+			return this.args;
+		}
 
 		//курсон переведен на другой элемента
 		virtual public t f_mouse_change_selected_item(t args)
+		{
+			return new t();
+		}
+
+		//форма деактивирована
+		virtual public t f_leaved(t args)
 		{
 			return new t();
 		}
@@ -558,6 +601,14 @@ namespace my_helper
 
 			t_f<t,t> f=new t_f<t, t>(delegate(t args1)
 			{
+				//string lbx_add = args1["lbx_add"].f_def("replace").f_str();
+
+				
+
+				bool lbx_add_replace = args1["lbx_add"].f_def("replace").f_str() == "replace";
+
+				//MessageBox.Show(lbx_add_replace.ToString());
+
 				pb_loading_2.Hide();
 
 				//если количество возвращенных результатов 0
@@ -567,8 +618,8 @@ namespace my_helper
 					f_add_new();
 				}
 
-				//очищаем
-				lbx_items.Items.Clear();
+				//очищаем если нужно
+				if (lbx_add_replace) lbx_items.Items.Clear();
 
 				//наполн€ем и рендерим список
 				foreach (t item in (IList<t>)this.args["items"])

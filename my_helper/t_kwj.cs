@@ -317,7 +317,7 @@ namespace my_helper
 									[id_login] [int] NULL,
 									tab_address_id int null,
 									tab_customer_id int null,
-									tab_customer_id int null,
+									tab_seller_id int null,
 									[wd_customer_guid] [uniqueidentifier] NULL,
 									[wd_seller_guid] [uniqueidentifier] NULL,
 								 CONSTRAINT [PK_tab_pick] PRIMARY KEY CLUSTERED 
@@ -372,6 +372,60 @@ namespace my_helper
 									tab_address_id int null,
 									tab_customer_id int null
 								 CONSTRAINT [PK_tab_relat_391] PRIMARY KEY CLUSTERED 
+								(
+									[id_tab] ASC
+								)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+								) ON [PRIMARY]
+
+								"
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args1)
+					{
+
+						//t_deb.f_deb("unit_test", "table {0} created successfull...", "TEST_TABLE");
+
+						MessageBox.Show("tab_pick пересоздан");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						//t_deb.f_deb("unit_test", "table {0} create is fail...", "TEST_TABLE");
+
+						return new t();
+					})
+				}
+			});
+
+			//tab_freq
+			cli.f_exec_cmd(new t()
+			{
+				{
+					"cmd",@"
+								IF (EXISTS (SELECT * 
+												 FROM INFORMATION_SCHEMA.TABLES 
+												 WHERE TABLE_SCHEMA = 'dbo' 
+												 AND  TABLE_NAME = 'tab_freq'))
+								BEGIN
+								   drop table tab_freq
+								END
+								CREATE TABLE [dbo].[tab_freq](
+									[id_tab] [int] IDENTITY(1,1) NOT NULL,
+									[id] [int] NULL,
+									[dtcre] [datetime] NULL,
+									[deleted] [datetime] NULL,
+									[id_login] [int] NULL,
+									[tab_address_id] [int] NULL,
+									[tab_customer_id] [int] NULL,
+									[tab_seller_id] [int] NULL,
+									[wd_customer_guid] [uniqueidentifier] NULL,
+									[wd_seller_guid] [uniqueidentifier] NULL,
+									[freq] [int] NULL,
+								 CONSTRAINT [PK_tab_freq] PRIMARY KEY CLUSTERED 
 								(
 									[id_tab] ASC
 								)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
@@ -1277,6 +1331,49 @@ namespace my_helper
 
 			return this;
 		}
+
+		public t f_select_tab_customer_address(t args)
+		{
+
+			string where = args["where"].f_str();
+			string limit = args["limit"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+			cli.f_select(new t()
+			{
+				{"cmd","SELECT top "+limit+" * FROM view_tab_customer_address where "+where},
+				{
+					"f_each", args["f_each"].f_f()
+				},
+				{
+					"f_done", args["f_done"].f_f()
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						
+
+						return new t();
+					})
+				}
+			});
+
+			return this;
+		}
+
+	
 
 		public t f_select_tab_address(t args)
 		{

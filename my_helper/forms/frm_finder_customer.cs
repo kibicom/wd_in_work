@@ -142,7 +142,8 @@ namespace my_helper
 			{
 				where = " name like '%" + query + "%' " +
 						" or phone like '%" + query + "%' " +
-						" or email like '%" + query + "%' ";
+						" or email like '%" + query + "%' " +
+						" order by deleted, tab_pick_id desc, freq ";
 			}
 			else if (this.args["using_local_store"].f_str() == "sqlite")
 			{

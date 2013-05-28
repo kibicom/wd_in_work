@@ -37,6 +37,7 @@
 			this.btn_add_pay = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_close = new System.Windows.Forms.Button();
+			this.btn_customer_address = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -53,7 +54,7 @@
 			this.btn_add_customer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_add_customer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.btn_add_customer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.btn_add_customer.Location = new System.Drawing.Point(3, 58);
+			this.btn_add_customer.Location = new System.Drawing.Point(3, 113);
 			this.btn_add_customer.Name = "btn_add_customer";
 			this.btn_add_customer.Size = new System.Drawing.Size(238, 49);
 			this.btn_add_customer.TabIndex = 0;
@@ -68,7 +69,7 @@
 			this.btn_add_address.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
 			this.btn_add_address.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_add_address.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_add_address.Location = new System.Drawing.Point(3, 113);
+			this.btn_add_address.Location = new System.Drawing.Point(3, 168);
 			this.btn_add_address.Name = "btn_add_address";
 			this.btn_add_address.Size = new System.Drawing.Size(238, 49);
 			this.btn_add_address.TabIndex = 0;
@@ -86,7 +87,7 @@
 			this.btn_add_zamer.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
 			this.btn_add_zamer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_add_zamer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_add_zamer.Location = new System.Drawing.Point(3, 168);
+			this.btn_add_zamer.Location = new System.Drawing.Point(3, 223);
 			this.btn_add_zamer.Name = "btn_add_zamer";
 			this.btn_add_zamer.Size = new System.Drawing.Size(238, 49);
 			this.btn_add_zamer.TabIndex = 0;
@@ -101,7 +102,7 @@
 			this.btn_take_in_work.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
 			this.btn_take_in_work.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_take_in_work.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_take_in_work.Location = new System.Drawing.Point(3, 278);
+			this.btn_take_in_work.Location = new System.Drawing.Point(3, 333);
 			this.btn_take_in_work.Name = "btn_take_in_work";
 			this.btn_take_in_work.Size = new System.Drawing.Size(237, 49);
 			this.btn_take_in_work.TabIndex = 0;
@@ -115,6 +116,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel1.Controls.Add(this.btn_events);
+			this.flowLayoutPanel1.Controls.Add(this.btn_customer_address);
 			this.flowLayoutPanel1.Controls.Add(this.btn_add_customer);
 			this.flowLayoutPanel1.Controls.Add(this.btn_add_address);
 			this.flowLayoutPanel1.Controls.Add(this.btn_add_zamer);
@@ -154,7 +156,7 @@
 			this.btn_add_pay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
 			this.btn_add_pay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_add_pay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_add_pay.Location = new System.Drawing.Point(3, 223);
+			this.btn_add_pay.Location = new System.Drawing.Point(3, 278);
 			this.btn_add_pay.Name = "btn_add_pay";
 			this.btn_add_pay.Size = new System.Drawing.Size(238, 49);
 			this.btn_add_pay.TabIndex = 0;
@@ -186,6 +188,26 @@
 			this.btn_close.TabIndex = 0;
 			this.btn_close.UseVisualStyleBackColor = true;
 			this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
+			// 
+			// btn_customer_address
+			// 
+			this.btn_customer_address.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_customer_address.BackColor = System.Drawing.Color.Transparent;
+			this.btn_customer_address.FlatAppearance.BorderSize = 0;
+			this.btn_customer_address.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_customer_address.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_customer_address.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_customer_address.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_customer_address.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.btn_customer_address.Location = new System.Drawing.Point(3, 58);
+			this.btn_customer_address.Name = "btn_customer_address";
+			this.btn_customer_address.Size = new System.Drawing.Size(238, 49);
+			this.btn_customer_address.TabIndex = 0;
+			this.btn_customer_address.Text = "Клиент/Адрес";
+			this.btn_customer_address.UseVisualStyleBackColor = false;
+			this.btn_customer_address.Click += new System.EventHandler(this.btn_customer_address_Click);
 			// 
 			// kibicom_mwh_frm_main
 			// 
@@ -225,6 +247,7 @@
 		private System.Windows.Forms.Button btn_close;
 		private System.Windows.Forms.Button btn_add_pay;
 		private System.Windows.Forms.Button btn_events;
+		private System.Windows.Forms.Button btn_customer_address;
 	}
 }
 

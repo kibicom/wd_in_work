@@ -82,40 +82,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="customer_info_form.cs">
+    <Compile Include="forms\customer_info_form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="customer_info_form.designer.cs">
+    <Compile Include="forms\customer_info_form.designer.cs">
       <DependentUpon>customer_info_form.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_conf.cs">
+    <Compile Include="forms\frm_conf.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_conf.Designer.cs">
+    <Compile Include="forms\frm_conf.Designer.cs">
       <DependentUpon>frm_conf.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_finder.cs">
+    <Compile Include="forms\frm_finder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_finder.designer.cs">
+    <Compile Include="forms\frm_finder.designer.cs">
       <DependentUpon>frm_finder.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_finder_address.cs">
+    <Compile Include="forms\frm_finder_address.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_finder_address.Designer.cs">
+    <Compile Include="forms\frm_finder_address.Designer.cs">
       <DependentUpon>frm_finder_address.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_finder_customer.cs">
+    <Compile Include="forms\frm_finder_customer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_finder_customer.Designer.cs">
+    <Compile Include="forms\frm_finder_customer.Designer.cs">
       <DependentUpon>frm_finder_customer.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_main.cs">
+    <Compile Include="forms\frm_finder_customer_address.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_main.Designer.cs">
+    <Compile Include="forms\frm_finder_customer_address.designer.cs">
+      <DependentUpon>frm_finder_customer_address.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\frm_main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_main.Designer.cs">
       <DependentUpon>frm_main.cs</DependentUpon>
     </Compile>
     <Compile Include="frm_customer_finder.cs">
@@ -139,19 +145,19 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="t_kwj.cs" />
-    <EmbeddedResource Include="customer_info_form.resx">
+    <EmbeddedResource Include="forms\customer_info_form.resx">
       <DependentUpon>customer_info_form.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frm_conf.resx">
+    <EmbeddedResource Include="forms\frm_conf.resx">
       <DependentUpon>frm_conf.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frm_finder.resx">
+    <EmbeddedResource Include="forms\frm_finder.resx">
       <DependentUpon>frm_finder.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frm_main.resx">
+    <EmbeddedResource Include="forms\frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_customer_finder.resx">
