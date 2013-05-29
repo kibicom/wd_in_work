@@ -88,8 +88,27 @@ namespace my_helper
 
 			//инициализируем локальное хранилище
 			f_cre_kwj(args);
+
+			f_set_grafix(args);
 		}
 
+
+		public t f_set_grafix(t args)
+		{
+
+			//this.Scale((float)0.8);
+			//lbx_items.Scale((float)0.8);
+			lbx_items.ItemHeight = args["lbx"]["item_hight"].f_def(63).f_int();
+			lbx_items.Font=new Font(lbx_items.Font.FontFamily, args["lbx"]["font_size"].f_def(16).f_int());
+
+			lbx_items.ItemHeight = args["lbx"]["item_hight"].f_def(55).f_int();
+			lbx_items.Font = new Font(lbx_items.Font.FontFamily, args["lbx"]["font_size"].f_def(14).f_int());
+
+			//lbx_items.ItemHeight = args["lbx"]["item_hight"].f_def(43).f_int();
+			//lbx_items.Font = new Font(lbx_items.Font.FontFamily, args["lbx"]["font_size"].f_def(11).f_int());
+
+			return new t();
+		}
 
 		public t f_cre_kwj(t args)
 		{
@@ -232,7 +251,6 @@ namespace my_helper
 		{
 			//MessageBox.Show("lbx");
 			ListBox lbx = (ListBox)sender;
-
 			//если в списке нет элементов нечего прорисовывать выходим
 			if (lbx.Items.Count == 0 || e.Index < 0)
 			{
@@ -281,7 +299,7 @@ namespace my_helper
 					new SolidBrush(ColorTranslator.FromHtml("#eee")),	//цвет текста
 					new SolidBrush(ColorTranslator.FromHtml("#555")),	//цвет тени
 					//прямоугольник в который выводится текст - смещен на 31 пиксель по вертикали (вывод второй строки)
-					new Rectangle(e.Bounds.X, e.Bounds.Y + 31, e.Bounds.Width, e.Bounds.Height)
+					new Rectangle(e.Bounds.X, e.Bounds.Y + lbx_items.ItemHeight/2-2, e.Bounds.Width, e.Bounds.Height)
 				);
 
 				//выводим кнопку редактирования на выделенном элементе
@@ -320,7 +338,7 @@ namespace my_helper
 					e.Font,
 					new SolidBrush(ColorTranslator.FromHtml("#555")),	//цвет текста
 					new SolidBrush(ColorTranslator.FromHtml("#fff")),	//цвет тени
-					new Rectangle(e.Bounds.X, e.Bounds.Y + 31, e.Bounds.Width, e.Bounds.Height)
+					new Rectangle(e.Bounds.X, e.Bounds.Y + lbx_items.ItemHeight / 2-2, e.Bounds.Width, e.Bounds.Height)
 				);
 
 			}
@@ -558,6 +576,9 @@ namespace my_helper
 		//форма деактивирована
 		virtual public t f_leaved(t args)
 		{
+
+			t.f_f("f_leaved", this.args);
+
 			return new t();
 		}
 

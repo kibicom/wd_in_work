@@ -34,10 +34,10 @@
 			this.btn_take_in_work = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_events = new System.Windows.Forms.Button();
+			this.btn_customer_address = new System.Windows.Forms.Button();
 			this.btn_add_pay = new System.Windows.Forms.Button();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_close = new System.Windows.Forms.Button();
-			this.btn_customer_address = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -60,6 +60,7 @@
 			this.btn_add_customer.TabIndex = 0;
 			this.btn_add_customer.Text = "Добавить заказчика";
 			this.btn_add_customer.UseVisualStyleBackColor = false;
+			this.btn_add_customer.Visible = false;
 			this.btn_add_customer.Click += new System.EventHandler(this.btn_add_customer_Click);
 			// 
 			// btn_add_address
@@ -75,6 +76,7 @@
 			this.btn_add_address.TabIndex = 0;
 			this.btn_add_address.Text = "Добавить адрес";
 			this.btn_add_address.UseVisualStyleBackColor = true;
+			this.btn_add_address.Visible = false;
 			this.btn_add_address.Click += new System.EventHandler(this.btn_add_address_Click);
 			// 
 			// btn_add_zamer
@@ -144,7 +146,28 @@
 			this.btn_events.TabIndex = 0;
 			this.btn_events.Text = "Уведомления";
 			this.btn_events.UseVisualStyleBackColor = true;
+			this.btn_events.Visible = false;
 			this.btn_events.Click += new System.EventHandler(this.btn_add_address_Click);
+			// 
+			// btn_customer_address
+			// 
+			this.btn_customer_address.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_customer_address.BackColor = System.Drawing.Color.Transparent;
+			this.btn_customer_address.FlatAppearance.BorderSize = 0;
+			this.btn_customer_address.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_customer_address.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_customer_address.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_customer_address.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_customer_address.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.btn_customer_address.Location = new System.Drawing.Point(3, 58);
+			this.btn_customer_address.Name = "btn_customer_address";
+			this.btn_customer_address.Size = new System.Drawing.Size(238, 49);
+			this.btn_customer_address.TabIndex = 0;
+			this.btn_customer_address.Text = "Клиент/Адрес";
+			this.btn_customer_address.UseVisualStyleBackColor = false;
+			this.btn_customer_address.Click += new System.EventHandler(this.btn_customer_address_Click);
 			// 
 			// btn_add_pay
 			// 
@@ -188,26 +211,6 @@
 			this.btn_close.TabIndex = 0;
 			this.btn_close.UseVisualStyleBackColor = true;
 			this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
-			// 
-			// btn_customer_address
-			// 
-			this.btn_customer_address.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_customer_address.BackColor = System.Drawing.Color.Transparent;
-			this.btn_customer_address.FlatAppearance.BorderSize = 0;
-			this.btn_customer_address.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-			this.btn_customer_address.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-			this.btn_customer_address.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btn_customer_address.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_customer_address.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.btn_customer_address.Location = new System.Drawing.Point(3, 58);
-			this.btn_customer_address.Name = "btn_customer_address";
-			this.btn_customer_address.Size = new System.Drawing.Size(238, 49);
-			this.btn_customer_address.TabIndex = 0;
-			this.btn_customer_address.Text = "Клиент/Адрес";
-			this.btn_customer_address.UseVisualStyleBackColor = false;
-			this.btn_customer_address.Click += new System.EventHandler(this.btn_customer_address_Click);
 			// 
 			// kibicom_mwh_frm_main
 			// 

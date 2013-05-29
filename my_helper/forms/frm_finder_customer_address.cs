@@ -238,7 +238,7 @@ namespace my_helper
 						{
 							{"str1", dr["name"].ToString()},
 							{"str2", ""},
-							{"tab_name", "customer"},
+							{"tab_name", "address"},
 							{
 								"item", new t()
 								{
@@ -495,6 +495,15 @@ namespace my_helper
 			
 			return new t();
 
+		}
+
+		//форма деактивирована
+		override public t f_leaved(t args)
+		{
+
+			t.f_f("f_leaved", this.args);
+
+			return new t();
 		}
 
 		//удаление элемента

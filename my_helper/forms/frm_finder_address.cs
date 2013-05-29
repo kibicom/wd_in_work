@@ -121,7 +121,7 @@ namespace my_helper
 		//получение элементов из источника local_store
 		override public t f_get_items(t args)
 		{
-
+			string tab_customer_id = args["tab_customer_id"].f_def(0).f_str();
 			string query=txt_query.Text.Replace(' ', '%');
 			query = (new Regex("(\\d)")).Replace(query, "$1%");
 			//query = (new Regex("(\\d)")).Replace(query, "$1[- ,/]");
@@ -129,7 +129,9 @@ namespace my_helper
 			string where = "";
 			if (this.args["using_local_store"].f_str() == "mssql")
 			{
-				where = " name like '%" + query + "%' ";
+				where = " name like '%" + query + "%' "+
+						" or id in (select tab_address_id from tab_relat_391"+
+						" where tab_customer_id=" + tab_customer_id + ")";
 			}
 			else if (this.args["using_local_store"].f_str() == "sqlite")
 			{
@@ -177,7 +179,8 @@ namespace my_helper
 
 			return new t();
 		}
-		
+
+
 		//сохранение созданного клиента в josi_store
 		public void fstore_customer()
 		{

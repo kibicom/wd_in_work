@@ -258,13 +258,77 @@ namespace my_helper
 
 		#region команды
 
-		private void btn_add_customer_Click(object sender, EventArgs e)
+		private t f_frm_address(t args)
 		{
-			frm_customer_finder.Top = Top;
-			frm_customer_finder.Left = Left - frm_customer_finder.Width;
-			
+
+			frm_address_finder.Top = args["top"].f_int();
+			frm_address_finder.Left = args["left"].f_int();
+
+			frm_address_finder.args["tab_customer_id"] = args["tab_customer_id"];
+
+			//callback когда адресс будет выбран
+			frm_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+				t address = frm_address_finder.args["selected_item"]["item"];
+
+				this.args["address"] = address;
+
+				btn_add_address.Text = address["name"].f_str();
+				btn_add_address.Font = new Font(btn_add_address.Font.FontFamily, 10);
+				//btn_add_address.Height *= 2;
+
+				t.f_f("f_select_address", this.args);
+
+				t.f_f("f_done", args);
+
+				return new t();
+			}));
+
+			frm_address_finder.args["f_leaved"]= new t(new t_f<t, t>(delegate(t args1)
+			{
+				
+				t.f_f("f_leaved", args);
+
+				return new t();
+			}));
+
+
+
+			if (frm_address_finder.is_shown)
+			{
+				btn_add_address.Font = new Font(btn_add_address.Font, FontStyle.Regular);
+
+				frm_address_finder.is_shown = false;
+				frm_address_finder.Hide();
+				is_show_blocked = false;
+			}
+			else
+			{
+
+				btn_add_address.Font = new Font(btn_add_address.Font, FontStyle.Bold);
+
+				frm_address_finder.is_shown = true;
+				frm_address_finder.Show();
+				frm_address_finder.TopMost = true;
+				is_show_blocked = true;
+
+				//запрашиваем элементы по умолчанию
+				frm_address_finder.f_find(args);
+
+			}
+
+			return new t();
+		}
+
+		public t f_frm_customer(t args)
+		{
+			frm_customer_finder.Top = args["top"].f_int();
+			frm_customer_finder.Left = args["left"].f_int();
+
+			frm_customer_finder.args["tab_address_id"] = args["tab_address_id"];
+
 			//callback когда контрагент будет выбран
-			frm_customer_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args)
+			frm_customer_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
 			{
 				t cust = frm_customer_finder.args["selected_item"]["item"];
 
@@ -276,12 +340,20 @@ namespace my_helper
 
 				t.f_f("f_select_customer", this.args);
 
+				t.f_f("f_done", args);
 				//после выбора клиента вызываем окно выбора адреса
-				btn_add_address_Click(null, null);
+				//btn_add_address_Click(null, null);
 
 				return new t();
 			}));
 
+			frm_customer_finder.args["f_leaved"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+
+				t.f_f("f_leaved", args);
+
+				return new t();
+			}));
 
 			if (frm_customer_finder.is_shown)
 			{
@@ -300,29 +372,62 @@ namespace my_helper
 				frm_customer_finder.TopMost = true;
 
 				is_show_blocked = true;
+
+				//запрашиваем элементы по умолчанию
+				frm_customer_finder.f_find(args);
 			}
+
+			return new t();
 		}
 
-		private void btn_add_address_Click(object sender, EventArgs e)
-		{
-			f_frm_address(new t()
-			{
-				{"top", Top},
-				{"left", Left - frm_address_finder.Width}
-			});
-		}
-
-		private void btn_customer_address_Click(object sender, EventArgs e)
+		public t f_frm_customer_address(t args)
 		{
 			frm_customer_address_finder.Top = Top;
 			frm_customer_address_finder.Left = Left - frm_customer_address_finder.Width;
 
-			//callback когда контрагент будет выбран
-			frm_customer_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args)
+			//аркументы для окна выбора адреса/клиента
+			t frm_finder_args = new t()
 			{
-				t cust = frm_customer_address_finder.args["selected_item"]["item"];
+				{
+					"f_done", new t_f<t, t>(delegate(t args1)
+					{
 
-				this.args["customer"] = cust;
+						//скрываем форму клиент/адрес
+						frm_customer_address_finder.Hide();
+
+						//восстанавливаем форму клиент/адрес
+						frm_customer_address_finder.fpn_selected_pane.Visible = false;
+						frm_customer_address_finder.fpn_finder_pane.Visible = true;
+						frm_customer_address_finder.args["is_blocked"].f_set(false);
+						frm_customer_address_finder.args.f_drop("selected_item");
+						frm_customer_address_finder.txt_query.Text="";
+
+						t.f_f("f_select_customer_address", this.args);
+
+						return new t();
+					})
+				},
+				{
+					"f_leaved", new t_f<t, t>(delegate(t args1)
+					{
+
+						//скрываем форму клиент/адрес
+						//но не восстанавливаем ее
+						//пользователь не закончил выбор контрагента
+						//и когда вернятся продолжит с выбора адреса
+						frm_customer_address_finder.Hide();
+
+						//t.f_f("f_select_customer_address", this.args);
+
+						return new t();
+					})
+				}
+			};
+
+			//callback когда контрагент будет выбран
+			frm_customer_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+				t selected_item = frm_customer_address_finder.args["selected_item"]["item"];
 
 				//копируем название выбранного контрагента в опционную кнопку finder
 				frm_customer_address_finder.btn_opt.Text =
@@ -340,43 +445,52 @@ namespace my_helper
 				//блокируем окно от скрывания в результате деактивации
 				frm_customer_address_finder.args["is_blocked"].f_set(true);
 
-				
 				//размещаем окно выбора адреса под окном выбора контрагента
 				//после выбора клиента вызываем окно выбора адреса
-				f_frm_address(new t()
+				//указываем что был выбран клиент/адрес
+				if (frm_customer_address_finder.args["selected_item"]["tab_name"].f_str() == "customer")
 				{
-					{"top", frm_customer_address_finder.Bottom},
-					{"left", Left - frm_address_finder.Width},
+					//frm_customer_address_finder.args["selected"].f_set(true);
+					this.args["customer"] = selected_item;
+					f_frm_address(frm_finder_args.f_add(true, new t()
 					{
-						"f_done", new t_f<t, t>(delegate(t args1)
-						{
+						{"top", frm_customer_address_finder.Bottom},
+						{"left", Left - frm_address_finder.Width},
+						{"tab_customer_id", this.args["customer"]["id"]}
+					}));
 
-							//скрываем форму клиент/адрес
-							frm_customer_address_finder.Hide();
+					//вызываем событие выбора контрагента
+					t.f_f("f_select_customer", this.args);
 
-							//восстанавливаем форму клиент/адрес
-							frm_customer_address_finder.fpn_selected_pane.Visible = false;
-							frm_customer_address_finder.fpn_finder_pane.Visible = true;
-							frm_customer_address_finder.args["is_blocked"].f_set(false);
+				}
+				else if (frm_customer_address_finder.args["selected_item"]["tab_name"].f_str() == "address")
+				{
+					//frm_customer_address_finder.args["selected"].f_set(true);
+					this.args["address"] = selected_item;
+					f_frm_customer(frm_finder_args.f_add(true,new t()
+					{
+						{"top", frm_customer_address_finder.Bottom},
+						{"left", Left - frm_customer_finder.Width},
+						{"tab_address_id", this.args["address"]["id"]}
+					}));
+
+					//вызываем событие выбора адреса
+					t.f_f("f_select_address", this.args);
+
+				}
 
 
-							t.f_f("f_select_customer_address", this.args);
-
-							return new t();
-						})
-					}
-				});
 
 				//lbl_invite.Text = "Выберите адрес...";
 
-				
+
 
 				//btn_add_customer.Text = cust["name"].f_str();
 				//btn_add_customer.Font = new Font(btn_add_address.Font.FontFamily, 10);
 				//btn_add_customer.Height *= 2;
 
 
-				
+
 
 				return new t();
 			}));
@@ -398,50 +512,24 @@ namespace my_helper
 				frm_customer_address_finder.Show();
 				frm_customer_address_finder.TopMost = true;
 
-				is_show_blocked = true;
-			}
-		}
+				//если уже выбран клиент
+				if (frm_customer_address_finder.args["selected_item"]["tab_name"].f_str() == "customer")
+				{
+					f_frm_address(frm_finder_args.f_add(true, new t()
+					{
+						{"top", frm_customer_address_finder.Bottom},
+						{"left", Left - frm_address_finder.Width},
+					}));
+				}
+				else if (frm_customer_address_finder.args["selected_item"]["tab_name"].f_str() == "address")
+				{
+					f_frm_customer(frm_finder_args.f_add(true, new t()
+					{
+						{"top", frm_customer_address_finder.Bottom},
+						{"left", Left - frm_customer_finder.Width}
+					}));
+				}
 
-		private t f_frm_address(t args)
-		{
-
-			frm_address_finder.Top = args["top"].f_int();
-			frm_address_finder.Left = args["left"].f_int();
-
-			//callback когда адресс будет выбран
-			frm_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
-			{
-				t address = frm_address_finder.args["selected_item"]["item"];
-
-				this.args["address"] = address;
-
-				btn_add_address.Text = address["name"].f_str();
-				btn_add_address.Font = new Font(btn_add_address.Font.FontFamily, 10);
-				//btn_add_address.Height *= 2;
-
-				t.f_f("f_select_address", this.args);
-
-				t.f_f("f_done", args);
-
-				return new t();
-			}));
-
-
-			if (frm_address_finder.is_shown)
-			{
-				btn_add_address.Font = new Font(btn_add_address.Font, FontStyle.Regular);
-
-				frm_address_finder.is_shown = false;
-				frm_address_finder.Hide();
-				is_show_blocked = false;
-			}
-			else
-			{
-				btn_add_address.Font = new Font(btn_add_address.Font, FontStyle.Bold);
-
-				frm_address_finder.is_shown = true;
-				frm_address_finder.Show();
-				frm_address_finder.TopMost = true;
 				is_show_blocked = true;
 			}
 
@@ -497,14 +585,45 @@ namespace my_helper
 		public void f_get_items(t args)
 		{
 			//получение последних элементов
-			frm_customer_finder.f_find(args);
-			frm_address_finder.f_find(args);
+			//frm_customer_finder.f_find(args);
+			//frm_address_finder.f_find(args);
+			frm_customer_address_finder.f_find(args);
 		}
 
 		#endregion команды
 
 
 		#region события
+
+
+		private void btn_add_customer_Click(object sender, EventArgs e)
+		{
+			f_frm_customer(new t()
+			{
+				{"top", Top},
+				{"left", Left - frm_customer_finder.Width}
+			});
+
+		}
+
+		private void btn_add_address_Click(object sender, EventArgs e)
+		{
+			f_frm_address(new t()
+			{
+				{"top", Top},
+				{"left", Left - frm_address_finder.Width}
+			});
+		}
+
+		private void btn_customer_address_Click(object sender, EventArgs e)
+		{
+			f_frm_customer_address(new t()
+			{
+				{"top", Top},
+				{"left", Left - frm_address_finder.Width}
+			});
+		}
+
 
 		private void frm_main_Activated(object sender, EventArgs e)
 		{

@@ -133,6 +133,7 @@ namespace my_helper
 		//получение элементов из источника local_store
 		override public t f_get_items(t args)
 		{
+			string tab_address_id = args["tab_address_id"].f_def(0).f_str();
 			string query = txt_query.Text.Replace(' ', '%');
 			query = (new Regex("(\\d)")).Replace(query, "$1%");
 			//query = (new Regex("(\\d)(?<=\\d)(\\d)")).Replace(query, "$1[-$2]");
@@ -143,6 +144,8 @@ namespace my_helper
 				where = " name like '%" + query + "%' " +
 						" or phone like '%" + query + "%' " +
 						" or email like '%" + query + "%' " +
+						" or id in (select tab_customer_id from tab_relat_391"+
+						" where tab_address_id=" + tab_address_id + ")" +
 						" order by deleted, tab_pick_id desc, freq ";
 			}
 			else if (this.args["using_local_store"].f_str() == "sqlite")
