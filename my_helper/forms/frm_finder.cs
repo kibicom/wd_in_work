@@ -203,12 +203,12 @@ namespace my_helper
 		private void txt_query_KeyUp(object sender, KeyEventArgs e)
 		{
 
-			if (e.KeyData == Keys.Up || e.KeyData == Keys.Down)
+			if (e.KeyData == Keys.Up || e.KeyData == Keys.Down || e.KeyData==Keys.Enter)
 			{
 				return;
 			}
 
-			if (txt_query.Text.Length < 2)
+			if (txt_query.Text.Length < 2&&1==0)
 			{
 
 				lbx_items.Items.Clear();
@@ -458,10 +458,10 @@ namespace my_helper
 		private void btn_change_Click(object sender, EventArgs e)
 		{
 			//выбираем затронутый элемент
-			t selected_item = this.args["selected_item"].f_set((t)lbx_items.SelectedItem);
+			//t selected_item = this.args["selected_item"].f_set((t)lbx_items.SelectedItem);
 
 			//вызываем функцию редактирования
-			f_modify_item(new t() { { "item", selected_item } });
+			f_modify_item(new t() { { "item", (t)lbx_items.SelectedItem } });
 		}
 
 		private void btn_change_MouseEnter(object sender, EventArgs e)
@@ -522,6 +522,14 @@ namespace my_helper
 				{"btn", sender}
 			});
 		}
+
+		//опция
+		private void btn_opt_Click(object sender, EventArgs e)
+		{
+			//вызываем функцию редактирования
+			f_opt(new t());
+		}
+
 
 		#endregion кнопки
 
@@ -600,6 +608,8 @@ namespace my_helper
 				this.args["new_items"].Clear();
 
 				f_fill_lbx(args);
+
+				return;
 			}
 
 			pb_loading_2.Show();
@@ -632,9 +642,9 @@ namespace my_helper
 
 				pb_loading_2.Hide();
 
-				//если количество возвращенных результатов 0
+				//если количество возвращенных результатов 0 и запрос не пуст
 				//то добавляем новый элемент
-				if (this.args["items"].Count == 0)
+				if (this.args["items"].Count == 0&& txt_query.Text!="")
 				{
 					f_add_new();
 				}
@@ -753,7 +763,11 @@ namespace my_helper
 			return new t();
 		}
 
-		
+		//опциональное действие
+		virtual public t f_opt(t args)
+		{
+			return new t();
+		}
 
 	}
 

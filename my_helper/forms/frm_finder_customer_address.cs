@@ -152,7 +152,7 @@ namespace my_helper
 				where = " name like '%" + query + "%' " +
 						" or phone like '%" + query + "%' " +
 						" or email like '%" + query + "%' " +
-						" order by deleted, tab_pick_id desc, freq ";
+						" order by deleted, tab_pick_id desc, freq , dtcre";
 			}
 			else if (this.args["using_local_store"].f_str() == "sqlite")
 			{
@@ -178,6 +178,7 @@ namespace my_helper
 								"item", new t()
 								{
 									{"id",dr["id"].ToString()},
+									{"uid",dr["uid"].ToString()},
 									{"name",dr["name"].ToString()},
 									{"phone",dr["phone"].ToString()},
 									{"email",dr["email"].ToString()},
@@ -243,6 +244,8 @@ namespace my_helper
 								"item", new t()
 								{
 									{"id",dr["id"].ToString()},
+									{"uid",dr["uid"].ToString()},
+									{"deleted",dr["deleted"].ToString()},
 									{"name",dr["name"].ToString()}
 								}
 							}
@@ -382,6 +385,7 @@ namespace my_helper
 
 
 				//формируем guid для нового контрагента
+				created_customer["uid"].f_set(Guid.NewGuid().ToString());
 				created_customer["wd_customer_guid"].f_set(Guid.NewGuid().ToString());
 
 				//this.args["selected_item"]["str1"] = this.args["selected_item"]["item"]["name"];
@@ -393,6 +397,7 @@ namespace my_helper
 				{
 					{"str1", created_customer["name"]},
 					{"str2", created_customer["phone"]},
+					{"tab_name", "customer"},
 					{"item", created_customer}
 				});
 
@@ -404,6 +409,8 @@ namespace my_helper
 							{
 
 								f_touch_lbx_item();
+
+								//t.f_f("f_done", this.args);
 
 								return new t();
 							})
@@ -426,32 +433,73 @@ namespace my_helper
 
 			t item = args["item"];
 
-			//создаем форму ввода данных нового контрагента
-			frm_cre_edit_item = new customer_info.customer_info_form(new t(){{"item", item["item"]}});
-
-			//показываем форму как диалог
-			frm_cre_edit_item.ShowDialog();
-
-			if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+			if (item["tab_name"].f_str() == "customer")
 			{
-				//в результате деактивации текущего окна (окна поиска)
-				//оно скроется так как предыдущее окно было диалогом
-				//сюда мы попадем когда его закроют - данные введут
-				//поэтом вновь показываем себя
-				Show();
 
-				//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
+				//создаем форму ввода данных нового контрагента
+				frm_cre_edit_item = new customer_info.customer_info_form(new t() { { "item", item["item"] } });
 
-				t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
+				//показываем форму как диалог
+				frm_cre_edit_item.ShowDialog();
 
-				
+				if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+				{
+					//в результате деактивации текущего окна (окна поиска)
+					//оно скроется так как предыдущее окно было диалогом
+					//сюда мы попадем когда его закроют - данные введут
+					//поэтом вновь показываем себя
+					Show();
 
-				lbx_items.SelectedItem = item;
+					//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
-				f_touch_lbx_item();
+					t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
 
-				//сохраняем созданного контрагента
-				kwj.f_tab_customer_modify_mssql(new t() { { "item", created_customer } });
+					///item["item"] = created_customer;
+
+					item["str1"].f_set(created_customer["name"].f_str()+" " + created_customer["phone"].f_str());
+
+					lbx_items.SelectedItem = item;
+
+					f_fill_lbx(new t());
+
+					//f_touch_lbx_item();
+
+					//сохраняем созданного контрагента
+					kwj.f_tab_customer_modify_mssql(new t() { { "item", created_customer } });
+				}
+
+			}
+			if (item["tab_name"].f_str() == "address")
+			{
+				//создаем форму ввода данных нового контрагента
+				frm_cre_edit_item = new customer_info.address_info_form(new t() { { "item", item["item"] } });
+
+				//показываем форму как диалог
+				frm_cre_edit_item.ShowDialog();
+
+				if (((customer_info.address_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+				{
+					//в результате деактивации текущего окна (окна поиска)
+					//оно скроется так как предыдущее окно было диалогом
+					//сюда мы попадем когда его закроют - данные введут
+					//поэтом вновь показываем себя
+					Show();
+
+					t created_item = ((customer_info.address_info_form)frm_cre_edit_item).args["item"];
+
+					//item["name"].f_set(txt_query.Text);
+
+					item["str1"].f_set(created_item["name"].f_str() + " " + created_item["phone"].f_str());
+
+					lbx_items.SelectedItem = item;
+
+					//f_touch_lbx_item();
+
+					//сохраняем созданного контрагента
+					kwj.f_tab_address_modify_mssql(new t() { { "item", created_item } });
+
+				}
+
 			}
 
 			frm_cre_edit_item = null;
@@ -513,13 +561,24 @@ namespace my_helper
 			t item = args["item"];
 			Button btn = args["btn"].f_val<Button>();
 
-			
-			//удаляем элемент
-			kwj.f_tab_customer_drop_mssql(new t() 
-			{ 
-				{ "item", item["item"] },
-				{ "wd_seller_guid", this.args["wd_seller_guid"]}
-			});
+			if (item["tab_name"].f_str() == "customer")
+			{
+				//удаляем элемент
+				kwj.f_tab_customer_drop_mssql(new t() 
+				{ 
+					{ "item", item["item"] },
+					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+				});
+			}
+			if (item["tab_name"].f_str() == "address")
+			{
+				//удаляем элемент
+				kwj.f_tab_address_drop_mssql(new t() 
+				{ 
+					{ "item", item["item"] },
+					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+				});
+			}
 			
 			//вызываем проверку удаления, чтобы выключить ненужные теперь кнопки
 			f_check_drop(args);
@@ -535,16 +594,38 @@ namespace my_helper
 			t item = args["item"];
 			Button btn = args["btn"].f_val<Button>();
 
-
-			//восстанавливаем элемент
-			kwj.f_tab_customer_revert_mssql(new t() 
-			{ 
-				{ "item", item["item"] },
-				{ "wd_seller_guid", this.args["wd_seller_guid"]}
-			});
-
+			if (item["tab_name"].f_str() == "customer")
+			{
+				//восстанавливаем элемент
+				kwj.f_tab_customer_revert_mssql(new t() 
+				{ 
+					{ "item", item["item"] },
+					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+				});
+			}
+			if (item["tab_name"].f_str() == "address")
+			{
+				//восстанавливаем элемент
+				kwj.f_tab_address_revert_mssql(new t() 
+				{ 
+					{ "item", item["item"] },
+					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+				});
+			}
 			//вызываем проверку удаления, чтобы включить кнопки
 			f_check_drop(args);
+
+			return new t();
+
+		}
+
+		//нажатие на опциональкую кнопку выбранный элемента
+		override public t f_opt(t args)
+		{
+
+			t.f_f("f_cancel", this.args);
+
+			//Hide();
 
 			return new t();
 

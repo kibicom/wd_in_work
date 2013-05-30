@@ -33,16 +33,16 @@ namespace my_helper
 			this.lbx_items = new System.Windows.Forms.ListBox();
 			this.pb_loading_2 = new System.Windows.Forms.ProgressBar();
 			this.fp_actions = new System.Windows.Forms.FlowLayoutPanel();
-			this.btn_pick = new System.Windows.Forms.Button();
 			this.fpn_action_right = new System.Windows.Forms.FlowLayoutPanel();
-			this.btn_revert = new System.Windows.Forms.Button();
-			this.btn_drop = new System.Windows.Forms.Button();
-			this.btn_change = new System.Windows.Forms.Button();
 			this.lbl_invite = new System.Windows.Forms.Label();
 			this.fpn_main = new System.Windows.Forms.FlowLayoutPanel();
 			this.fpn_selected_pane = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_opt = new System.Windows.Forms.Button();
 			this.fpn_finder_pane = new System.Windows.Forms.Panel();
+			this.btn_pick = new System.Windows.Forms.Button();
+			this.btn_revert = new System.Windows.Forms.Button();
+			this.btn_drop = new System.Windows.Forms.Button();
+			this.btn_change = new System.Windows.Forms.Button();
 			this.fp_actions.SuspendLayout();
 			this.fpn_action_right.SuspendLayout();
 			this.fpn_main.SuspendLayout();
@@ -103,6 +103,85 @@ namespace my_helper
 			this.fp_actions.TabIndex = 14;
 			this.fp_actions.Visible = false;
 			// 
+			// fpn_action_right
+			// 
+			this.fpn_action_right.BackColor = System.Drawing.Color.White;
+			this.fpn_action_right.Controls.Add(this.btn_revert);
+			this.fpn_action_right.Controls.Add(this.btn_drop);
+			this.fpn_action_right.Controls.Add(this.btn_change);
+			this.fpn_action_right.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+			this.fpn_action_right.Location = new System.Drawing.Point(70, 0);
+			this.fpn_action_right.Margin = new System.Windows.Forms.Padding(0);
+			this.fpn_action_right.Name = "fpn_action_right";
+			this.fpn_action_right.Padding = new System.Windows.Forms.Padding(3);
+			this.fpn_action_right.Size = new System.Drawing.Size(130, 45);
+			this.fpn_action_right.TabIndex = 14;
+			// 
+			// lbl_invite
+			// 
+			this.lbl_invite.AutoSize = true;
+			this.lbl_invite.Font = new System.Drawing.Font("Courier New", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.lbl_invite.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lbl_invite.Location = new System.Drawing.Point(5, 5);
+			this.lbl_invite.Margin = new System.Windows.Forms.Padding(5);
+			this.lbl_invite.Name = "lbl_invite";
+			this.lbl_invite.Size = new System.Drawing.Size(348, 27);
+			this.lbl_invite.TabIndex = 15;
+			this.lbl_invite.Text = "Начните ввод в поле ниже";
+			// 
+			// fpn_main
+			// 
+			this.fpn_main.AutoSize = true;
+			this.fpn_main.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.fpn_main.Controls.Add(this.fpn_selected_pane);
+			this.fpn_main.Controls.Add(this.fpn_finder_pane);
+			this.fpn_main.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.fpn_main.Location = new System.Drawing.Point(0, 0);
+			this.fpn_main.Name = "fpn_main";
+			this.fpn_main.Size = new System.Drawing.Size(886, 586);
+			this.fpn_main.TabIndex = 16;
+			// 
+			// fpn_selected_pane
+			// 
+			this.fpn_selected_pane.AutoSize = true;
+			this.fpn_selected_pane.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.fpn_selected_pane.BackColor = System.Drawing.Color.White;
+			this.fpn_selected_pane.Controls.Add(this.btn_opt);
+			this.fpn_selected_pane.Location = new System.Drawing.Point(0, 0);
+			this.fpn_selected_pane.Margin = new System.Windows.Forms.Padding(0);
+			this.fpn_selected_pane.Name = "fpn_selected_pane";
+			this.fpn_selected_pane.Size = new System.Drawing.Size(886, 41);
+			this.fpn_selected_pane.TabIndex = 17;
+			this.fpn_selected_pane.Visible = false;
+			// 
+			// btn_opt
+			// 
+			this.btn_opt.BackColor = System.Drawing.Color.Transparent;
+			this.btn_opt.FlatAppearance.BorderSize = 0;
+			this.btn_opt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_opt.Location = new System.Drawing.Point(3, 3);
+			this.btn_opt.Name = "btn_opt";
+			this.btn_opt.Size = new System.Drawing.Size(880, 35);
+			this.btn_opt.TabIndex = 16;
+			this.btn_opt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.btn_opt.UseVisualStyleBackColor = false;
+			this.btn_opt.Click += new System.EventHandler(this.btn_opt_Click);
+			// 
+			// fpn_finder_pane
+			// 
+			this.fpn_finder_pane.AutoSize = true;
+			this.fpn_finder_pane.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.fpn_finder_pane.Controls.Add(this.lbl_invite);
+			this.fpn_finder_pane.Controls.Add(this.fp_actions);
+			this.fpn_finder_pane.Controls.Add(this.lbx_items);
+			this.fpn_finder_pane.Controls.Add(this.pb_loading_2);
+			this.fpn_finder_pane.Controls.Add(this.txt_query);
+			this.fpn_finder_pane.Location = new System.Drawing.Point(0, 41);
+			this.fpn_finder_pane.Margin = new System.Windows.Forms.Padding(0);
+			this.fpn_finder_pane.Name = "fpn_finder_pane";
+			this.fpn_finder_pane.Size = new System.Drawing.Size(886, 545);
+			this.fpn_finder_pane.TabIndex = 16;
+			// 
 			// btn_pick
 			// 
 			this.btn_pick.BackColor = System.Drawing.Color.White;
@@ -123,20 +202,6 @@ namespace my_helper
 			this.btn_pick.Click += new System.EventHandler(this.btn_pick_Click);
 			this.btn_pick.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
 			this.btn_pick.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
-			// 
-			// fpn_action_right
-			// 
-			this.fpn_action_right.BackColor = System.Drawing.Color.White;
-			this.fpn_action_right.Controls.Add(this.btn_revert);
-			this.fpn_action_right.Controls.Add(this.btn_drop);
-			this.fpn_action_right.Controls.Add(this.btn_change);
-			this.fpn_action_right.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.fpn_action_right.Location = new System.Drawing.Point(70, 0);
-			this.fpn_action_right.Margin = new System.Windows.Forms.Padding(0);
-			this.fpn_action_right.Name = "fpn_action_right";
-			this.fpn_action_right.Padding = new System.Windows.Forms.Padding(3);
-			this.fpn_action_right.Size = new System.Drawing.Size(130, 45);
-			this.fpn_action_right.TabIndex = 14;
 			// 
 			// btn_revert
 			// 
@@ -202,70 +267,6 @@ namespace my_helper
 			this.btn_change.Click += new System.EventHandler(this.btn_change_Click);
 			this.btn_change.MouseEnter += new System.EventHandler(this.btn_change_MouseEnter);
 			this.btn_change.MouseLeave += new System.EventHandler(this.btn_change_MouseLeave);
-			// 
-			// lbl_invite
-			// 
-			this.lbl_invite.AutoSize = true;
-			this.lbl_invite.Font = new System.Drawing.Font("Courier New", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.lbl_invite.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.lbl_invite.Location = new System.Drawing.Point(5, 5);
-			this.lbl_invite.Margin = new System.Windows.Forms.Padding(5);
-			this.lbl_invite.Name = "lbl_invite";
-			this.lbl_invite.Size = new System.Drawing.Size(348, 27);
-			this.lbl_invite.TabIndex = 15;
-			this.lbl_invite.Text = "Начните ввод в поле ниже";
-			// 
-			// fpn_main
-			// 
-			this.fpn_main.AutoSize = true;
-			this.fpn_main.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.fpn_main.Controls.Add(this.fpn_selected_pane);
-			this.fpn_main.Controls.Add(this.fpn_finder_pane);
-			this.fpn_main.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.fpn_main.Location = new System.Drawing.Point(0, 0);
-			this.fpn_main.Name = "fpn_main";
-			this.fpn_main.Size = new System.Drawing.Size(886, 586);
-			this.fpn_main.TabIndex = 16;
-			// 
-			// fpn_selected_pane
-			// 
-			this.fpn_selected_pane.AutoSize = true;
-			this.fpn_selected_pane.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.fpn_selected_pane.BackColor = System.Drawing.Color.White;
-			this.fpn_selected_pane.Controls.Add(this.btn_opt);
-			this.fpn_selected_pane.Location = new System.Drawing.Point(0, 0);
-			this.fpn_selected_pane.Margin = new System.Windows.Forms.Padding(0);
-			this.fpn_selected_pane.Name = "fpn_selected_pane";
-			this.fpn_selected_pane.Size = new System.Drawing.Size(886, 41);
-			this.fpn_selected_pane.TabIndex = 17;
-			this.fpn_selected_pane.Visible = false;
-			// 
-			// btn_opt
-			// 
-			this.btn_opt.BackColor = System.Drawing.Color.Transparent;
-			this.btn_opt.FlatAppearance.BorderSize = 0;
-			this.btn_opt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btn_opt.Location = new System.Drawing.Point(3, 3);
-			this.btn_opt.Name = "btn_opt";
-			this.btn_opt.Size = new System.Drawing.Size(880, 35);
-			this.btn_opt.TabIndex = 16;
-			this.btn_opt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btn_opt.UseVisualStyleBackColor = false;
-			// 
-			// fpn_finder_pane
-			// 
-			this.fpn_finder_pane.AutoSize = true;
-			this.fpn_finder_pane.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.fpn_finder_pane.Controls.Add(this.lbl_invite);
-			this.fpn_finder_pane.Controls.Add(this.fp_actions);
-			this.fpn_finder_pane.Controls.Add(this.lbx_items);
-			this.fpn_finder_pane.Controls.Add(this.pb_loading_2);
-			this.fpn_finder_pane.Controls.Add(this.txt_query);
-			this.fpn_finder_pane.Location = new System.Drawing.Point(0, 41);
-			this.fpn_finder_pane.Margin = new System.Windows.Forms.Padding(0);
-			this.fpn_finder_pane.Name = "fpn_finder_pane";
-			this.fpn_finder_pane.Size = new System.Drawing.Size(886, 545);
-			this.fpn_finder_pane.TabIndex = 16;
 			// 
 			// frm_finder
 			// 

@@ -167,80 +167,6 @@ namespace my_helper
 			});
 		}
 
-		private void button4_Click(object sender, EventArgs e)
-		{
-			//this.StartPosition = FormStartPosition.Manual;
-			//
-		}
-
-		private void frm_main_Shown(object sender, EventArgs e)
-		{
-			//MessageBox.Show(Screen.PrimaryScreen.Bounds.Width.ToString());
-			//Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
-			//Top = this.args["top"].f_int();
-			//TopLevel = true;
-			//Height = 60;
-
-			//f_drop_shadow();
-
-			timer = new System.Threading.Timer(new TimerCallback(delegate(object args)
-			{
-				try
-				{
-					if (this.InvokeRequired)
-					{
-						this.Invoke(new t_f<t, t>(delegate(t args1)
-						{
-							if (!is_show_blocked)
-							{
-
-								if (Cursor.Position.X < Location.X
-								  || Cursor.Position.Y < Location.Y
-								  || Cursor.Position.X > Location.X + Width
-								  || Cursor.Position.Y > Location.Y + Height)
-								{
-									Height = 60;
-
-									ds.f_hide();
-
-									this.args["is_active"].f_set(false);
-
-									//f_drop_shadow();
-
-									return new t();
-								}
-							}
-
-							//контроль активности основной формы WD
-							if (oif != null)
-							{
-
-								if (oif.OrderForm.mainForm.Focused)
-								//if (order.OrderItemForm.OrderForm.mainForm.Focused)
-								{
-									Hide();
-								}
-								else
-								{
-									Show();
-								}
-							}
-
-							return new t();
-
-						}), new object[] { new t() });
-					}
-				}
-				catch (Exception ex)
-				{
-
-				}
-
-				
-			}), new t(), 1000, 1000);
-
-		}
-
 
 		private void f_ds_init()
 		{
@@ -264,7 +190,10 @@ namespace my_helper
 			frm_address_finder.Top = args["top"].f_int();
 			frm_address_finder.Left = args["left"].f_int();
 
-			frm_address_finder.args["tab_customer_id"] = args["tab_customer_id"];
+			if (!args["tab_customer_uid"].f_is_empty())
+			{
+				frm_address_finder.args["tab_customer_uid"] = args["tab_customer_uid"];
+			}
 
 			//callback когда адресс будет выбран
 			frm_address_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
@@ -280,6 +209,9 @@ namespace my_helper
 				t.f_f("f_select_address", this.args);
 
 				t.f_f("f_done", args);
+
+				//сохраняем связь между выбранным контрагентом и адресом
+				frm_address_finder.f_store_related_customer(new t());
 
 				return new t();
 			}));
@@ -312,6 +244,12 @@ namespace my_helper
 				frm_address_finder.TopMost = true;
 				is_show_blocked = true;
 
+				//очищаем поле запроса если нужно
+				if (args["clear_query"].f_bool())
+				{
+					frm_address_finder.txt_query.Text = "";
+				}
+
 				//запрашиваем элементы по умолчанию
 				frm_address_finder.f_find(args);
 
@@ -325,7 +263,10 @@ namespace my_helper
 			frm_customer_finder.Top = args["top"].f_int();
 			frm_customer_finder.Left = args["left"].f_int();
 
-			frm_customer_finder.args["tab_address_id"] = args["tab_address_id"];
+			if (!args["tab_address_uid"].f_is_empty())
+			{
+				frm_customer_finder.args["tab_address_uid"] = args["tab_address_uid"];
+			}
 
 			//callback когда контрагент будет выбран
 			frm_customer_finder.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
@@ -341,6 +282,10 @@ namespace my_helper
 				t.f_f("f_select_customer", this.args);
 
 				t.f_f("f_done", args);
+
+				//сохраняем связь между выбранным контрагентом и адресом
+				frm_customer_finder.f_store_related_address(new t());
+
 				//после выбора клиента вызываем окно выбора адреса
 				//btn_add_address_Click(null, null);
 
@@ -370,8 +315,13 @@ namespace my_helper
 				frm_customer_finder.is_shown = true;
 				frm_customer_finder.Show();
 				frm_customer_finder.TopMost = true;
-
 				is_show_blocked = true;
+
+				//очищаем поле запроса если нужно
+				if (args["clear_query"].f_bool())
+				{
+					frm_customer_finder.txt_query.Text = "";
+				}
 
 				//запрашиваем элементы по умолчанию
 				frm_customer_finder.f_find(args);
@@ -415,13 +365,62 @@ namespace my_helper
 						//но не восстанавливаем ее
 						//пользователь не закончил выбор контрагента
 						//и когда вернятся продолжит с выбора адреса
-						frm_customer_address_finder.Hide();
+						//при этом если курсор не над формой
+						if (Cursor.Position.X < frm_customer_address_finder.Location.X
+								  || Cursor.Position.Y < frm_customer_address_finder.Location.Y
+								  || Cursor.Position.X > frm_customer_address_finder.Location.X +
+															frm_customer_address_finder.Width
+								  || Cursor.Position.Y > frm_customer_address_finder.Location.Y +
+															frm_customer_address_finder.Height)
+						{
+							frm_customer_address_finder.Hide();
+
+							
+							return new t();
+						}
+						else
+						{
+							//иначе возвращаемся к выбору клиента/адреса
+							//frm_customer_finder.Hide();
+							//frm_address_finder.Hide();
+
+							frm_customer_address_finder.fpn_selected_pane.Visible = false;
+							frm_customer_address_finder.fpn_finder_pane.Visible = true;
+							frm_customer_address_finder.args["is_blocked"].f_set(false);
+							frm_customer_address_finder.args.f_drop("selected_item");
+
+							//блокируем popup так как работа еще ведеться
+							is_show_blocked = true;
+						}
+						
+
+
+
+						//t.f_f("f_select_customer_address", this.args);
+
+						return new t();
+					})
+				},
+				{
+					"f_cancel_", new t_f<t, t>(delegate(t args1)
+					{
+
+						//скрываем форму клиент/адрес
+						//frm_customer_address_finder.Hide();
+
+						//восстанавливаем форму клиент/адрес
+						frm_customer_address_finder.fpn_selected_pane.Visible = false;
+						frm_customer_address_finder.fpn_finder_pane.Visible = true;
+						///frm_customer_address_finder.args["is_blocked"].f_set(false);
+						frm_customer_address_finder.args.f_drop("selected_item");
+						//frm_customer_address_finder.txt_query.Text="";
 
 						//t.f_f("f_select_customer_address", this.args);
 
 						return new t();
 					})
 				}
+
 			};
 
 			//callback когда контрагент будет выбран
@@ -456,7 +455,8 @@ namespace my_helper
 					{
 						{"top", frm_customer_address_finder.Bottom},
 						{"left", Left - frm_address_finder.Width},
-						{"tab_customer_id", this.args["customer"]["id"]}
+						{"tab_customer_uid", this.args["customer"]["uid"]},
+						{"clear_query", true}
 					}));
 
 					//вызываем событие выбора контрагента
@@ -471,7 +471,8 @@ namespace my_helper
 					{
 						{"top", frm_customer_address_finder.Bottom},
 						{"left", Left - frm_customer_finder.Width},
-						{"tab_address_id", this.args["address"]["id"]}
+						{"tab_address_uid", this.args["address"]["uid"]},
+						{"clear_query", true}
 					}));
 
 					//вызываем событие выбора адреса
@@ -509,8 +510,9 @@ namespace my_helper
 				frm_customer_address_finder.Font = new Font(frm_customer_address_finder.Font, FontStyle.Bold);
 
 				frm_customer_address_finder.is_shown = true;
-				frm_customer_address_finder.Show();
+				//frm_customer_address_finder.Hide();
 				frm_customer_address_finder.TopMost = true;
+				frm_customer_address_finder.Show();
 
 				//если уже выбран клиент
 				if (frm_customer_address_finder.args["selected_item"]["tab_name"].f_str() == "customer")
@@ -596,6 +598,81 @@ namespace my_helper
 		#region события
 
 
+		private void button4_Click(object sender, EventArgs e)
+		{
+			//this.StartPosition = FormStartPosition.Manual;
+			//
+		}
+
+		private void frm_main_Shown(object sender, EventArgs e)
+		{
+			//MessageBox.Show(Screen.PrimaryScreen.Bounds.Width.ToString());
+			//Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
+			//Top = this.args["top"].f_int();
+			//TopLevel = true;
+			//Height = 60;
+
+			//f_drop_shadow();
+
+			timer = new System.Threading.Timer(new TimerCallback(delegate(object args)
+			{
+				try
+				{
+					if (this.InvokeRequired)
+					{
+						this.Invoke(new t_f<t, t>(delegate(t args1)
+						{
+							if (!is_show_blocked)
+							{
+
+								if (Cursor.Position.X < Location.X
+								  || Cursor.Position.Y < Location.Y
+								  || Cursor.Position.X > Location.X + Width
+								  || Cursor.Position.Y > Location.Y + Height)
+								{
+									Height = 60;
+
+									ds.f_hide();
+
+									this.args["is_active"].f_set(false);
+
+									//f_drop_shadow();
+
+									return new t();
+								}
+							}
+
+							//контроль активности основной формы WD
+							if (oif != null)
+							{
+
+								if (oif.OrderForm.mainForm.Focused)
+								//if (order.OrderItemForm.OrderForm.mainForm.Focused)
+								{
+									Hide();
+								}
+								else
+								{
+									Show();
+								}
+							}
+
+							return new t();
+
+						}), new object[] { new t() });
+					}
+				}
+				catch (Exception ex)
+				{
+
+				}
+
+
+			}), new t(), 1000, 1000);
+
+		}
+
+
 		private void btn_add_customer_Click(object sender, EventArgs e)
 		{
 			f_frm_customer(new t()
@@ -620,7 +697,7 @@ namespace my_helper
 			f_frm_customer_address(new t()
 			{
 				{"top", Top},
-				{"left", Left - frm_address_finder.Width}
+				{"left", Left - frm_customer_address_finder.Width}
 			});
 		}
 

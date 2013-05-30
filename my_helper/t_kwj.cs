@@ -1103,7 +1103,9 @@ namespace my_helper
 			{
 				//запрос блокирует клиента
 				{"block", true},
-				{"cmd", "insert into tab_customer (name, phone, email, wd_customer_guid) values ('"+
+				{"cmd", "insert into tab_customer (uid, dtcre, name, phone, email, wd_customer_guid) values ('"+
+						new_item["uid"].f_str()+"','"+
+						new_item["dtcre"].f_str()+"','"+
 						new_item["name"].f_str()+"','"+
 						new_item["phone"].f_str()+"','"+
 						new_item["email"].f_str()+"','"+
@@ -1156,7 +1158,8 @@ namespace my_helper
 				//запрос блокирует клиента
 				{"block", true},
 				{
-					"cmd", "insert into tab_address (name) values ('"+
+					"cmd", "insert into tab_address (uid,name) values ('"+
+							new_item["uid"].f_str()+"','"+
 							new_item["name"].f_str()+"') "
 				},
 				{
@@ -1210,7 +1213,7 @@ namespace my_helper
 						"name='"+new_item["name"].f_str()+
 						"', phone='"+new_item["phone"].f_str()+
 						"', email='"+new_item["email"].f_str()+
-						"' where id="+new_item["id"].f_str()+" "
+						"' where uid='"+new_item["uid"].f_str()+"' "
 				},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
@@ -1259,8 +1262,9 @@ namespace my_helper
 				//запрос блокирует клиента
 				{"block", true},
 				{
-					"cmd", "update tab_address (name) values ('"+
-							new_item["name"].f_str()+"') "
+					"cmd", "update tab_address set name='"+
+							new_item["name"].f_str()+"'"+
+							" where uid='"+new_item["uid"].f_str()+"' "
 				},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
@@ -1442,8 +1446,8 @@ namespace my_helper
 			{
 				//запрос блокирует клиента
 				{"block", true},
-				{"cmd", "insert into tab_pick (tab_customer_id, wd_seller_guid) values ('"+
-						new_item["id"].f_str()+"','"+
+				{"cmd", "insert into tab_pick (tab_customer_uid, wd_seller_guid) values ('"+
+						new_item["uid"].f_str()+"','"+
 						wd_seller_guid+"') "
 				},
 				{
@@ -1499,7 +1503,7 @@ namespace my_helper
 				{"block", true},
 				{"cmd", "update tab_pick set deleted=getdate() where deleted is null"+
 							" and wd_seller_guid='"+wd_seller_guid+
-							"' and tab_customer_id="+new_item["id"].f_str()},
+							"' and tab_customer_uid='"+new_item["uid"].f_str()+"' "},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
 					{
@@ -1553,7 +1557,7 @@ namespace my_helper
 				//запрос блокирует клиента
 				{"block", true},
 				{"cmd", "update tab_customer set deleted=getdate() where deleted is null"+
-							" and id="+new_item["id"].f_str()
+							" and uid='"+new_item["uid"].f_str()+"' "
 				},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
@@ -1603,7 +1607,7 @@ namespace my_helper
 				//запрос блокирует клиента
 				{"block", true},
 				{"cmd", "update tab_customer set deleted=null where deleted is not null"+
-							" and id="+new_item["id"].f_str()
+							" and uid='"+new_item["uid"].f_str()+"' "
 				},
 				{
 					"f_done", new t_f<t,t>(delegate (t args2)
@@ -1629,6 +1633,160 @@ namespace my_helper
 			return this;
 		}
 
+
+		public t f_tab_address_drop_mssql(t args)
+		{
+
+			t new_item = args["item"];
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//сохраняем в локальный кеш
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "update tab_address set deleted=getdate() where deleted is null"+
+							" and uid='"+new_item["uid"].f_str()+"' "
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["deleted"].f_set(DateTime.Now);
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+		}
+
+		public t f_tab_address_revert_mssql(t args)
+		{
+			t new_item = args["item"];
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//удаляем все строки из tab_pick для данного сочетания продавца и контрагента
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "update tab_address set deleted=null where deleted is not null"+
+							" and uid='"+new_item["uid"].f_str()+"' "
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["deleted"].f_set("");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+
+			return this;
+		}
+
+
+		public t f_store_customer_address_relat(t args)
+		{
+			t new_item = args["item"];
+			string tab_customer_uid = args["tab_customer_uid"].f_str();
+			string tab_address_uid = args["tab_address_uid"].f_str();
+			string wd_seller_guid = args["wd_seller_guid"].f_str();
+
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+
+			//сохраняем в локальный кеш
+			cli.f_exec_cmd(new t()
+			{
+				//запрос блокирует клиента
+				{"block", true},
+				{"cmd", "insert into tab_relat_391 (tab_customer_uid, tab_address_uid) values ('"+
+						tab_customer_uid+"','"+
+						tab_address_uid+"') "
+				},
+				{
+					"f_done", new t_f<t,t>(delegate (t args2)
+					{
+
+						new_item["tab_pick_id"].f_set(1);
+
+						return new t();
+					})
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args2)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			//сохраняем в кибиком
+
+			return this;
+		}
 
 		#endregion взаимодействие
 

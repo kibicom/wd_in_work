@@ -133,7 +133,7 @@ namespace my_helper
 		//получение элементов из источника local_store
 		override public t f_get_items(t args)
 		{
-			string tab_address_id = args["tab_address_id"].f_str();
+			string tab_address_uid = this.args["tab_address_uid"].f_str();
 			string query = txt_query.Text.Replace(' ', '%');
 			query = (new Regex("(\\d)")).Replace(query, "$1%");
 			//query = (new Regex("(\\d)(?<=\\d)(\\d)")).Replace(query, "$1[-$2]");
@@ -141,19 +141,18 @@ namespace my_helper
 			string where = "";
 			if (this.args["using_local_store"].f_str() == "mssql")
 			{
-				if (tab_address_id == "")
+				if (tab_address_uid != "" && query=="")
+				{
+					where = " uid in (select tab_customer_uid from tab_relat_391" +
+							" where tab_address_uid='" + tab_address_uid + "')" +
+							" order by deleted, tab_pick_id desc, freq ";
+				}
+				else
 				{
 					where = " name like '%" + query + "%' " +
 							" or phone like '%" + query + "%' " +
 							" or email like '%" + query + "%' " +
 							" order by deleted, tab_pick_id desc, freq ";
-				}
-				else
-				{
-					where = " id in (select tab_customer_id from tab_relat_391" +
-							" where tab_address_id=" + tab_address_id + ")" +
-							" order by deleted, tab_pick_id desc, freq ";
-					args["tab_address_id"].f_set("");
 				}
 			}
 			else if (this.args["using_local_store"].f_str() == "sqlite")
@@ -179,6 +178,7 @@ namespace my_helper
 								"item", new t()
 								{
 									{"id",dr["id"].ToString()},
+									{"uid",dr["uid"].ToString()},
 									{"name",dr["name"].ToString()},
 									{"phone",dr["phone"].ToString()},
 									{"email",dr["email"].ToString()},
@@ -196,7 +196,7 @@ namespace my_helper
 					"f_done", new t_f<t,t>(delegate (t args1)
 					{
 						
-						f_fill_lbx(args);
+						f_fill_lbx(new t());
 
 						return new t();
 					})
@@ -293,9 +293,9 @@ namespace my_helper
 		override public t f_select_item()
 		{
 
-			t.f_f("f_done", args);
-
 			Hide();
+
+			t.f_f("f_done", args);
 
 			return new t();
 		}
@@ -323,6 +323,8 @@ namespace my_helper
 
 
 				//формируем guid для нового контрагента
+				created_customer["uid"].f_set(Guid.NewGuid().ToString());
+				created_customer["dtcre"].f_set(DateTime.Now);
 				created_customer["wd_customer_guid"].f_set(Guid.NewGuid().ToString());
 
 				//this.args["selected_item"]["str1"] = this.args["selected_item"]["item"]["name"];
@@ -345,6 +347,8 @@ namespace my_helper
 							{
 
 								f_touch_lbx_item();
+
+								t.f_f("f_done", this.args);
 
 								return new t();
 							})
@@ -389,7 +393,9 @@ namespace my_helper
 
 				lbx_items.SelectedItem = item;
 
-				f_touch_lbx_item();
+				f_fill_lbx(new t());
+
+				//f_touch_lbx_item();
 
 				//сохраняем созданного контрагента
 				kwj.f_tab_customer_modify_mssql(new t() { { "item", created_customer } });
@@ -482,6 +488,19 @@ namespace my_helper
 
 		}
 
+		//сохранение связи между выбранный клиентом и адресом
+		public t f_store_related_address(t args)
+		{
+			if (!this.args["tab_address_uid"].f_is_empty())
+			{
+				kwj.f_store_customer_address_relat(new t()
+				{
+					{"tab_address_uid", this.args["tab_address_uid"]},
+					{"tab_customer_uid", this.args["selected_item"]["item"]["uid"]}
+				});
+			}
+			return new t();
+		}
 
 		public t f_check_pick_btn(t args)
 		{
