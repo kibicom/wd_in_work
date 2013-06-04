@@ -18,10 +18,12 @@ namespace my_helper
 
 		DropShadow ds = new DropShadow();
 
-		frm_finder_customer frm_customer_finder;
-		frm_finder_address frm_address_finder;
+		public frm_finder_customer frm_customer_finder;
+		public frm_finder_address frm_address_finder;
 
-		frm_finder_customer_address frm_customer_address_finder;
+		public frm_finder_customer_address frm_customer_address_finder;
+
+		public frm_in_work frm_in_work;
 
 		System.Threading.Timer timer = null;
 
@@ -67,6 +69,8 @@ namespace my_helper
 
 			this.args["top"] = args["top"].f_def(0);
 			this.args["right_offset"] = args["right_offset"].f_def(150);
+
+			this.args["real_state"].f_set("hidden");
 
 			this.args["josi_store"]["josi_end_point"] = args["josi_end_point"].
 				f_def("http://kibicom.com/order_store_339/index.php");
@@ -165,6 +169,15 @@ namespace my_helper
 					}
 				},
 			});
+
+			//форма получения сроков передачи в работу
+			frm_in_work = new frm_in_work(new t()
+			{
+				{"owner", this},
+				{"f_give_to_work", args["f_give_to_work"]},
+				{"f_give_to_check",args["f_give_to_work"]}
+			});
+
 		}
 
 
@@ -538,9 +551,44 @@ namespace my_helper
 			return new t();
 		}
 
+		private t f_frm_in_work(t args)
+		{
+			
+			frm_in_work.Top = args["top"].f_int();
+			frm_in_work.Left = args["left"].f_int();
+
+
+			if (frm_in_work.args["is_shown"].f_bool())
+			{
+				frm_in_work.Font = new Font(frm_in_work.Font, FontStyle.Regular);
+
+				frm_in_work.args["is_shown"].f_set(false);
+				frm_in_work.Hide();
+				is_show_blocked = false;
+			}
+			else
+			{
+
+				frm_in_work.Font = new Font(frm_in_work.Font, FontStyle.Bold);
+
+				frm_in_work.args["is_shown"].f_set(true);
+				frm_in_work.Show();
+				frm_in_work.Refresh();
+				frm_in_work.TopMost = true;
+				is_show_blocked = true;
+
+				//t.f_f("f_", this.args);
+
+			}
+
+			return new t();
+		}
+
+
 		//событие активации вкладки wd
 		public void f_tab_enter(object sender, EventArgs e)
 		{
+			
 			this.args["wd"]["active_tab"].f_set(sender);
 			Atechnology.ecad.Document.OrderItemForm oif = (Atechnology.ecad.Document.OrderItemForm)sender;
 
@@ -550,8 +598,11 @@ namespace my_helper
 
 			//MessageBox.Show(oif.ds.Tables["orders"].Rows[0]["name"].ToString());
 
-			this.args["wd"]["dbconn"].f_set(oif.db);
-			this.args["wd"]["ds"].f_set(oif.ds);
+			if (sender.GetType() == typeof(Atechnology.ecad.Document.OrderItemForm))
+			{
+				this.args["wd"]["dbconn"].f_set(oif.db);
+				this.args["wd"]["ds"].f_set(oif.ds);
+			}
 
 
 		}
@@ -614,6 +665,8 @@ namespace my_helper
 
 			//f_drop_shadow();
 
+			this.args["real_state"].f_set("shown");
+
 			timer = new System.Threading.Timer(new TimerCallback(delegate(object args)
 			{
 				try
@@ -622,6 +675,8 @@ namespace my_helper
 					{
 						this.Invoke(new t_f<t, t>(delegate(t args1)
 						{
+							
+							//если состояние формы заблокировано
 							if (!is_show_blocked)
 							{
 
@@ -636,26 +691,39 @@ namespace my_helper
 
 									this.args["is_active"].f_set(false);
 
+									//MessageBox.Show(this.Focused.ToString());
+
+									//если требуемое состояние спратан
+									if (this.args["required_state"].f_str() == "hidden" )
+									{
+										//то если форма видна прячем ее
+										if (this.args["real_state"].f_str() == "shown")
+										{
+											Hide();
+											this.args["real_state"].f_set("hidden");
+										}
+									}
+									else
+									{
+										//то если должна быть видна но спрятана показываем
+										if (this.args["real_state"].f_str() == "hidden")
+										{
+											Show();
+											this.args["real_state"].f_set("shown");
+										}
+									}
+
 									//f_drop_shadow();
 
 									return new t();
 								}
-							}
-
-							//контроль активности основной формы WD
-							if (oif != null)
-							{
-
-								if (oif.OrderForm.mainForm.Focused)
-								//if (order.OrderItemForm.OrderForm.mainForm.Focused)
-								{
-									Hide();
-								}
 								else
 								{
-									Show();
+									
 								}
 							}
+
+							
 
 							return new t();
 
@@ -701,11 +769,21 @@ namespace my_helper
 			});
 		}
 
+		private void btn_gate_to_work_Click(object sender, EventArgs e)
+		{
+			f_frm_in_work(new t()
+			{
+				{"top", Top},
+				{"left", Left - frm_in_work.Width}
+			});
+		}
+
 
 		private void frm_main_Activated(object sender, EventArgs e)
 		{
 			btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Regular);
 			is_show_blocked = false;
+			this.args["real_state"].f_set("shown");
 		}
 
 		private void frm_main_MouseEnter(object sender, EventArgs e)
@@ -776,8 +854,28 @@ namespace my_helper
 			Height = 60;
 		}
 
+		/*
+		protected override bool ShowWithoutActivation
+		{
+			get { return true; }
+		}
+
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams baseParams = base.CreateParams;
+				
+				baseParams.ExStyle |= (int)(0x08000000L | 0x00000080L);
+
+				return baseParams;
+			}
+		}
+		*/
+
 		#endregion события
 
+		
 
 
 	}

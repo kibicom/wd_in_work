@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using kibicom.tlib;
 using kibicom.josi;
 
+
 namespace my_helper
 {
 	public partial class frm_finder_address : frm_finder

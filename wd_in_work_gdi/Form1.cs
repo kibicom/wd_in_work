@@ -22,13 +22,14 @@ namespace wd_in_work_gdi
 
 			wd_josi_num = new t_wd_josi_num(new t()
 			{
-				{"josi_end_point_","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
-				//{"josi_end_point","http://kibicom.com/order_store_339/index.php"},
+				//{"josi_end_point_","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
+				//"josi_end_point","https://192.168.1.193/webproj/git/kibicom_venta/index.php"},
+				{"josi_end_point","http://kibicom.com/order_store_339/index.php"},
 				{"login_name","dnclive"},
-				{"req_timeout", 3000},
+				{"req_timeout", 5000},
 				{"auth_try_count", 3},
-				//{"pass","4947"},
-				{"pass","135"},
+				{"pass","4947"},
+				//{"pass","135"},
 				{
 					"f_done",new t_f<t,t>(delegate(t args1)
 					{

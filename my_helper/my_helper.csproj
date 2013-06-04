@@ -124,6 +124,12 @@
     <Compile Include="forms\frm_finder_customer_address.designer.cs">
       <DependentUpon>frm_finder_customer_address.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\frm_in_work.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_in_work.Designer.cs">
+      <DependentUpon>frm_in_work.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\frm_main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
     <EmbeddedResource Include="forms\frm_finder.resx">
       <DependentUpon>frm_finder.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\frm_in_work.resx">
+      <DependentUpon>frm_in_work.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="forms\frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>

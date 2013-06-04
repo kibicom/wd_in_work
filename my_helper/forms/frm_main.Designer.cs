@@ -31,15 +31,18 @@
 			this.btn_add_customer = new System.Windows.Forms.Button();
 			this.btn_add_address = new System.Windows.Forms.Button();
 			this.btn_add_zamer = new System.Windows.Forms.Button();
-			this.btn_take_in_work = new System.Windows.Forms.Button();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.btn_gate_to_work = new System.Windows.Forms.Button();
+			this.fpn_cmd_arr = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_events = new System.Windows.Forms.Button();
 			this.btn_customer_address = new System.Windows.Forms.Button();
 			this.btn_add_pay = new System.Windows.Forms.Button();
-			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.fpn_head = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_close = new System.Windows.Forms.Button();
-			this.flowLayoutPanel1.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
+			this.fpn_note = new System.Windows.Forms.FlowLayoutPanel();
+			this.btn_notify = new System.Windows.Forms.Button();
+			this.fpn_cmd_arr.SuspendLayout();
+			this.fpn_head.SuspendLayout();
+			this.fpn_note.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_add_customer
@@ -97,41 +100,41 @@
 			this.btn_add_zamer.UseVisualStyleBackColor = true;
 			this.btn_add_zamer.Click += new System.EventHandler(this.button4_Click);
 			// 
-			// btn_take_in_work
+			// btn_gate_to_work
 			// 
-			this.btn_take_in_work.FlatAppearance.BorderSize = 0;
-			this.btn_take_in_work.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-			this.btn_take_in_work.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-			this.btn_take_in_work.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btn_take_in_work.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_take_in_work.Location = new System.Drawing.Point(3, 333);
-			this.btn_take_in_work.Name = "btn_take_in_work";
-			this.btn_take_in_work.Size = new System.Drawing.Size(237, 49);
-			this.btn_take_in_work.TabIndex = 0;
-			this.btn_take_in_work.Text = "Отправить в ПТО";
-			this.btn_take_in_work.UseVisualStyleBackColor = true;
-			this.btn_take_in_work.Click += new System.EventHandler(this.button4_Click);
+			this.btn_gate_to_work.FlatAppearance.BorderSize = 0;
+			this.btn_gate_to_work.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_gate_to_work.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_gate_to_work.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_gate_to_work.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_gate_to_work.Location = new System.Drawing.Point(3, 333);
+			this.btn_gate_to_work.Name = "btn_gate_to_work";
+			this.btn_gate_to_work.Size = new System.Drawing.Size(237, 49);
+			this.btn_gate_to_work.TabIndex = 0;
+			this.btn_gate_to_work.Text = "Отправить в ПТО";
+			this.btn_gate_to_work.UseVisualStyleBackColor = true;
+			this.btn_gate_to_work.Click += new System.EventHandler(this.btn_gate_to_work_Click);
 			// 
-			// flowLayoutPanel1
+			// fpn_cmd_arr
 			// 
-			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.fpn_cmd_arr.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.flowLayoutPanel1.Controls.Add(this.btn_events);
-			this.flowLayoutPanel1.Controls.Add(this.btn_customer_address);
-			this.flowLayoutPanel1.Controls.Add(this.btn_add_customer);
-			this.flowLayoutPanel1.Controls.Add(this.btn_add_address);
-			this.flowLayoutPanel1.Controls.Add(this.btn_add_zamer);
-			this.flowLayoutPanel1.Controls.Add(this.btn_add_pay);
-			this.flowLayoutPanel1.Controls.Add(this.btn_take_in_work);
-			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(9, 46);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(242, 527);
-			this.flowLayoutPanel1.TabIndex = 1;
-			this.flowLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
+			this.fpn_cmd_arr.Controls.Add(this.btn_events);
+			this.fpn_cmd_arr.Controls.Add(this.btn_customer_address);
+			this.fpn_cmd_arr.Controls.Add(this.btn_add_customer);
+			this.fpn_cmd_arr.Controls.Add(this.btn_add_address);
+			this.fpn_cmd_arr.Controls.Add(this.btn_add_zamer);
+			this.fpn_cmd_arr.Controls.Add(this.btn_add_pay);
+			this.fpn_cmd_arr.Controls.Add(this.btn_gate_to_work);
+			this.fpn_cmd_arr.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.fpn_cmd_arr.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.fpn_cmd_arr.Location = new System.Drawing.Point(9, 46);
+			this.fpn_cmd_arr.Margin = new System.Windows.Forms.Padding(0);
+			this.fpn_cmd_arr.Name = "fpn_cmd_arr";
+			this.fpn_cmd_arr.Size = new System.Drawing.Size(242, 527);
+			this.fpn_cmd_arr.TabIndex = 1;
+			this.fpn_cmd_arr.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
 			// 
 			// btn_events
 			// 
@@ -187,17 +190,18 @@
 			this.btn_add_pay.UseVisualStyleBackColor = true;
 			this.btn_add_pay.Click += new System.EventHandler(this.button4_Click);
 			// 
-			// flowLayoutPanel2
+			// fpn_head
 			// 
-			this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.flowLayoutPanel2.Controls.Add(this.btn_close);
-			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(260, 44);
-			this.flowLayoutPanel2.TabIndex = 2;
-			this.flowLayoutPanel2.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
+			this.fpn_head.BackColor = System.Drawing.SystemColors.InactiveCaption;
+			this.fpn_head.Controls.Add(this.btn_close);
+			this.fpn_head.Controls.Add(this.fpn_note);
+			this.fpn_head.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+			this.fpn_head.Location = new System.Drawing.Point(0, 0);
+			this.fpn_head.Margin = new System.Windows.Forms.Padding(0);
+			this.fpn_head.Name = "fpn_head";
+			this.fpn_head.Size = new System.Drawing.Size(260, 44);
+			this.fpn_head.TabIndex = 2;
+			this.fpn_head.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
 			// 
 			// btn_close
 			// 
@@ -211,6 +215,34 @@
 			this.btn_close.TabIndex = 0;
 			this.btn_close.UseVisualStyleBackColor = true;
 			this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
+			this.btn_close.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
+			// 
+			// fpn_note
+			// 
+			this.fpn_note.BackColor = System.Drawing.Color.White;
+			this.fpn_note.Controls.Add(this.btn_notify);
+			this.fpn_note.Location = new System.Drawing.Point(0, 0);
+			this.fpn_note.Margin = new System.Windows.Forms.Padding(0);
+			this.fpn_note.Name = "fpn_note";
+			this.fpn_note.Size = new System.Drawing.Size(214, 44);
+			this.fpn_note.TabIndex = 1;
+			this.fpn_note.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
+			// 
+			// btn_notify
+			// 
+			this.btn_notify.BackColor = System.Drawing.Color.White;
+			this.btn_notify.FlatAppearance.BorderSize = 0;
+			this.btn_notify.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_notify.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_notify.ForeColor = System.Drawing.Color.Red;
+			this.btn_notify.Location = new System.Drawing.Point(3, 3);
+			this.btn_notify.Name = "btn_notify";
+			this.btn_notify.Size = new System.Drawing.Size(40, 40);
+			this.btn_notify.TabIndex = 0;
+			this.btn_notify.Text = "3";
+			this.btn_notify.UseVisualStyleBackColor = false;
+			this.btn_notify.Click += new System.EventHandler(this.btn_close_Click);
+			this.btn_notify.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
 			// 
 			// kibicom_mwh_frm_main
 			// 
@@ -219,8 +251,8 @@
 			this.BackColor = System.Drawing.Color.White;
 			this.ClientSize = new System.Drawing.Size(260, 582);
 			this.ControlBox = false;
-			this.Controls.Add(this.flowLayoutPanel2);
-			this.Controls.Add(this.flowLayoutPanel1);
+			this.Controls.Add(this.fpn_head);
+			this.Controls.Add(this.fpn_cmd_arr);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -233,8 +265,9 @@
 			this.Load += new System.EventHandler(this.kibicom_mwh_frm_main_Load);
 			this.Shown += new System.EventHandler(this.frm_main_Shown);
 			this.Click += new System.EventHandler(this.frm_main_Click);
-			this.flowLayoutPanel1.ResumeLayout(false);
-			this.flowLayoutPanel2.ResumeLayout(false);
+			this.fpn_cmd_arr.ResumeLayout(false);
+			this.fpn_head.ResumeLayout(false);
+			this.fpn_note.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -244,13 +277,15 @@
 		private System.Windows.Forms.Button btn_add_customer;
 		private System.Windows.Forms.Button btn_add_address;
 		private System.Windows.Forms.Button btn_add_zamer;
-		private System.Windows.Forms.Button btn_take_in_work;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Button btn_gate_to_work;
+		private System.Windows.Forms.FlowLayoutPanel fpn_cmd_arr;
+		private System.Windows.Forms.FlowLayoutPanel fpn_head;
 		private System.Windows.Forms.Button btn_close;
 		private System.Windows.Forms.Button btn_add_pay;
 		private System.Windows.Forms.Button btn_events;
 		private System.Windows.Forms.Button btn_customer_address;
+		private System.Windows.Forms.FlowLayoutPanel fpn_note;
+		private System.Windows.Forms.Button btn_notify;
 	}
 }
 

@@ -36,15 +36,69 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Atechnology.BrokerService">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.BrokerService.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.Components, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.Components.dll</HintPath>
+    </Reference>
     <Reference Include="Atechnology.DBConnection">
-      <HintPath>..\..\..\..\..\Dropbox\data\WinDraw2009\Atechnology.DBConnection.dll</HintPath>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.DBConnection.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.DXF">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.DXF.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.ecad.Calc, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Calc.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.ecad.Calc.SystemScript, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Calc.SystemScript.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.ecad.Dictionary, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Dictionary.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.ecad.Document">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Document.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.ecad.Report">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Report.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.ecad.Settings, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.FrontalCAE">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.FrontalCAE.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.lineOPT.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.lineOPT.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.Logging.dll</HintPath>
     </Reference>
     <Reference Include="fastJSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
     </Reference>
-    <Reference Include="kibicom.josi">
-      <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\kibicom.josi.dll</HintPath>
+    <Reference Include="kibicom.josi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\kibicom.josi.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom.kvl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\kibicom.kvl.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom.tlib">
+      <HintPath>..\..\..\_net_build_\kibicom.tlib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\_net_build_\atechnology\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -97,10 +151,6 @@
     <ProjectReference Include="..\..\..\dnclive\kibicom_wd\kibicom_wd_console_deb\kibicom_wd_console_deb.csproj">
       <Project>{ccdb8ce9-15e8-4227-b3d3-be1b9df7f729}</Project>
       <Name>kibicom_wd_console_deb</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\kibicom\kvl_sharp\kvl\kvl.csproj">
-      <Project>{508cbce9-4fde-4e12-a542-e104ce06be85}</Project>
-      <Name>kvl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
