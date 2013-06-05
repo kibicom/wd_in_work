@@ -1,4 +1,4 @@
-﻿namespace my_helper
+﻿namespace kibicom.my_wd_helper
 {
 	partial class frm_conf
 	{
@@ -31,6 +31,7 @@
 			this.btn_cre_kwj = new System.Windows.Forms.Button();
 			this.btn_fill_tab_customer = new System.Windows.Forms.Button();
 			this.btn_fill_tab_address = new System.Windows.Forms.Button();
+			this.btn_helper_start = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// btn_cre_kwj
@@ -63,16 +64,28 @@
 			this.btn_fill_tab_address.UseVisualStyleBackColor = true;
 			this.btn_fill_tab_address.Click += new System.EventHandler(this.btn_fill_tab_address_Click);
 			// 
+			// btn_helper_start
+			// 
+			this.btn_helper_start.Location = new System.Drawing.Point(12, 145);
+			this.btn_helper_start.Name = "btn_helper_start";
+			this.btn_helper_start.Size = new System.Drawing.Size(161, 62);
+			this.btn_helper_start.TabIndex = 1;
+			this.btn_helper_start.Text = "Запустить helper";
+			this.btn_helper_start.UseVisualStyleBackColor = true;
+			this.btn_helper_start.Click += new System.EventHandler(this.btn_helper_start_Click);
+			// 
 			// frm_conf
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(556, 395);
+			this.Controls.Add(this.btn_helper_start);
 			this.Controls.Add(this.btn_fill_tab_address);
 			this.Controls.Add(this.btn_fill_tab_customer);
 			this.Controls.Add(this.btn_cre_kwj);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.Name = "frm_conf";
-			this.Text = "frm_conf";
+			this.Activated += new System.EventHandler(this.frm_conf_Activated);
 			this.ResumeLayout(false);
 
 		}
@@ -82,5 +95,6 @@
 		private System.Windows.Forms.Button btn_cre_kwj;
 		private System.Windows.Forms.Button btn_fill_tab_customer;
 		private System.Windows.Forms.Button btn_fill_tab_address;
+		private System.Windows.Forms.Button btn_helper_start;
 	}
 }

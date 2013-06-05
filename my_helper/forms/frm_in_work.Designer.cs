@@ -1,4 +1,4 @@
-﻿namespace my_helper
+﻿namespace kibicom.my_wd_helper
 {
 	partial class frm_in_work
 	{

@@ -7,11 +7,12 @@ using System.Drawing.Drawing2D;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
-using customer_info;
+//using customer_info;
 using josi;
 //using josi.store.res;
 using kibicom.tlib;
 using kibicom.josi;
+using kibicom;
 
 
 namespace josi.store
@@ -48,7 +49,7 @@ namespace josi.store
 		public t args=new t();
 
 		//форма ввода нового контрагента
-		customer_info.customer_info_form cif_form;
+		customer_info_form cif_form;
 
 		public josi_customer()
 		{
@@ -635,7 +636,7 @@ namespace josi.store
 			if (((t)lbx_items.SelectedItem)["name"].f_str() == "ƒобавить нового клиента")
 			{
 				//создаем форму ввода данных нового контрагента
-				cif_form = new customer_info.customer_info_form(txt_query.Text);
+				cif_form = new customer_info_form(txt_query.Text);
 				
 				//показываем форму как диалог
 				cif_form.ShowDialog();

@@ -1,4 +1,4 @@
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	partial class frm_finder
 	{
@@ -192,7 +192,7 @@ namespace my_helper
 			this.btn_pick.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this.btn_pick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_pick.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_pick.Image = global::my_helper.Properties.Resources.btn_pick_1;
+			this.btn_pick.Image = global::kibicom.my_wd_helper.Properties.Resources.btn_pick_1;
 			this.btn_pick.Location = new System.Drawing.Point(3, 3);
 			this.btn_pick.Margin = new System.Windows.Forms.Padding(3, 3, 28, 3);
 			this.btn_pick.Name = "btn_pick";
@@ -213,7 +213,7 @@ namespace my_helper
 			this.btn_revert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this.btn_revert.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_revert.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_revert.Image = global::my_helper.Properties.Resources.btn_revert_1;
+			this.btn_revert.Image = global::kibicom.my_wd_helper.Properties.Resources.btn_revert_1;
 			this.btn_revert.Location = new System.Drawing.Point(85, 3);
 			this.btn_revert.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_revert.Name = "btn_revert";
@@ -236,7 +236,7 @@ namespace my_helper
 			this.btn_drop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this.btn_drop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_drop.Font = new System.Drawing.Font("Courier New", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_drop.Image = global::my_helper.Properties.Resources.btn_drop_1;
+			this.btn_drop.Image = global::kibicom.my_wd_helper.Properties.Resources.btn_drop_1;
 			this.btn_drop.Location = new System.Drawing.Point(46, 3);
 			this.btn_drop.Margin = new System.Windows.Forms.Padding(0);
 			this.btn_drop.Name = "btn_drop";

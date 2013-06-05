@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kibicom_wd_console_deb", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kvl", "..\..\..\kibicom\kvl_sharp\kvl\kvl.csproj", "{508CBCE9-4FDE-4E12-A542-E104CE06BE85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "my_helper", "..\my_helper\my_helper.csproj", "{DA2700E6-B433-4D6D-BB1A-89BF09D4B733}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "my_wd_helper", "..\my_helper\my_wd_helper.csproj", "{DA2700E6-B433-4D6D-BB1A-89BF09D4B733}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "card_reader", "..\..\..\dnclive\windraw\proj\josi_customer\objdist\card_reader.csproj", "{7D8C9B68-86B3-482A-B542-13A8F052FC1B}"
 EndProject

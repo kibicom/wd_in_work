@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using kibicom.tlib;
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	public partial class frm_conf : Form
 	{
@@ -94,6 +94,42 @@ namespace my_helper
 			}
 		}
 
+		private void btn_helper_start_Click(object sender, EventArgs e)
+		{
+			kibicom_mwh_frm_main frm_helper = new kibicom_mwh_frm_main(new t());
+			//frm_helper.Owner = this;
+			frm_helper.Show(this);
+		}
+
+		/*
+		protected override bool ShowWithoutActivation
+		{
+			get { return true; }
+		}
+		*/
+		/*
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				const int WM_NCHITTEST = 0x0084;
+				const int WS_EX_TOPMOST = 0x00000008;
+				const int WS_EX_TOOLWINDOW = 0x00000080;
+				const int WS_EX_NOACTIVATE = 0x08000000;
+				//const int WS_EX_TOPMOST = 0x00000008;
+
+				CreateParams baseParams = base.CreateParams;
+
+				baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST);
+
+				return baseParams;
+			}
+		}
+		*/
+		private void frm_conf_Activated(object sender, EventArgs e)
+		{
+
+		}
 		
 	}
 }

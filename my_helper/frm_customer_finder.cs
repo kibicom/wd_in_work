@@ -8,7 +8,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace my_helper
+namespace kibicom
 {
 	public partial class frm_customer_finder : Form
 	{

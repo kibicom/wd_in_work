@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using kibicom;
 using kibicom.tlib;
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	public partial class frm_in_work : Form
 	{
@@ -65,11 +65,11 @@ namespace my_helper
 			}
 			if (Owner != null)
 			{
-				Owner.Activate();
+				//Owner.Activate();
 			}
 
 		}
-
+		
 		//форма деактивирована
 		virtual public t f_leaved(t args)
 		{

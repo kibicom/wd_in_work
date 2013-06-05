@@ -1,4 +1,4 @@
-﻿namespace my_helper
+﻿namespace kibicom
 {
 	partial class frm_customer_finder
 	{

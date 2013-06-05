@@ -11,7 +11,7 @@ using josi.store;
 using System.Text.RegularExpressions;
 using kibicom.tlib;
 
-namespace customer_info
+namespace kibicom
 {
 	public partial class address_info_form : Form
 	{

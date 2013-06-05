@@ -1,4 +1,4 @@
-﻿namespace customer_info
+﻿namespace kibicom
 {
 	partial class customer_info_form
 	{

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using josi.store;
 using kibicom.tlib;
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	public partial class kibicom_mwh_frm_main : Form
 	{
@@ -728,11 +728,13 @@ namespace my_helper
 								{
 									Height = 60;
 
-									ds.f_hide();
+									//ds.f_hide();
 
 									this.args["is_active"].f_set(false);
 
 									//MessageBox.Show(this.Focused.ToString());
+
+									/*
 
 									//если требуемое состояние спратан
 									if (this.args["required_state"].f_str() == "hidden" )
@@ -753,7 +755,7 @@ namespace my_helper
 											this.args["real_state"].f_set("shown");
 										}
 									}
-
+									*/
 									//f_drop_shadow();
 
 									return new t();
@@ -824,6 +826,12 @@ namespace my_helper
 		{
 			btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Regular);
 			is_show_blocked = false;
+
+			if(Owner!=null)
+			{
+				Owner.Activate();
+			}
+
 			this.args["real_state"].f_set("shown");
 		}
 
@@ -877,16 +885,37 @@ namespace my_helper
 		}
 
 		//border only
+		
 		protected override void WndProc(ref Message message)
 		{
+			
 			const int WM_NCHITTEST = 0x0084;
-
-			if (message.Msg == WM_NCHITTEST)
+			const int WM_ACTIVATEAPP = 0x001C;
+			const int WM_ACTIVATE = 0x0006;
+			const int WM_NCACTIVATE = 0x0086;
+			//const int WS_EX_TOPMOST = 0x00000008;
+			//const int WS_EX_TOOLWINDOW = 0x00000080;
+			//const int WS_EX_NOACTIVATE = 0x08000000;
+			//message.
+			if (message.Msg == WM_NCHITTEST )
 				return;
 
-			base.WndProc(ref message);
-		}
+			if (message.Msg == WM_ACTIVATE)
+			{
+				//message.
+				message.Result = IntPtr.Zero;
+				return;
+			}
+			if (message.Msg == WM_NCACTIVATE)
+			{
+				message.Result = IntPtr.Zero;
+				return;
+			}
 
+			base.WndProc(ref message);
+			 
+		}
+		
 		private void kibicom_mwh_frm_main_Load(object sender, EventArgs e)
 		{
 			Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
@@ -895,24 +924,32 @@ namespace my_helper
 			Height = 60;
 		}
 
-		/*
+		
 		protected override bool ShowWithoutActivation
 		{
 			get { return true; }
 		}
 
+		
 		protected override CreateParams CreateParams
 		{
 			get
 			{
+				//const int WM_NCHITTEST = 0x0084;
+				//const int WS_EX_TOPMOST = 0x00000008;
+				const int WS_EX_TOOLWINDOW = 0x00000080;
+				const int WS_EX_NOACTIVATE = 0x08000000;
+				const int WS_EX_TOPMOST = 0x00000008;
+				const int WS_EX_WINDOWEDGE = 0x00000100;
+
 				CreateParams baseParams = base.CreateParams;
-				
-				baseParams.ExStyle |= (int)(0x08000000L | 0x00000080L);
+
+				baseParams.ExStyle |= (int)(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_WINDOWEDGE);
 
 				return baseParams;
 			}
 		}
-		*/
+		
 
 		#endregion события
 

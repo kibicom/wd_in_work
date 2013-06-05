@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using kibicom.tlib;
 using kibicom.josi;
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	public partial class frm_finder_customer_address : frm_finder
 	{
@@ -366,12 +366,12 @@ namespace my_helper
 		{
 
 			//создаем форму ввода данных нового контрагента
-			frm_cre_edit_item = new customer_info.customer_info_form(txt_query.Text);
+			frm_cre_edit_item = new customer_info_form(txt_query.Text);
 
 			//показываем форму как диалог
 			frm_cre_edit_item.ShowDialog();
 
-			if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+			if (((customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
 			{
 				//в результате деактивации текущего окна (окна поиска)
 				//оно скроется так как предыдущее окно было диалогом
@@ -381,7 +381,7 @@ namespace my_helper
 
 				//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
-				t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
+				t created_customer = ((customer_info_form)frm_cre_edit_item).args["item"];
 
 
 				//формируем guid для нового контрагента
@@ -437,12 +437,12 @@ namespace my_helper
 			{
 
 				//создаем форму ввода данных нового контрагента
-				frm_cre_edit_item = new customer_info.customer_info_form(new t() { { "item", item["item"] } });
+				frm_cre_edit_item = new customer_info_form(new t() { { "item", item["item"] } });
 
 				//показываем форму как диалог
 				frm_cre_edit_item.ShowDialog();
 
-				if (((customer_info.customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+				if (((customer_info_form)frm_cre_edit_item).args["is_done"].f_bool())
 				{
 					//в результате деактивации текущего окна (окна поиска)
 					//оно скроется так как предыдущее окно было диалогом
@@ -452,7 +452,7 @@ namespace my_helper
 
 					//selected_item = ((customer_info.customer_info_form)frm_cre_edit_item).customer;
 
-					t created_customer = ((customer_info.customer_info_form)frm_cre_edit_item).args["item"];
+					t created_customer = ((customer_info_form)frm_cre_edit_item).args["item"];
 
 					///item["item"] = created_customer;
 
@@ -472,12 +472,12 @@ namespace my_helper
 			if (item["tab_name"].f_str() == "address")
 			{
 				//создаем форму ввода данных нового контрагента
-				frm_cre_edit_item = new customer_info.address_info_form(new t() { { "item", item["item"] } });
+				frm_cre_edit_item = new address_info_form(new t() { { "item", item["item"] } });
 
 				//показываем форму как диалог
 				frm_cre_edit_item.ShowDialog();
 
-				if (((customer_info.address_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+				if (((address_info_form)frm_cre_edit_item).args["is_done"].f_bool())
 				{
 					//в результате деактивации текущего окна (окна поиска)
 					//оно скроется так как предыдущее окно было диалогом
@@ -485,7 +485,7 @@ namespace my_helper
 					//поэтом вновь показываем себя
 					Show();
 
-					t created_item = ((customer_info.address_info_form)frm_cre_edit_item).args["item"];
+					t created_item = ((address_info_form)frm_cre_edit_item).args["item"];
 
 					//item["name"].f_set(txt_query.Text);
 

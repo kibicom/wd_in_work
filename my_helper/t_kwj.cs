@@ -11,7 +11,7 @@ using kibicom.tlib;
 using kibicom.tlib.data_store_cli;
 using kibicom.josi;
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	public class t_kwj:t
 	{

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace my_helper
+namespace kibicom
 {
 	public partial class my_helper_3 : Form
 	{

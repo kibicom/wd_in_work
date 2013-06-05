@@ -10,7 +10,7 @@ using kibicom.wd;
 
 using Atechnology.DBConnections2;
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	class atonet_kvl_wd_calc:t
 	{

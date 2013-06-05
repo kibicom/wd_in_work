@@ -1,4 +1,4 @@
-﻿namespace my_helper
+﻿namespace kibicom
 {
 	partial class my_helper_3
 	{

@@ -7,14 +7,14 @@ using System.Drawing.Drawing2D;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
-using customer_info;
+//using customer_info;
 using josi;
 //using josi.store.res;
 using kibicom.tlib;
 using kibicom.josi;
 
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 
 	
@@ -435,7 +435,7 @@ namespace my_helper
 			}
 			else if (Owner != null)
 			{
-				Owner.Activate();
+				//Owner.Activate();
 			}
 
 		}

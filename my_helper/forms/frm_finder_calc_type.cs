@@ -12,7 +12,7 @@ using kibicom.tlib;
 using kibicom.josi;
 
 
-namespace my_helper
+namespace kibicom.my_wd_helper
 {
 	public partial class frm_finder_calc_type : frm_finder
 	{
@@ -257,7 +257,7 @@ namespace my_helper
 			t item = args["item"];
 
 			//создаем форму ввода данных нового контрагента
-			frm_cre_edit_item = new customer_info.address_info_form(new t() { { "item", item["item"] } });
+			frm_cre_edit_item = new address_info_form(new t() { { "item", item["item"] } });
 
 			//frm_cre_edit_item.TopMost = true;
 
@@ -266,11 +266,11 @@ namespace my_helper
 			//показываем форму как диалог
 			frm_cre_edit_item.ShowDialog();
 
-			if (((customer_info.address_info_form)frm_cre_edit_item).args["is_done"].f_bool())
+			if (((address_info_form)frm_cre_edit_item).args["is_done"].f_bool())
 			{
 				
 
-				t created_item = ((customer_info.address_info_form)frm_cre_edit_item).args["item"];
+				t created_item = ((address_info_form)frm_cre_edit_item).args["item"];
 
 				//item["name"].f_set(txt_query.Text);
 

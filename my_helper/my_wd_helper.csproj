@@ -5,10 +5,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DA2700E6-B433-4D6D-BB1A-89BF09D4B733}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>my_helper</RootNamespace>
-    <AssemblyName>my_helper</AssemblyName>
+    <RootNamespace>kibicom.my_wd_helper</RootNamespace>
+    <AssemblyName>kibicom.my_wd_helper</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
