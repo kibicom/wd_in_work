@@ -584,11 +584,26 @@ namespace my_helper
 			return new t();
 		}
 
+		//событие активации получения фокуса вкладкой wd
+		public void f_tab_gotfocus(object sender, EventArgs e)
+		{
+
+			MessageBox.Show("gotfocus");
+
+		}
+
+		//событие активации потери фокуса вкладкой wd
+		public void f_tab_lostfocus(object sender, EventArgs e)
+		{
+
+			MessageBox.Show("lostfocus");
+
+		}
 
 		//событие активации вкладки wd
 		public void f_tab_enter(object sender, EventArgs e)
 		{
-			
+
 			this.args["wd"]["active_tab"].f_set(sender);
 			Atechnology.ecad.Document.OrderItemForm oif = (Atechnology.ecad.Document.OrderItemForm)sender;
 
@@ -597,7 +612,12 @@ namespace my_helper
 			//MessageBox.Show(oif.ds.Tables.Count.ToString());
 
 			//MessageBox.Show(oif.ds.Tables["orders"].Rows[0]["name"].ToString());
+			//oif.FormClosed
+			//new Atechnology.Components.FormClosed(delegate(object sender, FormClosedEventArgs args)
+			//	{
 
+			//	}
+			//oif.LostFocus
 			if (sender.GetType() == typeof(Atechnology.ecad.Document.OrderItemForm))
 			{
 				this.args["wd"]["dbconn"].f_set(oif.db);
@@ -606,6 +626,27 @@ namespace my_helper
 
 
 		}
+
+		//событие закрытия вкладки wd
+		public void f_tab_close(object sender, FormClosedEventArgs e)
+		{
+			//MessageBox.Show("closed");
+			if (this.args["wd"]["active_tab"].f_val() == sender)
+			{
+				//MessageBox.Show("drop_tab");
+				this.args["wd"]["active_tab"].val = null;
+
+				if (this.args["wd"]["active_tab"].f_val() == null)
+				{
+					//MessageBox.Show("active_tab is null");
+				}
+
+				this.args["wd"]["dbconn"].f_set(null);
+				this.args["wd"]["ds"].f_set(null);
+			}
+			
+		}
+
 
 		public void f_set_context(t args)
 		{

@@ -30,6 +30,8 @@ namespace my_helper
 		{
 			Owner = args["owner"].f_val<Form>();
 
+			this.args["owner"].f_set(Owner);
+
 			this.args["max_duration"] = args["max_duration"];
 			this.args["max_res_name"] = args["max_res_name"];
 

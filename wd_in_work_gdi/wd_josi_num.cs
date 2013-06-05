@@ -487,8 +487,9 @@ namespace wd_in_work_gdi
 			string seller_guid = wd_o_dr["seller_guid"].ToString();
 
 
-			/*** профиль ***/
-
+			/*** профиль фурнитура***/
+			string profsys_name = wd_o_dr["profsys_name"].ToString();
+			string furnsys_name = wd_o_dr["furnsys_name"].ToString();
 
 			/*** структура заказа ***/
 
@@ -668,33 +669,34 @@ namespace wd_in_work_gdi
 							}
 						}
 					}
-				}
-				/*,
+				},
 				{
 					"tab_wd_prof_sys", new t()
 					{
 						new t()
 						{
-							//_update_if_empty:true,
-							{"_no_update",true},
+							{"_update_if_empty",true},
+							//{"_no_update",true},
 							{"id",""},
-							{"name",""},
+							{"name",profsys_name},
 							//{"wd_idprofsys", ""},
 						}
 					}
-				},
+				}
+				,
 				{
 					"tab_order_sign", new t()
 					{
 						new t()
 						{
-							//_no_update:true,
-							{"_update_if_empty",true},
+							{"_no_update",true},
+							//{"_update_if_empty",true},
 							{"id",""},
-							{"name",""}
+							{"name","Заказчик"}
 						}
 					}
-				},
+				}
+				/*,
 				{
 					"tab_adv_type", new t()
 					{
@@ -793,7 +795,7 @@ namespace wd_in_work_gdi
 								"f_done", new t_f<t,t>(delegate(t args2)
 								{
 									
-									MessageBox.Show("done");
+									//MessageBox.Show("done");
 
 									t.f_f("f_done", args);
 
@@ -804,7 +806,7 @@ namespace wd_in_work_gdi
 								"f_fail", new t_f<t,t>(delegate(t args2)
 								{
 
-									MessageBox.Show("fail");
+									//MessageBox.Show("fail");
 
 									t.f_f("f_fail", args);
 

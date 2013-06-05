@@ -67,8 +67,20 @@
     <Reference Include="fastJSON">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
     </Reference>
+    <Reference Include="kibicom.atonet">
+      <HintPath>..\..\..\_net_build_\kibicom.atonet.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom.atonet_fast">
+      <HintPath>..\..\..\_net_build_\kibicom.atonet_fast.dll</HintPath>
+    </Reference>
     <Reference Include="kibicom.josi">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\kibicom.josi.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom.kvl">
+      <HintPath>..\..\..\_net_build_\kibicom.kvl.dll</HintPath>
+    </Reference>
+    <Reference Include="kibicom_wd_console_deb">
+      <HintPath>..\..\..\_net_build_\kibicom_wd_console_deb.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -82,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="atonet_kvl_wd_calc.cs" />
     <Compile Include="forms\address_info_form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +125,12 @@
     <Compile Include="forms\frm_finder_address.Designer.cs">
       <DependentUpon>frm_finder_address.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\frm_finder_calc_type.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_finder_calc_type.designer.cs">
+      <DependentUpon>frm_finder_calc_type.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\frm_finder_customer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +154,12 @@
     </Compile>
     <Compile Include="forms\frm_main.Designer.cs">
       <DependentUpon>frm_main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\frm_selector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_selector.designer.cs">
+      <DependentUpon>frm_selector.cs</DependentUpon>
     </Compile>
     <Compile Include="frm_customer_finder.cs">
       <SubType>Form</SubType>
@@ -177,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="forms\frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\frm_selector.resx">
+      <DependentUpon>frm_selector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_customer_finder.resx">
       <DependentUpon>frm_customer_finder.cs</DependentUpon>
