@@ -262,7 +262,6 @@
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.TopMost = true;
 			this.Activated += new System.EventHandler(this.frm_main_Activated);
 			this.Load += new System.EventHandler(this.kibicom_mwh_frm_main_Load);
 			this.Shown += new System.EventHandler(this.frm_main_Shown);

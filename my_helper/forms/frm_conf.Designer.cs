@@ -86,6 +86,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.Name = "frm_conf";
 			this.Activated += new System.EventHandler(this.frm_conf_Activated);
+			this.Deactivate += new System.EventHandler(this.frm_conf_Deactivate);
 			this.ResumeLayout(false);
 
 		}

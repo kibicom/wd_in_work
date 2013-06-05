@@ -10,13 +10,14 @@ using System.Text;
 using System.Windows.Forms;
 using josi.store;
 using kibicom.tlib;
+using System.Runtime.InteropServices;
 
 namespace kibicom.my_wd_helper
 {
 	public partial class kibicom_mwh_frm_main : Form
 	{
 
-		DropShadow ds = new DropShadow();
+		//DropShadow ds = new DropShadow();
 
 		public frm_finder_customer frm_customer_finder;
 		public frm_finder_address frm_address_finder;
@@ -190,8 +191,8 @@ namespace kibicom.my_wd_helper
 		private void f_drop_shadow()
 		{
 			
-			ds.f_show(this);
-			this.BringToFront();
+			//ds.f_show(this);
+			//this.BringToFront();
 
 		}
 
@@ -684,6 +685,13 @@ namespace kibicom.my_wd_helper
 			frm_customer_address_finder.f_find(args);
 		}
 
+
+		//управление отображением окна
+		public void f_show()
+		{
+			
+		}
+
 		#endregion команды
 
 
@@ -705,6 +713,7 @@ namespace kibicom.my_wd_helper
 			//Height = 60;
 
 			//f_drop_shadow();
+
 
 			this.args["real_state"].f_set("shown");
 
@@ -734,7 +743,7 @@ namespace kibicom.my_wd_helper
 
 									//MessageBox.Show(this.Focused.ToString());
 
-									/*
+									
 
 									//если требуемое состояние спратан
 									if (this.args["required_state"].f_str() == "hidden" )
@@ -755,7 +764,7 @@ namespace kibicom.my_wd_helper
 											this.args["real_state"].f_set("shown");
 										}
 									}
-									*/
+									
 									//f_drop_shadow();
 
 									return new t();
@@ -829,7 +838,7 @@ namespace kibicom.my_wd_helper
 
 			if(Owner!=null)
 			{
-				Owner.Activate();
+				//Owner.Activate();
 			}
 
 			this.args["real_state"].f_set("shown");
@@ -871,7 +880,7 @@ namespace kibicom.my_wd_helper
 
 		private void btn_close_Click(object sender, EventArgs e)
 		{
-			ds.Close();
+			//ds.Close();
 			foreach (Form frm in OwnedForms)
 			{
 				frm.Close();
@@ -886,42 +895,15 @@ namespace kibicom.my_wd_helper
 
 		//border only
 		
-		protected override void WndProc(ref Message message)
-		{
-			
-			const int WM_NCHITTEST = 0x0084;
-			const int WM_ACTIVATEAPP = 0x001C;
-			const int WM_ACTIVATE = 0x0006;
-			const int WM_NCACTIVATE = 0x0086;
-			//const int WS_EX_TOPMOST = 0x00000008;
-			//const int WS_EX_TOOLWINDOW = 0x00000080;
-			//const int WS_EX_NOACTIVATE = 0x08000000;
-			//message.
-			if (message.Msg == WM_NCHITTEST )
-				return;
-
-			if (message.Msg == WM_ACTIVATE)
-			{
-				//message.
-				message.Result = IntPtr.Zero;
-				return;
-			}
-			if (message.Msg == WM_NCACTIVATE)
-			{
-				message.Result = IntPtr.Zero;
-				return;
-			}
-
-			base.WndProc(ref message);
-			 
-		}
 		
 		private void kibicom_mwh_frm_main_Load(object sender, EventArgs e)
 		{
+			
 			Left = Screen.PrimaryScreen.Bounds.Width - Width - this.args["right_offset"].f_int();
 			Top = this.args["top"].f_int();
 			TopLevel = true;
 			Height = 60;
+			 
 		}
 
 		
@@ -931,6 +913,53 @@ namespace kibicom.my_wd_helper
 		}
 
 		
+		protected override void WndProc(ref Message message)
+		{
+
+			const int WM_NCHITTEST = 0x0084;
+			const int WM_ACTIVATEAPP = 0x001C;
+			const int WM_ACTIVATE = 0x0006;
+			const int WM_NCACTIVATE = 0x0086;
+			//const int WS_EX_TOPMOST = 0x00000008;
+			//const int WS_EX_TOOLWINDOW = 0x00000080;
+			//const int WS_EX_NOACTIVATE = 0x08000000;
+			//message.
+			if (message.Msg == WM_NCHITTEST)
+			{
+				return;
+			}
+
+			if (message.Msg == WM_ACTIVATE)
+			{
+				if (message.WParam == new IntPtr(0))
+				{
+					base.WndProc(ref message);
+				}
+				if (message.WParam == new IntPtr(1))
+				{
+					message.Result = IntPtr.Zero;
+					return;
+				}
+
+			}
+			if (message.Msg == WM_NCACTIVATE)
+			{
+				if (message.WParam == new IntPtr(0))
+				{
+					base.WndProc(ref message);
+				}
+				if (message.WParam == new IntPtr(1))
+				{
+					message.Result = IntPtr.Zero;
+					return;
+				}
+			}
+
+			base.WndProc(ref message);
+
+		}
+		
+
 		protected override CreateParams CreateParams
 		{
 			get
@@ -951,6 +980,34 @@ namespace kibicom.my_wd_helper
 		}
 		
 
+
+
+		/*
+		private const int SW_SHOWNOACTIVATE = 4;
+		private const int HWND_TOPMOST = -1;
+		private const uint SWP_NOACTIVATE = 0x0010;
+
+		[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+		static extern bool SetWindowPos(
+			 int hWnd,           // window handle
+			 int hWndInsertAfter,    // placement-order handle
+			 int X,          // horizontal position
+			 int Y,          // vertical position
+			 int cx,         // width
+			 int cy,         // height
+			 uint uFlags);       // window positioning flags
+
+		[DllImport("user32.dll")]
+		static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+		static void ShowInactiveTopmost(Form frm)
+		{
+			ShowWindow(frm.Handle, SW_SHOWNOACTIVATE);
+			SetWindowPos(frm.Handle.ToInt32(), HWND_TOPMOST,
+			frm.Left, frm.Top, frm.Width, frm.Height,
+			SWP_NOACTIVATE);
+		}
+		*/
 		#endregion события
 
 		

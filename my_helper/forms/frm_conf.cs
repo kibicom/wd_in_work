@@ -16,6 +16,10 @@ namespace kibicom.my_wd_helper
 
 		t_kwj kwj_conf = new t_kwj();
 
+		kibicom_mwh_frm_main frm_helper = new kibicom_mwh_frm_main(new t());
+
+		test_form frm_test = new test_form();
+
 		public frm_conf()
 		{
 			InitializeComponent();
@@ -96,9 +100,13 @@ namespace kibicom.my_wd_helper
 
 		private void btn_helper_start_Click(object sender, EventArgs e)
 		{
-			kibicom_mwh_frm_main frm_helper = new kibicom_mwh_frm_main(new t());
+			
 			//frm_helper.Owner = this;
+			//frm_helper.Owner = null;
 			frm_helper.Show(this);
+			//frm_test.Show(this);
+			//this.Activate();
+			//frm_test.Show(this);
 		}
 
 		/*
@@ -106,8 +114,8 @@ namespace kibicom.my_wd_helper
 		{
 			get { return true; }
 		}
-		*/
-		/*
+		
+		
 		protected override CreateParams CreateParams
 		{
 			get
@@ -125,11 +133,29 @@ namespace kibicom.my_wd_helper
 				return baseParams;
 			}
 		}
+		
 		*/
+
 		private void frm_conf_Activated(object sender, EventArgs e)
 		{
+			frm_helper.args["required_state"].f_set("shown");
+			//frm_helper.args["main_wd_frm"].f_set("shown");
 
+			//frm_helper.Show(this);
+			//frm_test.Show(this);
+
+			//this.Activate();
 		}
+
+		private void frm_conf_Deactivate(object sender, EventArgs e)
+		{
+			frm_helper.args["required_state"].f_set("hidden");
+			//frm_helper.args["main_wd_frm"].f_set("hidden");
+			//frm_helper.Hide();
+			//frm_test.Hide();
+			//this.Activate();
+		}
+
 		
 	}
 }

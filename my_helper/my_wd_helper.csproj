@@ -181,6 +181,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="test_form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="test_form.Designer.cs">
+      <DependentUpon>test_form.cs</DependentUpon>
+    </Compile>
     <Compile Include="t_kwj.cs" />
     <EmbeddedResource Include="forms\address_info_form.resx">
       <DependentUpon>address_info_form.cs</DependentUpon>
@@ -226,6 +232,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="test_form.resx">
+      <DependentUpon>test_form.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
