@@ -73,6 +73,36 @@ namespace kibicom.my_wd_helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap btn_checked_2 {
+            get {
+                object obj = ResourceManager.GetObject("btn_checked_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap btn_checked_3 {
+            get {
+                object obj = ResourceManager.GetObject("btn_checked_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap btn_checked_4 {
+            get {
+                object obj = ResourceManager.GetObject("btn_checked_4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap btn_drop_1 {
             get {
                 object obj = ResourceManager.GetObject("btn_drop_1", resourceCulture);
@@ -136,6 +166,16 @@ namespace kibicom.my_wd_helper.Properties {
         internal static System.Drawing.Bitmap btn_revert_1 {
             get {
                 object obj = ResourceManager.GetObject("btn_revert_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap glyphicons_113_justify {
+            get {
+                object obj = ResourceManager.GetObject("glyphicons_113_justify", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

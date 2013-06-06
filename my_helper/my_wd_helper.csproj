@@ -325,6 +325,42 @@
   <ItemGroup>
     <None Include="bin\Release\glyphicons_free\glyphicons\png\glyphicons_158_show_lines.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_206_ok_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_150_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_151_new_window.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_152_check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_153_unchecked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_154_more_windows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_207_remove_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_113_justify.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_015_print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_158_show_lines.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_335_pushpin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\glyphicons\png\glyphicons_151_new_window1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(TargetPath) D:\git\_net_build_\
