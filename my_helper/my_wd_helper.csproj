@@ -52,17 +52,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Atechnology.Components">
-      <HintPath>..\..\..\dnclive\windraw\WinDraw2009\Atechnology.Components.dll</HintPath>
+      <HintPath>D:\git\_net_build_\atechnology\Atechnology.Components.dll</HintPath>
     </Reference>
-    <Reference Include="Atechnology.DBConnection, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\venta\synchronize\orders\Dropbox\data\WinDraw2009\Atechnology.DBConnection.dll</HintPath>
+    <Reference Include="Atechnology.DBConnection">
+      <HintPath>D:\git\_net_build_\atechnology\Atechnology.DBConnection.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.ecad.Document">
-      <HintPath>..\..\..\..\venta\synchronize\orders\Dropbox\data\WinDraw2009\Atechnology.ecad.Document.dll</HintPath>
+      <HintPath>D:\git\_net_build_\atechnology\Atechnology.ecad.Document.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.winDraw.Components">
-      <HintPath>..\..\..\..\..\Dropbox\data\WinDraw2009\Atechnology.winDraw.Components.dll</HintPath>
+      <HintPath>D:\git\_net_build_\atechnology\Atechnology.winDraw.Components.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Data.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
     <Reference Include="DevExpress.Utils.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
