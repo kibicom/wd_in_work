@@ -11,9 +11,15 @@ using kibicom.tlib;
 
 namespace kibicom.my_wd_helper
 {
-	public partial class frm_in_work : Form
+	public partial class frm_in_work : Form, ikibifrm
 	{
-		public t args = new t();
+		public t _args = new t();
+
+		public t args
+		{
+			get{return _args;}
+			set { _args = value; }
+		}
 
 		public frm_in_work()
 		{
@@ -30,13 +36,13 @@ namespace kibicom.my_wd_helper
 		{
 			Owner = args["owner"].f_val<Form>();
 
-			this.args["owner"].f_set(Owner);
+			this._args["owner"].f_set(Owner);
 
-			this.args["max_duration"] = args["max_duration"];
-			this.args["max_res_name"] = args["max_res_name"];
+			this._args["max_duration"] = args["max_duration"];
+			this._args["max_res_name"] = args["max_res_name"];
 
-			this.args["f_give_to_work"] = args["f_give_to_work"];
-			this.args["f_give_to_check"] = args["f_give_to_check"];
+			this._args["f_give_to_work"] = args["f_give_to_work"];
+			this._args["f_give_to_check"] = args["f_give_to_check"];
 
 			lbl_duration_max.Text = args["max_duration"].f_str();
 
@@ -47,20 +53,20 @@ namespace kibicom.my_wd_helper
 
 		private void btn_give_to_check_Click(object sender, EventArgs e)
 		{
-			t.f_f("f_give_to_work", this.args);
+			t.f_f("f_give_to_work", this._args);
 		}
 
 		private void btn_give_to_work_Click(object sender, EventArgs e)
 		{
-			t.f_f("f_give_to_check", this.args);
+			t.f_f("f_give_to_check", this._args);
 		}
 
 		private void frm_Deactivate(object sender, EventArgs e)
 		{
-			if (!this.args["is_blocked"].f_def(false).f_bool())
+			if (!this._args["is_blocked"].f_def(false).f_bool())
 			{
-				this.args["is_shown"].f_set(false);
-				f_leaved(this.args);
+				this._args["is_shown"].f_set(false);
+				f_leaved(this._args);
 				Hide();
 			}
 			if (Owner != null)
@@ -74,7 +80,7 @@ namespace kibicom.my_wd_helper
 		virtual public t f_leaved(t args)
 		{
 
-			t.f_f("f_leaved", this.args);
+			t.f_f("f_leaved", this._args);
 
 			return new t();
 		}
@@ -83,8 +89,8 @@ namespace kibicom.my_wd_helper
 
 		public t f_set_duration(t args)
 		{
-			this.args["max_duration"] = args["max_duration"];
-			this.args["max_res_name"] = args["max_res_name"];
+			this._args["max_duration"] = args["max_duration"];
+			this._args["max_res_name"] = args["max_res_name"];
 
 			lbl_duration_max.Text = args["max_duration"].f_str();
 

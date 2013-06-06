@@ -25,7 +25,7 @@ namespace kibicom.my_wd_helper
 		public frm_finder_customer_address(t args)
 			: base(args)
 		{
-			this.args["wd_seller_guid"] = args["wd_seller_guid"];
+			this._args["wd_seller_guid"] = args["wd_seller_guid"];
 		}
 
 		//получение элементов из источника josi_store
@@ -100,7 +100,7 @@ namespace kibicom.my_wd_helper
 
 
 							//создаем очередной элемент
-							this.args["items"].Add(new t()
+							this._args["items"].Add(new t()
 							{
 								{"str1", row_name},
 								{"str2", row_phone},
@@ -147,14 +147,14 @@ namespace kibicom.my_wd_helper
 			//query = (new Regex("(\\d)(?<=\\d)(\\d)")).Replace(query, "$1[-$2]");
 
 			string where = "";
-			if (this.args["using_local_store"].f_str() == "mssql")
+			if (this._args["using_local_store"].f_str() == "mssql")
 			{
 				where = " name like '%" + query + "%' " +
 						" or phone like '%" + query + "%' " +
 						" or email like '%" + query + "%' " +
 						" order by deleted, tab_pick_id desc, freq , dtcre";
 			}
-			else if (this.args["using_local_store"].f_str() == "sqlite")
+			else if (this._args["using_local_store"].f_str() == "sqlite")
 			{
 				where = " _nocase_search like '%" + query + "%' ";
 			}
@@ -169,7 +169,7 @@ namespace kibicom.my_wd_helper
 						DataRow dr = args1["each"]["item"].f_val<DataRow>();
 
 						//создаем очередной элемент
-						this.args["items"].Add(new t()
+						this._args["items"].Add(new t()
 						{
 							{"str1", dr["name"].ToString()+" "+dr["phone"].ToString()},
 							{"str2", dr["picked_address_name"].ToString()},
@@ -216,11 +216,11 @@ namespace kibicom.my_wd_helper
 			//query = (new Regex("(\\d)")).Replace(query, "$1[- ,/]");
 
 			string where = "";
-			if (this.args["using_local_store"].f_str() == "mssql")
+			if (this._args["using_local_store"].f_str() == "mssql")
 			{
 				where = " name like '%" + query + "%' ";
 			}
-			else if (this.args["using_local_store"].f_str() == "sqlite")
+			else if (this._args["using_local_store"].f_str() == "sqlite")
 			{
 				where = " _nocase_search like '%" + query + "%' ";
 			}
@@ -235,7 +235,7 @@ namespace kibicom.my_wd_helper
 						DataRow dr = args1["each"]["item"].f_val<DataRow>();
 
 						//создаем очередной элемент
-						this.args["items"].Add(new t()
+						this._args["items"].Add(new t()
 						{
 							{"str1", dr["name"].ToString()},
 							{"str2", ""},
@@ -355,7 +355,7 @@ namespace kibicom.my_wd_helper
 		override public t f_select_item()
 		{
 
-			t.f_f("f_done", this.args);
+			t.f_f("f_done", this._args);
 
 			//Hide();
 
@@ -388,12 +388,12 @@ namespace kibicom.my_wd_helper
 				created_customer["uid"].f_set(Guid.NewGuid().ToString());
 				created_customer["wd_customer_guid"].f_set(Guid.NewGuid().ToString());
 
-				//this.args["selected_item"]["str1"] = this.args["selected_item"]["item"]["name"];
-				//this.args["selected_item"]["str2"] = this.args["selected_item"]["item"]["phone"];
+				//this._args["selected_item"]["str1"] = this._args["selected_item"]["item"]["name"];
+				//this._args["selected_item"]["str2"] = this._args["selected_item"]["item"]["phone"];
 
 				//добавляем созданный элемент в кэш времени выполнения
 				//запрос f_find() выполниться из кеша что бы не обращаться к серверу
-				this.args["new_items"].Add(new t()
+				this._args["new_items"].Add(new t()
 				{
 					{"str1", created_customer["name"]},
 					{"str2", created_customer["phone"]},
@@ -410,7 +410,7 @@ namespace kibicom.my_wd_helper
 
 								f_touch_lbx_item();
 
-								//t.f_f("f_done", this.args);
+								//t.f_f("f_done", this._args);
 
 								return new t();
 							})
@@ -525,7 +525,7 @@ namespace kibicom.my_wd_helper
 				kwj.f_tab_customer_pick_mssql(new t() 
 				{ 
 					{ "item", item["item"] },
-					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+					{ "wd_seller_guid", this._args["wd_seller_guid"]}
 				});
 			}
 			else
@@ -537,7 +537,7 @@ namespace kibicom.my_wd_helper
 				kwj.f_tab_customer_unpick_mssql(new t() 
 				{ 
 					{ "item", item["item"] },
-					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+					{ "wd_seller_guid", this._args["wd_seller_guid"]}
 				});
 			}
 			
@@ -549,7 +549,7 @@ namespace kibicom.my_wd_helper
 		override public t f_leaved(t args)
 		{
 
-			t.f_f("f_leaved", this.args);
+			t.f_f("f_leaved", this._args);
 
 			return new t();
 		}
@@ -567,7 +567,7 @@ namespace kibicom.my_wd_helper
 				kwj.f_tab_customer_drop_mssql(new t() 
 				{ 
 					{ "item", item["item"] },
-					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+					{ "wd_seller_guid", this._args["wd_seller_guid"]}
 				});
 			}
 			if (item["tab_name"].f_str() == "address")
@@ -576,7 +576,7 @@ namespace kibicom.my_wd_helper
 				kwj.f_tab_address_drop_mssql(new t() 
 				{ 
 					{ "item", item["item"] },
-					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+					{ "wd_seller_guid", this._args["wd_seller_guid"]}
 				});
 			}
 			
@@ -600,7 +600,7 @@ namespace kibicom.my_wd_helper
 				kwj.f_tab_customer_revert_mssql(new t() 
 				{ 
 					{ "item", item["item"] },
-					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+					{ "wd_seller_guid", this._args["wd_seller_guid"]}
 				});
 			}
 			if (item["tab_name"].f_str() == "address")
@@ -609,7 +609,7 @@ namespace kibicom.my_wd_helper
 				kwj.f_tab_address_revert_mssql(new t() 
 				{ 
 					{ "item", item["item"] },
-					{ "wd_seller_guid", this.args["wd_seller_guid"]}
+					{ "wd_seller_guid", this._args["wd_seller_guid"]}
 				});
 			}
 			//вызываем проверку удаления, чтобы включить кнопки
@@ -623,7 +623,7 @@ namespace kibicom.my_wd_helper
 		override public t f_opt(t args)
 		{
 
-			t.f_f("f_cancel", this.args);
+			t.f_f("f_cancel", this._args);
 
 			//Hide();
 

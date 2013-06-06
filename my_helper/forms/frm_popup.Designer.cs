@@ -1,6 +1,6 @@
-﻿namespace kibicom.my_wd_helper
+﻿namespace kibicom.my_wd_helper.forms
 {
-	partial class test_form
+	partial class frm_popup
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,37 +28,24 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.button1 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(98, 36);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// test_form
+			// frm_popup
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(540, 324);
-			this.Controls.Add(this.button1);
+			this.ClientSize = new System.Drawing.Size(622, 357);
+			this.ControlBox = false;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "test_form";
+			this.MaximumSize = new System.Drawing.Size(656, 408);
+			this.Name = "frm_popup";
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.test_form_FormClosing);
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Button button1;
 	}
 }

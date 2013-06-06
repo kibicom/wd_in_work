@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using josi.store;
 using kibicom.tlib;
 using System.Runtime.InteropServices;
+using kibicom.my_wd_helper.forms;
 
 namespace kibicom.my_wd_helper
 {
@@ -21,10 +22,9 @@ namespace kibicom.my_wd_helper
 
 		public frm_finder_customer frm_customer_finder;
 		public frm_finder_address frm_address_finder;
-
 		public frm_finder_customer_address frm_customer_address_finder;
-
 		public frm_in_work frm_in_work;
+		public frm_product_supply frm_product_supply;
 
 		System.Threading.Timer timer = null;
 
@@ -80,6 +80,33 @@ namespace kibicom.my_wd_helper
 			this.args["josi_store"]["pass"] = args["josi_end_point"].f_def("135");
 
 			this.args["local_store"]["file_name"] = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db");
+
+			this.args["kwj"]=new t_kwj(new t()
+			{
+				{"josi_store", this.args["josi_store"]},
+				{
+					"local_store", new t()
+					{
+						{"store_type", using_store},
+						{
+							"sqlite_cli", new t()
+							{
+								this.args["local_store"]
+							}
+						},
+						{
+							"mssql_cli", new t()
+ 							{
+								{"server",					"192.168.1.201"},
+								{"server_name",				""},
+								{"login",					"sa"},
+								{"pass",					"82757662=z"},
+								{"db_name",					"kwj_test"}
+							}
+						}
+					}
+				}
+			});
 
 			frm_customer_finder = new frm_finder_customer(new t()
 			{
@@ -179,6 +206,23 @@ namespace kibicom.my_wd_helper
 				{"f_give_to_check",args["f_give_to_work"]}
 			});
 
+			//форма получения сроков передачи в работу
+			frm_product_supply = new frm_product_supply(new t()
+			{
+				{"owner", this},
+				{"kwj", this.args["kwj"]},
+			});
+
+
+			this.args["forms"]=new t()
+			{
+				{"frm_customer_address_finder", frm_customer_address_finder},
+				{"frm_customer_finder", frm_customer_finder}, 
+				{"frm_address_finder", frm_address_finder}, 
+				{"frm_in_work", frm_in_work},
+				{"frm_product_supply", frm_product_supply}
+			};
+
 		}
 
 
@@ -255,7 +299,7 @@ namespace kibicom.my_wd_helper
 
 				frm_address_finder.is_shown = true;
 				frm_address_finder.Show();
-				frm_address_finder.TopMost = true;
+				//frm_address_finder.TopMost = true;
 				is_show_blocked = true;
 
 				//очищаем поле запроса если нужно
@@ -328,7 +372,7 @@ namespace kibicom.my_wd_helper
 
 				frm_customer_finder.is_shown = true;
 				frm_customer_finder.Show();
-				frm_customer_finder.TopMost = true;
+				//frm_customer_finder.TopMost = true;
 				is_show_blocked = true;
 
 				//очищаем поле запроса если нужно
@@ -366,6 +410,9 @@ namespace kibicom.my_wd_helper
 						frm_customer_address_finder.args.f_drop("selected_item");
 						frm_customer_address_finder.txt_query.Text="";
 
+						//frm_customer_address_finder
+						//frm_customer_address_finder.Refresh();
+
 						t.f_f("f_select_customer_address", this.args);
 
 						return new t();
@@ -374,7 +421,7 @@ namespace kibicom.my_wd_helper
 				{
 					"f_leaved", new t_f<t, t>(delegate(t args1)
 					{
-
+						/*
 						//скрываем форму клиент/адрес
 						//но не восстанавливаем ее
 						//пользователь не закончил выбор контрагента
@@ -406,9 +453,14 @@ namespace kibicom.my_wd_helper
 							//блокируем popup так как работа еще ведеться
 							is_show_blocked = true;
 						}
-						
+						*/
 
+						f_hide_all_not_under_mouse_cursor();
 
+						frm_customer_address_finder.fpn_selected_pane.Visible = false;
+						frm_customer_address_finder.fpn_finder_pane.Visible = true;
+						frm_customer_address_finder.args["is_blocked"].f_set(false);
+						frm_customer_address_finder.args.f_drop("selected_item");
 
 						//t.f_f("f_select_customer_address", this.args);
 
@@ -510,6 +562,11 @@ namespace kibicom.my_wd_helper
 				return new t();
 			}));
 
+			frm_customer_address_finder.args["f_leaved"]=new t(new t_f<t, t>(delegate(t args1)
+			{
+				f_hide_all_not_under_mouse_cursor();
+				return new t();
+			}));
 
 			if (frm_customer_address_finder.is_shown)
 			{
@@ -525,8 +582,10 @@ namespace kibicom.my_wd_helper
 
 				frm_customer_address_finder.is_shown = true;
 				//frm_customer_address_finder.Hide();
-				frm_customer_address_finder.TopMost = true;
+				//frm_customer_address_finder.TopMost = true;
 				frm_customer_address_finder.Show();
+				frm_customer_address_finder.Refresh();
+
 
 				//если уже выбран клиент
 				if (frm_customer_address_finder.args["selected_item"]["tab_name"].f_str() == "customer")
@@ -584,6 +643,40 @@ namespace kibicom.my_wd_helper
 
 			return new t();
 		}
+
+		private t f_frm(t args)
+		{
+			Form frm = args["frm"].f_val<Form>();
+			frm.Top = args["top"].f_int();
+			frm.Left = args["left"].f_int();
+
+
+			if (((ikibifrm)frm).args["is_shown"].f_bool())
+			{
+				//frm_in_work.Font = new Font(frm_in_work.Font, FontStyle.Regular);
+
+				((ikibifrm)frm).args["is_shown"].f_set(false);
+				frm.Hide();
+				is_show_blocked = false;
+			}
+			else
+			{
+
+				//frm_in_work.Font = new Font(frm_in_work.Font, FontStyle.Bold);
+
+				((ikibifrm)frm).args["is_shown"].f_set(true);
+				frm.Show();
+				frm.Refresh();
+				frm.TopMost = true;
+				is_show_blocked = true;
+
+				//t.f_f("f_", this.args);
+
+			}
+
+			return new t();
+		}
+
 
 		//событие активации получения фокуса вкладкой wd
 		public void f_tab_gotfocus(object sender, EventArgs e)
@@ -692,6 +785,81 @@ namespace kibicom.my_wd_helper
 			
 		}
 
+		public void f_hide_all_not_under_mouse_cursor()
+		{
+			//скрываем форму клиент/адрес
+			//но не восстанавливаем ее
+			//пользователь не закончил выбор контрагента
+			//и когда вернятся продолжит с выбора адреса
+			//при этом если курсор не над формой
+
+			foreach (KeyValuePair<string, t> item in (IDictionary<string, t>)this.args["forms"])
+			{
+				
+				Form frm = item.Value.f_val<Form>();
+				if (!f_cursor_in_frm_rect(frm))
+				{
+					//if (frm.GetType
+					if (!((ikibifrm)frm).args["is_blocked"].f_def(false).f_bool())
+					{
+						frm.Hide();
+					}
+				}
+			}
+				/*
+			else
+			{
+				if (!frm_customer_address_finder.args["is_blocked"].f_def(false).f_bool())
+				{
+					frm_customer_address_finder.Hide();
+					frm_customer_address_finder.args["real_state"].f_set("shown");
+				}
+			}
+			*/
+
+			//frm_address_finder.Hide();
+			//frm_customer_finder.Hide();
+			
+
+			this.args["activate_owner"].f_set(true);
+			this.args["required_state"].f_set("shown");
+			this.args["real_state"].f_set("shown");
+
+			//
+			is_show_blocked = false;
+
+			//если нужно активировать владельца он существует и курсор не над нашей формой
+			if (this.args["activate_owner"].f_bool() && Owner != null)
+			{
+				Owner.Activate();
+				Owner.BringToFront();
+				Owner.Focus();
+				this.args["activate_owner"].f_set(false);
+			}
+
+			if (f_cursor_in_frm_rect(this))
+			{
+				//Activate();
+			}
+
+			
+
+
+
+		}
+
+		bool f_cursor_in_frm_rect(Form frm)
+		{
+			if (Cursor.Position.X < frm.Location.X
+				|| Cursor.Position.Y < frm.Location.Y
+				|| Cursor.Position.X > frm.Location.X + frm.Width
+				|| Cursor.Position.Y > frm.Location.Y + frm.Height)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		#endregion команды
 
 
@@ -752,6 +920,7 @@ namespace kibicom.my_wd_helper
 										if (this.args["real_state"].f_str() == "shown")
 										{
 											Hide();
+											
 											this.args["real_state"].f_set("hidden");
 										}
 									}
@@ -761,10 +930,13 @@ namespace kibicom.my_wd_helper
 										if (this.args["real_state"].f_str() == "hidden")
 										{
 											Show();
+											
 											this.args["real_state"].f_set("shown");
 										}
 									}
+
 									
+
 									//f_drop_shadow();
 
 									return new t();
@@ -814,6 +986,7 @@ namespace kibicom.my_wd_helper
 
 		private void btn_customer_address_Click(object sender, EventArgs e)
 		{
+			//MessageBox.Show("1");
 			f_frm_customer_address(new t()
 			{
 				{"top", Top},
@@ -830,18 +1003,21 @@ namespace kibicom.my_wd_helper
 			});
 		}
 
+		private void btn_supply_Click(object sender, EventArgs e)
+		{
+			f_frm(new t()
+			{
+				{"frm", frm_product_supply},
+				{"top", Top},
+				{"left", Left - frm_product_supply.Width}
+			});
+		}
 
 		private void frm_main_Activated(object sender, EventArgs e)
 		{
 			btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Regular);
 			is_show_blocked = false;
-
-			if(Owner!=null)
-			{
-				//Owner.Activate();
-			}
-
-			this.args["real_state"].f_set("shown");
+			
 		}
 
 		private void frm_main_MouseEnter(object sender, EventArgs e)
@@ -937,6 +1113,7 @@ namespace kibicom.my_wd_helper
 				}
 				if (message.WParam == new IntPtr(1))
 				{
+					frm_main_Activated(null, null);
 					message.Result = IntPtr.Zero;
 					return;
 				}
@@ -978,6 +1155,7 @@ namespace kibicom.my_wd_helper
 				return baseParams;
 			}
 		}
+
 		
 
 

@@ -1,6 +1,6 @@
-﻿namespace kibicom.my_wd_helper
+﻿namespace kibicom.my_wd_helper.forms
 {
-	partial class test_form
+	partial class frm_kibi
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,37 +28,19 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.button1 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(98, 36);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// test_form
+			// frm_kibi
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(540, 324);
-			this.Controls.Add(this.button1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "test_form";
-			this.ShowInTaskbar = false;
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.test_form_FormClosing);
+			this.ClientSize = new System.Drawing.Size(628, 353);
+			this.Name = "frm_kibi";
+			this.Text = "frm_kibi";
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Button button1;
 	}
 }

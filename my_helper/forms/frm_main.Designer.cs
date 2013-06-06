@@ -40,6 +40,7 @@
 			this.btn_close = new System.Windows.Forms.Button();
 			this.fpn_note = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_notify = new System.Windows.Forms.Button();
+			this.btn_supply = new System.Windows.Forms.Button();
 			this.fpn_cmd_arr.SuspendLayout();
 			this.fpn_head.SuspendLayout();
 			this.fpn_note.SuspendLayout();
@@ -128,6 +129,7 @@
 			this.fpn_cmd_arr.Controls.Add(this.btn_add_zamer);
 			this.fpn_cmd_arr.Controls.Add(this.btn_add_pay);
 			this.fpn_cmd_arr.Controls.Add(this.btn_gate_to_work);
+			this.fpn_cmd_arr.Controls.Add(this.btn_supply);
 			this.fpn_cmd_arr.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.fpn_cmd_arr.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.fpn_cmd_arr.Location = new System.Drawing.Point(9, 46);
@@ -246,6 +248,21 @@
 			this.btn_notify.Click += new System.EventHandler(this.btn_close_Click);
 			this.btn_notify.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);
 			// 
+			// btn_supply
+			// 
+			this.btn_supply.FlatAppearance.BorderSize = 0;
+			this.btn_supply.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_supply.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+			this.btn_supply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btn_supply.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.btn_supply.Location = new System.Drawing.Point(3, 388);
+			this.btn_supply.Name = "btn_supply";
+			this.btn_supply.Size = new System.Drawing.Size(237, 49);
+			this.btn_supply.TabIndex = 0;
+			this.btn_supply.Text = "Поставщики";
+			this.btn_supply.UseVisualStyleBackColor = true;
+			this.btn_supply.Click += new System.EventHandler(this.btn_supply_Click);
+			// 
 			// kibicom_mwh_frm_main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -287,6 +304,7 @@
 		private System.Windows.Forms.Button btn_customer_address;
 		private System.Windows.Forms.FlowLayoutPanel fpn_note;
 		private System.Windows.Forms.Button btn_notify;
+		private System.Windows.Forms.Button btn_supply;
 	}
 }
 

@@ -1377,8 +1377,6 @@ namespace kibicom.my_wd_helper
 			return this;
 		}
 
-	
-
 		public t f_select_tab_address(t args)
 		{
 
@@ -1788,7 +1786,86 @@ namespace kibicom.my_wd_helper
 			return this;
 		}
 
+
+		
+
 		#endregion взаимодействие
+
+		#region product supply
+
+		public t f_get_tab_product_supply(t args)
+		{
+
+			string where = args["where"].f_def(" deleted is null ").f_str();
+			string limit = args["limit"].f_def(" 10000 ").f_str();
+
+			/*
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+			*/
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+			cli.f_select(new t()
+			{
+				{"cmd","SELECT  top "+limit+" * FROM tab_product_supply where "+where},
+				{
+					"f_each", args["f_each"].f_f()
+				},
+				{
+					"f_done", args["f_done"].f_f()
+				},
+				{
+					"f_fail", args["f_fail"].f_f()
+				}
+			});
+
+			return this;
+		}
+
+		public t f_put_tab_product_supply(t args)
+		{
+
+			DataTable tab = args["tab"].f_val<DataTable>();
+
+			/*
+			t_store josi_store = this["josi_store"].f_val<t_store>();
+			if (josi_store == null)
+			{
+				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
+			}
+			*/
+			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
+			if (cli == null)
+			{
+				cli = f_cre_local_db(args)["sql_store_cli"].f_val<t_sql_store_cli>();
+			}
+
+			cli.f_store_tab(new t()
+			{
+				{"tab",tab},
+				{
+					"f_done", args["f_done"].f_f()
+				},
+				{
+					"f_fail", new t_f<t,t>(delegate (t args1)
+					{
+
+						return new t();
+					})
+				}
+			});
+
+			return this;
+		}
+
+		#endregion product supply
 
 	}
 }

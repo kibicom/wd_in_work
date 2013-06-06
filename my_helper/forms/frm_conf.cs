@@ -156,6 +156,11 @@ namespace kibicom.my_wd_helper
 			//this.Activate();
 		}
 
+		private void btn_start_test_form_Click(object sender, EventArgs e)
+		{
+			frm_test.Show();
+		}
+
 		
 	}
 }

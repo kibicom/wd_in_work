@@ -32,6 +32,7 @@
 			this.btn_fill_tab_customer = new System.Windows.Forms.Button();
 			this.btn_fill_tab_address = new System.Windows.Forms.Button();
 			this.btn_helper_start = new System.Windows.Forms.Button();
+			this.btn_start_test_form = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// btn_cre_kwj
@@ -74,11 +75,22 @@
 			this.btn_helper_start.UseVisualStyleBackColor = true;
 			this.btn_helper_start.Click += new System.EventHandler(this.btn_helper_start_Click);
 			// 
+			// btn_start_test_form
+			// 
+			this.btn_start_test_form.Location = new System.Drawing.Point(179, 145);
+			this.btn_start_test_form.Name = "btn_start_test_form";
+			this.btn_start_test_form.Size = new System.Drawing.Size(161, 62);
+			this.btn_start_test_form.TabIndex = 1;
+			this.btn_start_test_form.Text = "Запустить test_form";
+			this.btn_start_test_form.UseVisualStyleBackColor = true;
+			this.btn_start_test_form.Click += new System.EventHandler(this.btn_start_test_form_Click);
+			// 
 			// frm_conf
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(556, 395);
+			this.Controls.Add(this.btn_start_test_form);
 			this.Controls.Add(this.btn_helper_start);
 			this.Controls.Add(this.btn_fill_tab_address);
 			this.Controls.Add(this.btn_fill_tab_customer);
@@ -97,5 +109,6 @@
 		private System.Windows.Forms.Button btn_fill_tab_customer;
 		private System.Windows.Forms.Button btn_fill_tab_address;
 		private System.Windows.Forms.Button btn_helper_start;
+		private System.Windows.Forms.Button btn_start_test_form;
 	}
 }

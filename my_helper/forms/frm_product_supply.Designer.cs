@@ -1,6 +1,6 @@
-﻿namespace kibicom.my_wd_helper
+﻿namespace kibicom.my_wd_helper.forms
 {
-	partial class test_form
+	partial class frm_product_supply
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,37 +28,33 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.button1 = new System.Windows.Forms.Button();
+			this.dg_supply = new System.Windows.Forms.DataGridView();
+			((System.ComponentModel.ISupportInitialize)(this.dg_supply)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// button1
+			// dg_supply
 			// 
-			this.button1.Location = new System.Drawing.Point(98, 36);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.dg_supply.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dg_supply.Location = new System.Drawing.Point(12, 12);
+			this.dg_supply.Name = "dg_supply";
+			this.dg_supply.RowTemplate.Height = 24;
+			this.dg_supply.Size = new System.Drawing.Size(614, 288);
+			this.dg_supply.TabIndex = 0;
 			// 
-			// test_form
+			// frm_product_supply
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(540, 324);
-			this.Controls.Add(this.button1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "test_form";
-			this.ShowInTaskbar = false;
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.test_form_FormClosing);
+			this.ClientSize = new System.Drawing.Size(638, 354);
+			this.Controls.Add(this.dg_supply);
+			this.Name = "frm_product_supply";
+			((System.ComponentModel.ISupportInitialize)(this.dg_supply)).EndInit();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.DataGridView dg_supply;
 	}
 }

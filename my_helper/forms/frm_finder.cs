@@ -18,7 +18,7 @@ namespace kibicom.my_wd_helper
 {
 
 	
-	public partial class frm_finder : Form
+	public partial class frm_finder : Form, ikibifrm
 	{
 
 		//DropShadow ds = new DropShadow();
@@ -49,7 +49,13 @@ namespace kibicom.my_wd_helper
 		Point last_lbx_mouse_point;
 
 		//аргументы
-		public t args=new t();
+		public t _args=new t();
+
+		public t args
+		{
+			get { return _args; }
+			set { _args = value; }
+		}
 
 		//форма ввода нового/редактирования элемента
 		public Form frm_cre_edit_item;
@@ -63,8 +69,8 @@ namespace kibicom.my_wd_helper
 		{
 			Owner = args["owner"].f_val<Form>();
 
-			this.args["caption"] = args["caption"];
-			lbl_invite.Text = this.args["caption"].f_def(lbl_invite.Text).f_str();
+			this._args["caption"] = args["caption"];
+			lbl_invite.Text = this._args["caption"].f_def(lbl_invite.Text).f_str();
 
 			string login_name = args["josi_store"]["login_name"].f_def("dnclive").f_str();
 			string pass = args["josi_store"]["pass"].f_def("135").f_str();
@@ -84,7 +90,7 @@ namespace kibicom.my_wd_helper
 				{"f_fail", args["f_fail"].f_f()}		//вызываем если авторизация не удалась
 			});
 
-			this.args["using_local_store"] = args["local_store"]["store_type"].f_def("mssql");
+			this._args["using_local_store"] = args["local_store"]["store_type"].f_def("mssql");
 
 			//инициализируем локальное хранилище
 			f_cre_kwj(args);
@@ -224,7 +230,7 @@ namespace kibicom.my_wd_helper
 			}
 
 			/*
-			this.args["eimit"].f_set(false);
+			this._args["eimit"].f_set(false);
 			if (!f_check_speed_dial(new t())["emit"].f_bool())
 			{
 				return;
@@ -423,21 +429,32 @@ namespace kibicom.my_wd_helper
 		private void josi_customer_Deactivate(object sender, EventArgs e)
 		{
 			is_shown = false;
-			if (!this.args["is_blocked"].f_def(false).f_bool())
+			f_leaved(this._args);
+			return;
+			int l = 0;
+			is_shown = false;
+			if (!this._args["is_blocked"].f_def(false).f_bool())
 			{
 				//ds.f_hide();
-				f_leaved(this.args);
-				Hide();
+				f_leaved(this._args);
+
+				if (Owner != null)
+				{
+					((kibicom_mwh_frm_main)Owner).f_hide_all_not_under_mouse_cursor();
+				}
+				else
+				{
+					Hide();
+				}
+			}
+			else
+			{
+				l = 0;
 			}
 			if (frm_cre_edit_item != null)
 			{
 				frm_cre_edit_item.Activate();
 			}
-			else if (Owner != null)
-			{
-				//Owner.Activate();
-			}
-
 		}
 
 		private void josi_customer_FormClosing(object sender, FormClosingEventArgs e)
@@ -458,7 +475,7 @@ namespace kibicom.my_wd_helper
 		private void btn_change_Click(object sender, EventArgs e)
 		{
 			//выбираем затронутый элемент
-			//t selected_item = this.args["selected_item"].f_set((t)lbx_items.SelectedItem);
+			//t selected_item = this._args["selected_item"].f_set((t)lbx_items.SelectedItem);
 
 			//вызываем функцию редактирования
 			f_modify_item(new t() { { "item", (t)lbx_items.SelectedItem } });
@@ -563,23 +580,28 @@ namespace kibicom.my_wd_helper
 			//message.
 			if (message.Msg == WM_NCHITTEST)
 			{
+				//message.Result = IntPtr.Zero;
+				base.WndProc(ref message);
 				return;
 			}
 
-			if (message.Msg == WM_ACTIVATE)
+			if (message.Msg == WM_ACTIVATE&&1==0)
 			{
 				if (message.WParam == new IntPtr(0))
 				{
+					josi_customer_Deactivate(null, null);
 					base.WndProc(ref message);
 				}
 				if (message.WParam == new IntPtr(1))
 				{
-					message.Result = IntPtr.Zero;
+					//message.Result = IntPtr.Zero;
+					base.WndProc(ref message);
 					return;
 				}
 				if (message.WParam == new IntPtr(2))
 				{
 					//message.Result = IntPtr.Zero;
+					base.WndProc(ref message);
 					return;
 				}
 
@@ -597,7 +619,7 @@ namespace kibicom.my_wd_helper
 				}
 				if (message.WParam == new IntPtr(2))
 				{
-					//message.Result = IntPtr.Zero;
+					message.Result = IntPtr.Zero;
 					return;
 				}
 			}
@@ -632,17 +654,17 @@ namespace kibicom.my_wd_helper
 		public t f_check_speed_dial(t args)
 		{
 
-			TimeSpan last_key_down= this.args["last_key_down"].
+			TimeSpan last_key_down= this._args["last_key_down"].
 					f_def_set(new TimeSpan(DateTime.Now.Ticks)).f_val<TimeSpan>();
 
 			if (DateTime.Now.Ticks - last_key_down.Ticks > 10000000)
 			{
-				this.args["emit"].f_set(true);
+				this._args["emit"].f_set(true);
 			}
 
-			this.args["last_key_down"].f_set(new TimeSpan(DateTime.Now.Ticks));
+			this._args["last_key_down"].f_set(new TimeSpan(DateTime.Now.Ticks));
 
-			return this.args;
+			return this._args;
 		}
 
 		//курсон переведен на другой элемента
@@ -655,7 +677,7 @@ namespace kibicom.my_wd_helper
 		virtual public t f_leaved(t args)
 		{
 
-			t.f_f("f_leaved", this.args);
+			t.f_f("f_leaved", this._args);
 
 			return new t();
 		}
@@ -665,17 +687,17 @@ namespace kibicom.my_wd_helper
 		{
 			fp_actions.Visible = false;
 
-			this.args["items"].Clear();
+			this._args["items"].Clear();
 
 			//если есть новые элементы в кеше показываем их сразу
-			if (this.args["new_items"].Count > 0)
+			if (this._args["new_items"].Count > 0)
 			{
-				foreach (t new_item in (IList<t>) this.args["new_items"])
+				foreach (t new_item in (IList<t>) this._args["new_items"])
 				{
-					this.args["items"].Add(new_item);
+					this._args["items"].Add(new_item);
 				}
 
-				this.args["new_items"].Clear();
+				this._args["new_items"].Clear();
 
 				f_fill_lbx(args);
 
@@ -714,7 +736,7 @@ namespace kibicom.my_wd_helper
 
 				//если количество возвращенных результатов 0 и запрос не пуст
 				//то добавляем новый элемент
-				if (this.args["items"].Count == 0&& txt_query.Text!="")
+				if (this._args["items"].Count == 0&& txt_query.Text!="")
 				{
 					f_add_new();
 				}
@@ -723,7 +745,7 @@ namespace kibicom.my_wd_helper
 				if (lbx_add_replace) lbx_items.Items.Clear();
 
 				//наполняем и рендерим список
-				foreach (t item in (IList<t>)this.args["items"])
+				foreach (t item in (IList<t>)this._args["items"])
 				{
 					lbx_items.Items.Add(item);
 				}
@@ -751,9 +773,9 @@ namespace kibicom.my_wd_helper
 		//если результ запроса пуст, предлагаем создать новый элемент ресурса
 		virtual public void f_add_new()
 		{
-			this.args["items"].Add(new t()
+			this._args["items"].Add(new t()
 			{
-				{"str1",this.args["new_item_caption"].f_def("Добавить новый элемент")},
+				{"str1",this._args["new_item_caption"].f_def("Добавить новый элемент")},
 				{"str2",txt_query.Text},
 				{"is_new", true}
 			});
@@ -763,7 +785,7 @@ namespace kibicom.my_wd_helper
 		virtual public void f_touch_lbx_item()
 		{
 			//выбираем затронутый элемент
-			t selected_item=this.args["selected_item"].f_set((t)lbx_items.SelectedItem);
+			t selected_item=this._args["selected_item"].f_set((t)lbx_items.SelectedItem);
 
 			//если он новый
 			if (selected_item["is_new"].f_bool())
@@ -790,9 +812,9 @@ namespace kibicom.my_wd_helper
 
 			t item = args["new item"];
 
-			this.args["items"][0] = item;
+			this._args["items"][0] = item;
 
-			this.args["selected_item"] = item;
+			this._args["selected_item"] = item;
 
 			lbx_items.Items.Clear();
 
@@ -800,7 +822,7 @@ namespace kibicom.my_wd_helper
 
 			lbx_items.SelectedIndex = 0;
 
-			t.f_f("f_done", this.args);
+			t.f_f("f_done", this._args);
 
 			//ds.f_hide();
 

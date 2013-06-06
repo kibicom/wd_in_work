@@ -64,6 +64,13 @@
     <Reference Include="Atechnology.winDraw.Components">
       <HintPath>..\..\..\..\..\Dropbox\data\WinDraw2009\Atechnology.winDraw.Components.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Data.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
+    <Reference Include="DevExpress.Utils.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
+    <Reference Include="DevExpress.XtraBars.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\DevExpress.XtraBars.v8.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
     <Reference Include="fastJSON">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
     </Reference>
@@ -84,6 +91,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -149,11 +157,29 @@
     <Compile Include="forms\frm_in_work.Designer.cs">
       <DependentUpon>frm_in_work.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\frm_kibi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_kibi.Designer.cs">
+      <DependentUpon>frm_kibi.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\frm_main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="forms\frm_main.Designer.cs">
       <DependentUpon>frm_main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\frm_popup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_popup.Designer.cs">
+      <DependentUpon>frm_popup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\frm_product_supply.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_product_supply.Designer.cs">
+      <DependentUpon>frm_product_supply.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\frm_selector.cs">
       <SubType>Form</SubType>
@@ -167,6 +193,7 @@
     <Compile Include="frm_customer_finder.Designer.cs">
       <DependentUpon>frm_customer_finder.cs</DependentUpon>
     </Compile>
+    <Compile Include="ikibifrm.cs" />
     <Compile Include="josi_customer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,8 +233,17 @@
     <EmbeddedResource Include="forms\frm_in_work.resx">
       <DependentUpon>frm_in_work.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="forms\frm_kibi.resx">
+      <DependentUpon>frm_kibi.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="forms\frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\frm_popup.resx">
+      <DependentUpon>frm_popup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\frm_product_supply.resx">
+      <DependentUpon>frm_product_supply.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="forms\frm_selector.resx">
       <DependentUpon>frm_selector.cs</DependentUpon>
