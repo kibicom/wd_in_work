@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "my_wd_helper", "..\my_helpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "card_reader", "..\..\..\dnclive\windraw\proj\josi_customer\objdist\card_reader.csproj", "{7D8C9B68-86B3-482A-B542-13A8F052FC1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kibicom_wd_deb", "..\..\..\dnclive\kibicom_wd\kibicom_wd_deb\kibicom_wd_deb.csproj", "{42A9A342-1850-4B2A-AF07-440E1AF97199}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{7D8C9B68-86B3-482A-B542-13A8F052FC1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D8C9B68-86B3-482A-B542-13A8F052FC1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D8C9B68-86B3-482A-B542-13A8F052FC1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42A9A342-1850-4B2A-AF07-440E1AF97199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A9A342-1850-4B2A-AF07-440E1AF97199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A9A342-1850-4B2A-AF07-440E1AF97199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A9A342-1850-4B2A-AF07-440E1AF97199}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

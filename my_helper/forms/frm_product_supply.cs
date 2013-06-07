@@ -44,7 +44,8 @@ namespace kibicom.my_wd_helper.forms
 						DataTable tab = args1["tab"].f_val<DataTable>();
 
 						DataView tab_view = new DataView(tab);
-
+						
+						//dg_supply.Columns[0].
 
 						dg_supply.DataSource = tab_view;
 
