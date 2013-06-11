@@ -49,5 +49,16 @@ namespace kibicom.my_wd_helper.Properties {
                 return ((string)(this["josi_store_pass"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER3;Initial Catalog=kwj_test;Persist Security Info=True;User ID=s" +
+            "a;Password=\"82757662=z\"")]
+        public string kwj_testConnectionString {
+            get {
+                return ((string)(this["kwj_testConnectionString"]));
+            }
+        }
     }
 }

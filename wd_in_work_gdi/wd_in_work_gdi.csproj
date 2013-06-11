@@ -94,6 +94,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\kibicom.kvl.dll</HintPath>
     </Reference>
+    <Reference Include="kibicom.my_wd_helper">
+      <HintPath>..\..\..\_net_build_\kibicom.my_wd_helper.dll</HintPath>
+    </Reference>
     <Reference Include="kibicom.tlib">
       <HintPath>..\..\..\_net_build_\kibicom.tlib.dll</HintPath>
     </Reference>

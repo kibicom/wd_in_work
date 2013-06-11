@@ -57,6 +57,9 @@
     <Reference Include="Atechnology.DBConnection">
       <HintPath>D:\git\_net_build_\atechnology\Atechnology.DBConnection.dll</HintPath>
     </Reference>
+    <Reference Include="Atechnology.ecad.Calc.SystemScript">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Calc.SystemScript.dll</HintPath>
+    </Reference>
     <Reference Include="Atechnology.ecad.Document">
       <HintPath>D:\git\_net_build_\atechnology\Atechnology.ecad.Document.dll</HintPath>
     </Reference>
@@ -101,7 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="atonet_kvl_wd_calc.cs" />
+    <Compile Include="t_atonet_kvl_wd_calc.cs" />
     <Compile Include="forms\address_info_form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -199,6 +202,11 @@
     <Compile Include="josi_customer.Designer.cs">
       <DependentUpon>josi_customer.cs</DependentUpon>
     </Compile>
+    <Compile Include="kwj_testDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>kwj_testDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="my_helper_3.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -270,6 +278,17 @@
     <EmbeddedResource Include="test_form.resx">
       <DependentUpon>test_form.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="kwj_testDataSet.xsc">
+      <DependentUpon>kwj_testDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="kwj_testDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>kwj_testDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="kwj_testDataSet.xss">
+      <DependentUpon>kwj_testDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

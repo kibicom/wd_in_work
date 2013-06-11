@@ -78,7 +78,7 @@ namespace kibicom.my_wd_helper
 		public t f_cre_josi_store(t args)
 		{
 			string login_name = args["login_name"].f_def("dnclive").f_str();
-			string pass = args["pass"].f_def("135").f_str();
+			string pass = args["pass"].f_def("4947").f_str();
 			string josi_end_point = args["josi_end_point"].
 				f_def("http://kibicom.com/order_store_339/index.php").f_str();
 				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
@@ -92,8 +92,24 @@ namespace kibicom.my_wd_helper
 				{"pass",pass},							//пароль для входа
 				{"login_on_cre", true},					//логинимся
 				{"auth_try_count", args["auth_try_count"].f_def(3).f_int()},	//количество попыток авторизации
-				{"f_done", args["f_done"].f_f()},		//вызываем когда авторизуемся успешно
-				{"f_fail", args["f_fail"].f_f()}		//вызываем если авторизация не удалась
+				{"f_done_", args["f_done"].f_f()},		//вызываем когда авторизуемся успешно
+				{"f_fail_", args["f_fail"].f_f()},		//вызываем если авторизация не удалась
+				{
+					//когда получен id
+					//сохраняем заказ с учетом полученного id
+					"f_done", new t_f<t,t>(delegate(t args1)
+					{
+						return new t();
+					})
+				},
+				{
+					//когда получен id
+					//сохраняем заказ с учетом полученного id
+					"f_fail", new t_f<t,t>(delegate(t args1)
+					{
+						return new t();
+					})
+				},
 			});
 
 			this["josi_store"] = josi_store;

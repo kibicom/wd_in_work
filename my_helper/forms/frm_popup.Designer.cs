@@ -34,10 +34,9 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(622, 357);
+			this.ClientSize = new System.Drawing.Size(602, 389);
 			this.ControlBox = false;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximumSize = new System.Drawing.Size(656, 408);
 			this.Name = "frm_popup";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

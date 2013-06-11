@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using kibicom.tlib;
 using fastJSON;
+using kibicom.my_wd_helper;
 
 namespace wd_in_work_gdi
 {
@@ -20,8 +21,13 @@ namespace wd_in_work_gdi
 		{
 			InitializeComponent();
 
+			kibicom_mwh_frm_main mwh = new kibicom_mwh_frm_main(new t());
+
+			
+
 			wd_josi_num = new t_wd_josi_num(new t()
 			{
+				{"josi_store", mwh.args["kwj"]["josi_store"]},
 				//{"josi_end_point_","https://192.168.1.139/webproj/git/kibicom_venta/index.php"},
 				//"josi_end_point","https://192.168.1.193/webproj/git/kibicom_venta/index.php"},
 				{"josi_end_point","http://kibicom.com/order_store_339/index.php"},

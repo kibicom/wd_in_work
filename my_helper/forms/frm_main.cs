@@ -76,8 +76,8 @@ namespace kibicom.my_wd_helper
 			this.args["josi_store"]["josi_end_point"] = args["josi_end_point"].
 				f_def("http://kibicom.com/order_store_339/index.php");
 				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php");
-			this.args["josi_store"]["login"] = args["josi_end_point"].f_def("dnclive");
-			this.args["josi_store"]["pass"] = args["josi_end_point"].f_def("135");
+			this.args["josi_store"]["login"] = args["josi_store"]["login"].f_def("dnclive");
+			this.args["josi_store"]["pass"] = args["josi_store"]["pass"].f_def("4947");
 
 			this.args["local_store"]["file_name"] = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db");
 
@@ -455,7 +455,7 @@ namespace kibicom.my_wd_helper
 						}
 						*/
 
-						f_hide_all_not_under_mouse_cursor();
+						f_hide_all_not_under_mouse_cursor(new t());
 
 						frm_customer_address_finder.fpn_selected_pane.Visible = false;
 						frm_customer_address_finder.fpn_finder_pane.Visible = true;
@@ -564,7 +564,7 @@ namespace kibicom.my_wd_helper
 
 			frm_customer_address_finder.args["f_leaved"]=new t(new t_f<t, t>(delegate(t args1)
 			{
-				f_hide_all_not_under_mouse_cursor();
+				f_hide_all_not_under_mouse_cursor(new t());
 				return new t();
 			}));
 
@@ -617,6 +617,22 @@ namespace kibicom.my_wd_helper
 			frm_in_work.Top = args["top"].f_int();
 			frm_in_work.Left = args["left"].f_int();
 
+			//callback когда контрагент будет выбран
+			frm_in_work.args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+				
+				return new t();
+			}));
+
+			frm_in_work.args["f_leaved"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+
+				t.f_f("f_leaved", args);
+
+				f_hide_all_not_under_mouse_cursor(new t(){{"under_mouse_cursor_to", true}});
+
+				return new t();
+			}));
 
 			if (frm_in_work.args["is_shown"].f_bool())
 			{
@@ -741,7 +757,6 @@ namespace kibicom.my_wd_helper
 			
 		}
 
-
 		public void f_set_context(t args)
 		{
 			try
@@ -785,7 +800,7 @@ namespace kibicom.my_wd_helper
 			
 		}
 
-		public void f_hide_all_not_under_mouse_cursor()
+		public void f_hide_all_not_under_mouse_cursor(t args)
 		{
 			//скрываем форму клиент/адрес
 			//но не восстанавливаем ее
@@ -793,11 +808,13 @@ namespace kibicom.my_wd_helper
 			//и когда вернятся продолжит с выбора адреса
 			//при этом если курсор не над формой
 
+			bool under_mouse_cursor_to = args["under_mouse_cursor_to"].f_def(false).f_bool();
+
 			foreach (KeyValuePair<string, t> item in (IDictionary<string, t>)this.args["forms"])
 			{
 				
 				Form frm = item.Value.f_val<Form>();
-				if (!f_cursor_in_frm_rect(frm))
+				if (!f_cursor_in_frm_rect(frm) || under_mouse_cursor_to)
 				{
 					//if (frm.GetType
 					if (!((ikibifrm)frm).args["is_blocked"].f_def(false).f_bool())
@@ -1013,6 +1030,22 @@ namespace kibicom.my_wd_helper
 			});
 		}
 
+		private void btn_calc_Click(object sender, EventArgs e)
+		{
+			t_atonet_kvl_wd_calc akwc = new t_atonet_kvl_wd_calc();
+
+			akwc.f_init(new t()
+			{
+				{"is_out_calc", true},
+				{"ds", this.args["wd"]["ds"]},
+				{"dbconn", this.args["wd"]["dbconn"]}
+			});
+
+			akwc.f_calc_order(new t());
+
+		}
+
+
 		private void frm_main_Activated(object sender, EventArgs e)
 		{
 			btn_add_customer.Font = new Font(btn_add_customer.Font, FontStyle.Regular);
@@ -1155,6 +1188,8 @@ namespace kibicom.my_wd_helper
 				return baseParams;
 			}
 		}
+
+		
 
 		
 

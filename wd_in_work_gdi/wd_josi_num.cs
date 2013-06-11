@@ -34,6 +34,12 @@ namespace wd_in_work_gdi
 
 		public t_wd_josi_num(t args)
 		{
+			if (!args["josi_store"].f_is_empty())
+			{
+				josi_store = args["josi_store"].f_val<t_store>();
+				return;
+			}
+
 			string login_name = args["login_name"].f_def("dnclive").f_str();
 			string pass = args["pass"].f_def("135").f_str();
 			string josi_end_point = args["josi_end_point"].

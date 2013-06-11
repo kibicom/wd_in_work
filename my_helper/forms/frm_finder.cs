@@ -440,7 +440,7 @@ namespace kibicom.my_wd_helper
 
 				if (Owner != null)
 				{
-					((kibicom_mwh_frm_main)Owner).f_hide_all_not_under_mouse_cursor();
+					((kibicom_mwh_frm_main)Owner).f_hide_all_not_under_mouse_cursor(new t());
 				}
 				else
 				{
