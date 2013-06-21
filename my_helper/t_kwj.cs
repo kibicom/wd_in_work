@@ -83,7 +83,9 @@ namespace kibicom.my_wd_helper
 				f_def("http://kibicom.com/order_store_339/index.php").f_str();
 				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php").f_str();
 				//f_def("https://192.168.1.37/webproj/git/kibicom_venta/index.php").f_str();
-		
+
+			//MessageBox.Show(login_name);
+
 			t_store josi_store = new t_store(new t()
 			{
 				{"josi_end_point", josi_end_point},		//точка подключения josi
@@ -1857,6 +1859,7 @@ namespace kibicom.my_wd_helper
 				josi_store = f_cre_josi_store(args)["josi_store"].f_val<t_store>();
 			}
 			*/
+
 			t_sql_store_cli cli = this["sql_store_cli"].f_val<t_sql_store_cli>();
 			if (cli == null)
 			{

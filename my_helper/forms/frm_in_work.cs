@@ -14,7 +14,7 @@ namespace kibicom.my_wd_helper
 	public partial class frm_in_work : Form, ikibifrm
 	{
 		public t _args = new t();
-
+		
 		public t args
 		{
 			get{return _args;}
@@ -55,12 +55,12 @@ namespace kibicom.my_wd_helper
 
 		private void btn_give_to_check_Click(object sender, EventArgs e)
 		{
-			t.f_f("f_give_to_work", this._args);
+			t.f_f("f_give_to_check", this._args);
 		}
 
 		private void btn_give_to_work_Click(object sender, EventArgs e)
 		{
-			t.f_f("f_give_to_check", this._args);
+			t.f_f("f_give_to_work", this._args);
 		}
 
 		private void frm_Deactivate(object sender, EventArgs e)

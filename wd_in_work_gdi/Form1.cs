@@ -62,6 +62,13 @@ namespace wd_in_work_gdi
 			wd_josi_num.f_get_num(new t()
 			{
 				{
+					"josi_store", new t()
+					{
+						{"login_name", "Виктория"},
+						{"pass", "6580"}
+					}
+				},
+				{
 					"f_done",new t_f<t,t>(delegate(t args1)
 					{
 						//если необходима синхронизация потоков

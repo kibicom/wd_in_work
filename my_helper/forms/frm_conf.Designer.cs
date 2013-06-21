@@ -33,6 +33,7 @@
 			this.btn_fill_tab_address = new System.Windows.Forms.Button();
 			this.btn_helper_start = new System.Windows.Forms.Button();
 			this.btn_start_test_form = new System.Windows.Forms.Button();
+			this.btn_wd_in_work_gdi = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// btn_cre_kwj
@@ -85,12 +86,23 @@
 			this.btn_start_test_form.UseVisualStyleBackColor = true;
 			this.btn_start_test_form.Click += new System.EventHandler(this.btn_start_test_form_Click);
 			// 
+			// btn_wd_in_work_gdi
+			// 
+			this.btn_wd_in_work_gdi.Location = new System.Drawing.Point(12, 213);
+			this.btn_wd_in_work_gdi.Name = "btn_wd_in_work_gdi";
+			this.btn_wd_in_work_gdi.Size = new System.Drawing.Size(161, 62);
+			this.btn_wd_in_work_gdi.TabIndex = 1;
+			this.btn_wd_in_work_gdi.Text = "Сохранить в Кибиком";
+			this.btn_wd_in_work_gdi.UseVisualStyleBackColor = true;
+			this.btn_wd_in_work_gdi.Click += new System.EventHandler(this.btn_wd_in_work_gdi_Click);
+			// 
 			// frm_conf
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(556, 395);
 			this.Controls.Add(this.btn_start_test_form);
+			this.Controls.Add(this.btn_wd_in_work_gdi);
 			this.Controls.Add(this.btn_helper_start);
 			this.Controls.Add(this.btn_fill_tab_address);
 			this.Controls.Add(this.btn_fill_tab_customer);
@@ -110,5 +122,6 @@
 		private System.Windows.Forms.Button btn_fill_tab_address;
 		private System.Windows.Forms.Button btn_helper_start;
 		private System.Windows.Forms.Button btn_start_test_form;
+		private System.Windows.Forms.Button btn_wd_in_work_gdi;
 	}
 }

@@ -225,7 +225,6 @@
 			this.btn_calc.TabIndex = 0;
 			this.btn_calc.Text = "Расчет";
 			this.btn_calc.UseVisualStyleBackColor = true;
-			this.btn_calc.Visible = false;
 			this.btn_calc.Click += new System.EventHandler(this.btn_calc_Click);
 			// 
 			// fpn_head
@@ -277,7 +276,6 @@
 			this.btn_notify.Name = "btn_notify";
 			this.btn_notify.Size = new System.Drawing.Size(40, 40);
 			this.btn_notify.TabIndex = 0;
-			this.btn_notify.Text = "3";
 			this.btn_notify.UseVisualStyleBackColor = false;
 			this.btn_notify.Click += new System.EventHandler(this.btn_close_Click);
 			this.btn_notify.MouseEnter += new System.EventHandler(this.frm_main_MouseEnter);

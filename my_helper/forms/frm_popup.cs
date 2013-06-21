@@ -30,6 +30,15 @@ namespace kibicom.my_wd_helper.forms
 			ControlBox = false;
 		}
 
+		//форма деактивирована
+		virtual public t f_leaved(t args)
+		{
+
+			t.f_f("f_leaved", this._args);
+
+			return new t();
+		}
+
 		protected override bool ShowWithoutActivation
 		{
 			get { return true; }
@@ -51,7 +60,7 @@ namespace kibicom.my_wd_helper.forms
 				return;
 			}
 
-			if (message.Msg == WM_ACTIVATE)
+			if (message.Msg == WM_ACTIVATE && 1 == 0)
 			{
 				if (message.WParam == new IntPtr(0))
 				{

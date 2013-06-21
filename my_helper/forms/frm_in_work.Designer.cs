@@ -58,7 +58,6 @@
 			this.btn_give_to_check.TabIndex = 1;
 			this.btn_give_to_check.Text = "На проверку";
 			this.btn_give_to_check.UseVisualStyleBackColor = true;
-			this.btn_give_to_check.Visible = false;
 			this.btn_give_to_check.Click += new System.EventHandler(this.btn_give_to_check_Click);
 			// 
 			// lbl_prev_date_capt

@@ -36,6 +36,12 @@ namespace kibicom.my_wd_helper
 
 		public t f_init(t args)
 		{
+
+			DataRow o_dr = args["o_dr"].f_val<DataRow>();
+
+			this["ds"] = args["ds"];
+			this["dbconn"] = args["dbconn"];
+
 			//если это внешний расчет
 			//инициализируем подключение к базе
 			if (args["is_out_calc"].f_bool())
@@ -43,19 +49,21 @@ namespace kibicom.my_wd_helper
 				f_init_out(args);
 			}
 
-			DataRow o_dr = args["o_dr"].f_val<DataRow>();
+
+
 			//если строка заказа не передана
-			if (o_dr == null)
+			if (o_dr == null&&1==0)
 			{
 				//строка заказа
 				DataTable tab_order = f_tab_order(new t()
 				{
+					{"tab_name", "orders"},
 					{"idorder", "4671"}
 					//{"idorder", "97785"}
 					//{"idorder","95740"}
 					//{"idorder","96785"}
 
-				})["tab_order"].f_val<DataTable>();
+				})["orders"].f_val<DataTable>();
 
 				if (tab_order.Rows.Count > 0)
 				{
@@ -98,12 +106,13 @@ namespace kibicom.my_wd_helper
 			//строка заказа
 			DataTable tab_order = f_tab_order(new t()
 			{
+				{"tab_name", "orders"},
 				{"idorder", "4671"}
 				//{"idorder", "97785"}
 				//{"idorder","95740"}
 				//{"idorder","96785"}
 
-			})["tab_order"].f_val<DataTable>();
+			})["orders"].f_val<DataTable>();
 
 			/*
 			//загрузка моделей
@@ -132,14 +141,18 @@ namespace kibicom.my_wd_helper
 		{
 			DataSet ds = this["ds"].f_val<DataSet>();
 			string idorder = args["idorder"].f_str();
-			string tab_name = args["tab_name"].f_def("tab_order").f_str();
+			string tab_name = args["tab_name"].f_def("orders").f_str();
 
 			if (ds.Tables.Contains(tab_name))
 			{
 				//DataRow ds.Tables[tab_name].Select(" deleted is null and idorder=" + idorder);
 
+				MessageBox.Show("ds contain table orders");
+
 				return new t() { { tab_name, ds.Tables[tab_name] } };
 			}
+
+			//return new t();
 
 			DataTable tab = new DataTable(tab_name);
 
@@ -165,17 +178,23 @@ namespace kibicom.my_wd_helper
 
 			dbconn._db.CloseDB();
 
-			return new t() { { "tab_order", tab } };
+			return new t() { { tab_name, tab } };
 		}
 
 		public t f_calc_order_atonet_fast_kvl(t args)
 		{
-
+			DataSet ds = this["ds"].f_val<DataSet>();
 			DataRow o_dr = args["o_dr"].f_val<DataRow>();
 			//DataGrid dg_ds = args["dg_ds"].f_def(new DataGrid()).f_val<DataGrid>();
 
+			/*
+			foreach (DataColumn c in o_dr.Table.Columns)
+			{
+				MessageBox.Show(c.ColumnName + " " + o_dr[c.ColumnName]);
+			}
+			*/
 			//расчет изделий nerocalc
-			torder order = new torder(dbconn._db, o_dr);//, pb);
+			torder order = new torder(dbconn._db, o_dr, true);//, pb);
 
 			t_d_f_calc d_f_calc = new t_d_f_calc(delegate(torder ord)
 			{
@@ -184,6 +203,8 @@ namespace kibicom.my_wd_helper
 
 			d_f_calc.BeginInvoke(order, new AsyncCallback(delegate(IAsyncResult ar)
 			{
+				 MessageBox.Show(ds.Tables["modelcalc"].Rows.Count.ToString());
+
 				AsyncResult result = (AsyncResult)ar;
 				//t_f<t, t> caller = (t_f<t, t>)result.AsyncDelegate;
 

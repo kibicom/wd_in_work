@@ -76,10 +76,12 @@ namespace kibicom.my_wd_helper
 			this.args["josi_store"]["josi_end_point"] = args["josi_end_point"].
 				f_def("http://kibicom.com/order_store_339/index.php");
 				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php");
-			this.args["josi_store"]["login"] = args["josi_store"]["login"].f_def("dnclive");
+			this.args["josi_store"]["login_name"] = args["josi_store"]["login_name"].f_def("dnclive");
 			this.args["josi_store"]["pass"] = args["josi_store"]["pass"].f_def("4947");
 
 			this.args["local_store"]["file_name"] = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db");
+
+			//MessageBox.Show(this.args.f_json()["json_str"].f_str());
 
 			this.args["kwj"]=new t_kwj(new t()
 			{
@@ -206,13 +208,14 @@ namespace kibicom.my_wd_helper
 				{"f_give_to_check",args["f_give_to_work"]}
 			});
 
+			
 			//форма получения сроков передачи в работу
 			frm_product_supply = new frm_product_supply(new t()
 			{
 				{"owner", this},
 				{"kwj", this.args["kwj"]},
 			});
-
+			
 
 			this.args["forms"]=new t()
 			{
@@ -902,6 +905,8 @@ namespace kibicom.my_wd_helper
 
 			this.args["real_state"].f_set("shown");
 
+			
+
 			timer = new System.Threading.Timer(new TimerCallback(delegate(object args)
 			{
 				try
@@ -1034,6 +1039,13 @@ namespace kibicom.my_wd_helper
 		{
 			t_atonet_kvl_wd_calc akwc = new t_atonet_kvl_wd_calc();
 
+			this.args["akwc"].f_set(akwc);
+
+			if (!this.args["wd"]["ds"].f_is_empty())
+			{
+				MessageBox.Show("tables in ds "+ this.args["wd"]["ds"].f_val<DataSet>().Tables.Count.ToString());
+			}
+
 			akwc.f_init(new t()
 			{
 				{"is_out_calc", true},
@@ -1041,7 +1053,15 @@ namespace kibicom.my_wd_helper
 				{"dbconn", this.args["wd"]["dbconn"]}
 			});
 
-			akwc.f_calc_order(new t());
+			try
+			{
+
+				akwc.f_calc_order(new t());
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 
 		}
 
@@ -1067,7 +1087,7 @@ namespace kibicom.my_wd_helper
 
 				//new Delegate(f_get_items)
 
-				f_get_items(new t());
+				//f_get_items(new t());
 
 				this.args["is_active"].f_set(true);
 

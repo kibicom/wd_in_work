@@ -17,8 +17,7 @@ namespace wd_in_work_gdi
 	public class t_wd_josi_num:t
 	{
 
-		t_store josi_store;
-
+		public t_store josi_store;
 
 		public t_wd_josi_num()
 		{
@@ -34,6 +33,7 @@ namespace wd_in_work_gdi
 
 		public t_wd_josi_num(t args)
 		{
+			//MessageBox.Show(args["josi_store"].f_json()["json_str"].f_str());
 			if (!args["josi_store"].f_is_empty())
 			{
 				josi_store = args["josi_store"].f_val<t_store>();
@@ -73,7 +73,7 @@ namespace wd_in_work_gdi
 			//получение строки заказа
 			DataTable tab_order = wd.f_tab_order(new t()
 			{
-				{"idorder","96785"}
+				{"idorder","90538"}
 
 			})["tab_order"].f_val<DataTable>();
 
@@ -474,6 +474,8 @@ namespace wd_in_work_gdi
 			string order_name = wd_o_dr["order_name"].ToString();
 			string order_dtcre = t_uti.f_mssql_dt(wd_o_dr["order_dtcre"].ToString());
 			string order_comment = wd_o_dr["order_comment"].ToString();
+			string order_smbase = Math.Round(Convert.ToDouble(wd_o_dr["order_smbase"].ToString()))
+									.ToString().Replace(',', '.');
 			string order_guid = wd_o_dr["order_guid"].ToString();
 
 			string customer_name = wd_o_dr["customer_name"].ToString();
@@ -529,6 +531,7 @@ namespace wd_in_work_gdi
 				{"terminal",""},
 				{"comment",order_comment},
 				{"wd_order_guid",order_guid},
+				{"sm", order_smbase},
 				{
 					"tab_org_unit",new t()
 					{
@@ -751,7 +754,7 @@ namespace wd_in_work_gdi
 
 		public t f_put_order(t args)
 		{
-
+			//MessageBox.Show(josi_store.f_json()["json_str"].f_str());
 			DataSet ds = args["ds"].f_val<DataSet>();
 			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
 
