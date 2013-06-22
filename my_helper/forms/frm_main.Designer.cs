@@ -225,6 +225,7 @@
 			this.btn_calc.TabIndex = 0;
 			this.btn_calc.Text = "Расчет";
 			this.btn_calc.UseVisualStyleBackColor = true;
+			this.btn_calc.Visible = false;
 			this.btn_calc.Click += new System.EventHandler(this.btn_calc_Click);
 			// 
 			// fpn_head

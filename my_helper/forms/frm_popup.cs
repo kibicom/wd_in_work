@@ -25,18 +25,45 @@ namespace kibicom.my_wd_helper.forms
 			InitializeComponent();
 		}
 
-		public frm_popup(t args)
+		public frm_popup(t args):this()
 		{
 			ControlBox = false;
+			_args["is_show_blocked"].f_set(false);
 		}
 
 		//форма деактивирована
+		virtual public void frm_Deactivate(object sender, EventArgs e)
+		{
+			if (!_args["is_show_blocked"].f_bool())
+			{
+				_args["is_shown"].f_set(false);
+				f_leaved(this._args);
+			}
+		}
+
 		virtual public t f_leaved(t args)
 		{
 
 			t.f_f("f_leaved", this._args);
 
 			return new t();
+		}
+
+		public void f_keep_win_shown(bool yes_or_no)
+		{
+			if (yes_or_no)
+			{
+				_args["is_show_blocked"].f_set(true);
+			}
+			else
+			{
+				_args["is_show_blocked"].f_set(false);
+			}
+		}
+
+		public void f_hide()
+		{
+			Hide();
 		}
 
 		protected override bool ShowWithoutActivation
@@ -57,6 +84,7 @@ namespace kibicom.my_wd_helper.forms
 			//message.
 			if (message.Msg == WM_NCHITTEST)
 			{
+				base.WndProc(ref message);
 				return;
 			}
 
@@ -80,6 +108,11 @@ namespace kibicom.my_wd_helper.forms
 					base.WndProc(ref message);
 				}
 				if (message.WParam == new IntPtr(1))
+				{
+					message.Result = IntPtr.Zero;
+					return;
+				}
+				if (message.WParam == new IntPtr(2))
 				{
 					message.Result = IntPtr.Zero;
 					return;

@@ -39,12 +39,16 @@ namespace kibicom.my_wd_helper.forms
 
 			f_init_wd();
 
+			Owner = args["owner"].f_val<Form>();
+			this._args["owner"].f_set(Owner);
 			this._args["kwj"] = args["kwj"];
 			this._args["mssql_cli"]=args["mssql_cli"];
 			this._args["ds"] = args["ds"].f_def(_args["ds"].f_val<DataSet>());
 			this._args["o_dr_arr"] = args["o_dr_arr"];
 
 			this._args["o_dr_arr"].f_set(dbconn._db.GetDataTable("select top 1 * from view_orders").Select());
+
+			this._args["tab_supply_changed"].f_set(false);
 
 			//инициализация gridов
 			dg_supply.RowTemplate.Height = 30;
@@ -70,7 +74,7 @@ namespace kibicom.my_wd_helper.forms
 			//наполняем таблицы
 			f_get_product_supply_wd(args);
 			f_get_related_supply_wd(args);
-
+			f_get_supply_customer_wd(args);
 
 		}
 
@@ -119,6 +123,7 @@ namespace kibicom.my_wd_helper.forms
 			DataTable tab = dbconn._db.GetDataTable("select top 50 * from view_supply_1 where "+supply_where+order_by);
 			_args["tab_supply"].f_set(tab);
 			tab.TableName="tab_supply";
+			//tab.RowChanging += frm_product_supply_RowChanged;
 
 			if (!ds.Tables.Contains("tab_supply"))
 			{
@@ -134,6 +139,7 @@ namespace kibicom.my_wd_helper.forms
 			dg_supply.DataSource = tab;
 
 			dgc_idsupplydoc.DataPropertyName = "idsupplydoc";
+			dgc_idcustomer.DataPropertyName = "idcustomer";
 			dgc_seller_name.DataPropertyName = "seller_name";
 			dgc_name.DataPropertyName = "name";
 			dgc_dtcre.DataPropertyName = "dtcre";
@@ -143,6 +149,38 @@ namespace kibicom.my_wd_helper.forms
 
 			return new t();
 		}
+
+		//имеющиеся документы снабжения
+		public t f_get_supply_customer_wd(t args)
+		{
+			DataSet ds = _args["ds"].f_val<DataSet>();
+
+			//создаем фильтр для выборки
+			string where = " where idcustomergroup=51 ";
+
+			string order_by = " order by dtcre ";
+
+			DataTable tab = dbconn._db.GetDataTable("select idcustomer, name from customer "+where+order_by);
+			_args["tab_customer"].f_set(tab);
+			tab.TableName = "tab_customer";
+			//tab.RowChanging += frm_product_supply_RowChanged;
+
+			if (!ds.Tables.Contains("tab_customer"))
+			{
+				ds.Tables.Add(tab);
+			}
+
+			//DataView tab_view = new DataView(tab);
+			//_args["tab_view"].f_set(tab_view);
+
+			dgc_idcustomer.DataSource = tab;
+			dgc_idcustomer.DisplayMember = "name";
+			dgc_idcustomer.ValueMember = "idcustomer";
+
+
+			return new t();
+		}
+
 
 		//связанные документы снабжения
 		public t f_get_related_supply_wd(t args)
@@ -156,11 +194,17 @@ namespace kibicom.my_wd_helper.forms
 			{
 				in_idorder = t_uti.fjoin(in_idorder, ',', dr["idorder"].ToString());
 			}
-			in_idorder = "(" + in_idorder + ")";
+			//in_idorder = "(" + in_idorder + ")";
 
-			DataTable tab = dbconn._db.GetDataTable("select * from view_related_supply_1 where idorder in ("+in_idorder+")");
+			DataTable tab = dbconn._db.GetDataTable
+			(
+				"select * from view_related_supply_group "+ 
+				"where idsupplydoc in "+
+				"( select idsupplydoc from view_related_supply_1 where idorder in ("+in_idorder+"))"
+			);
 			_args["tab_related_supply"].f_set(tab);
 			tab.TableName = "tab_related_supply";
+			//tab.RowChanging+=tab_related_supply_RowChanged;
 
 			if (!ds.Tables.Contains("tab_related_supply"))
 			{
@@ -174,10 +218,12 @@ namespace kibicom.my_wd_helper.forms
 			dg_related_supply.AutoGenerateColumns = false;
 			dg_related_supply.DataSource = tab;
 
+			dgc_rs_iddocrelation.DataPropertyName = "iddocrelation";
+			dgc_rs_idsupplydoc.DataPropertyName = "idsupplydoc";
 			dgc_rs_seller_name.DataPropertyName = "customer_name";
 			dgc_rs_num.DataPropertyName = "name";
 			dgc_rs_make_dt.DataPropertyName = "dtcre";
-			dgc_rs_done_dt.DataPropertyName = "dtdoc";
+			dgc_rs_done_dt.DataPropertyName = "dtdone";
 			dgc_rs_comment.DataPropertyName = "comment";
 
 
@@ -241,6 +287,9 @@ namespace kibicom.my_wd_helper.forms
 
 				DataRow dr= tab_related_supply.NewRow();
 
+				//int id = dbconn.GetGenId("gen_docrelation");
+
+				//dr["iddocrelation"] = id.ToString();
 				dr["idsupplydoc"] = dg_r.Cells["dgc_idsupplydoc"].Value.ToString();
 				dr["customer_name"] = dg_r.Cells["dgc_seller_name"].Value.ToString();
 				dr["name"] = dg_r.Cells["dgc_name"].Value.ToString();
@@ -261,23 +310,21 @@ namespace kibicom.my_wd_helper.forms
 			DataSet ds = _args["ds"].f_val<DataSet>();
 			DataTable tab_related_supply = _args["tab_related_supply"].f_val<DataTable>();
 
-			DataRow[] o_dr_arr = args["o_dr_arr"].f_val<DataRow[]>();
+			DataRow[] o_dr_arr = _args["o_dr_arr"].f_val<DataRow[]>();
 
+			//сохранение связей документов
 			//foreach (DataGridViewRow dg_r in dg_related_supply.Rows)
 			foreach (DataRow rs_dr in tab_related_supply.Rows)
 			{
-				
-					foreach (DataRow dr in o_dr_arr)
+				foreach (DataRow dr in o_dr_arr)
+				{
+					if (rs_dr.RowState==DataRowState.Added)
 					{
-
-					
-						if (rs_dr.RowState==DataRowState.Added)
-						{
 						//запрашиваем из базы строку на данную комбинацию документа снабзения и заказа
 						DataRow dr_dr = dbconn._db.GetDataRow
 						(
 							"select iddocrelation from docrelation where idparentdoc="
-							+ dg_r.Cells["dgc_idsupplydoc"].Value.ToString() + " and idchilddoc="
+							+ rs_dr["idsupplydoc"].ToString() + " and idchilddoc="
 							+ dr["idorder"].ToString()
 						);
 
@@ -291,64 +338,70 @@ namespace kibicom.my_wd_helper.forms
 											"iddocappearanceparent, iddocappearancechild)" +
 											" values ("
 											+ id.ToString() + ","
-											+ dg_r.Cells["dgc_idsupplydoc"].Value.ToString() + ","
+											+ rs_dr["idsupplydoc"].ToString() + ","
 											+ dr["idorder"].ToString() + ","
 											+ "4,1)";
 
 							dbconn._db.Exec(sql_cmd);
 						}
 					}
+					if (rs_dr.RowState == DataRowState.Deleted)
+					{
+						string cmd =
+						"update docrelation set deleted=getdate() where "
+						+ " deleted is null and iddocappearanceparent=4 and iddocappearancechild=1"
+						+ " and idparentdoc=" + rs_dr["idsupplydoc", DataRowVersion.Original].ToString()
+						+ " and idchilddoc=" + dr["idorder", DataRowVersion.Original].ToString();
+
+						dbconn._db.Exec(cmd);
+					}
 				}
 			}
+			tab_related_supply.AcceptChanges();
 
+			//сохранение документов
 			DataTable tab_supply = _args["tab_supply"].f_val<DataTable>();
 			foreach (DataRow dr in tab_supply.Rows)
 			{
 				if (dr.RowState == DataRowState.Added)
 				{
 					string cmd =
-									"insert supplydoc (" +
-									"(idsupplydoc, dtcre, dtdoc, idcustomer comment, idchilddoc)" +
-									" values ("
-									+ dr["idsupplydoc"].ToString() + ","
-									+ t_sql_builder.f_db_val(dr, "dtcre") + ","
-									+ t_sql_builder.f_db_val(dr, "dtdoc") + ","
-									+ dr["idcustomer"].ToString() + ","
-									+ dr["comment"].ToString() + ")";
-					dbconn._db.Exec
-					(
-						"insert supplydoc ("+
-						"(idsupplydoc, name, dtcre, dtdoc, idcustomer, comment)" +
-						" values ("
-						+ dr["idsupplydoc"].ToString() + ","
-						+ dr["name"].ToString() + ","
-						+ t_sql_builder.f_db_val(dr, "dtcre") + ","
-						+ t_sql_builder.f_db_val(dr, "dtdoc") + ","
-						+ dr["idcustomer"].ToString() + ","
-						+ dr["comment"].ToString() + ")"
-					);
+					"insert supplydoc " +
+					"(idsupplydoc, name, dtcre, dtdoc, idcustomer, comment)" +
+					" values ("
+					+ t_sql_builder.f_db_val(dr, "idsupplydoc") + ","
+					+ t_sql_builder.f_db_val(dr, "name") + ","
+					+ t_sql_builder.f_db_val(dr, "dtcre") + ","
+					+ t_sql_builder.f_db_val(dr, "dtdone") + ","
+					+ t_sql_builder.f_db_val(dr, "idcustomer") + ","
+					+ t_sql_builder.f_db_val(dr, "comment") + ")";
+
+					dbconn._db.Exec(cmd);
+					dr.AcceptChanges();
 				}
 				if (dr.RowState == DataRowState.Modified)
 				{
 					string cmd =
 					"update supplydoc set "
-					+ "name=" + dr["name"].ToString() + ","
-					+ "dtcre="+ t_sql_builder.f_db_val(dr, "dtcre") + ","
-					+ "dtdoc="+ t_sql_builder.f_db_val(dr, "dtdoc") + ","
-					+ "idcustomer=" + dr["idcustomer"].ToString() + ","
-					+ "comment="+ dr["comment"].ToString() + ")"
-					+ "where idsupplydoc=" + dr["idsupplydoc"].ToString();
+					+ " name=" + t_sql_builder.f_db_val(dr, "name") + ","
+					+ " dtcre="+ t_sql_builder.f_db_val(dr, "dtcre") + ","
+					+ " dtdoc="+ t_sql_builder.f_db_val(dr, "dtdone") + ","
+					+ " idcustomer=" + t_sql_builder.f_db_val(dr, "idcustomer") + ","
+					+ " comment="+ t_sql_builder.f_db_val(dr, "comment")
+					+ " where idsupplydoc=" + t_sql_builder.f_db_val(dr, "idsupplydoc");
 
 					dbconn._db.Exec(cmd);
 				}
 				if (dr.RowState == DataRowState.Deleted)
 				{
 					string cmd =
-					"update supplydoc set deleted=getdate() where idsupplydoc=" +dr["idsupplydoc"].ToString();
+					"update supplydoc set deleted=getdate() where idsupplydoc=" 
+					+dr["idsupplydoc", DataRowVersion.Original].ToString();
 
 					dbconn._db.Exec(cmd);
 				}
 			}
+			tab_supply.AcceptChanges();
 
 			return new t();
 		}
@@ -467,11 +520,15 @@ namespace kibicom.my_wd_helper.forms
 		private void lbl_dtcre_Click(object sender, EventArgs e)
 		{
 			chb_dtcre.Checked = !chb_dtcre.Checked;
+
+			f_get_product_supply_wd(new t());
 		}
 
 		private void lbl_dt_done_Click(object sender, EventArgs e)
 		{
 			chb_dt_done.Checked = !chb_dt_done.Checked;
+
+			f_get_product_supply_wd(new t());
 		}
 
 		private void dtp_dtcre_filt_ValueChanged(object sender, EventArgs e)
@@ -489,14 +546,27 @@ namespace kibicom.my_wd_helper.forms
 			f_get_product_supply_wd(new t());
 		}
 
+		private void chb_dtcre_CheckedChanged(object sender, EventArgs e)
+		{
+			f_get_product_supply_wd(new t());
+		}
+
+		private void chb_dt_done_CheckedChanged(object sender, EventArgs e)
+		{
+			f_get_product_supply_wd(new t());
+		}
+
 
 		private void dg_supply_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dg=(DataGridView)sender;
 
+			f_keep_win_shown(true);
+
 			if (dg.Columns[e.ColumnIndex].GetType() == typeof(DataGridViewImageButtonRevertColumn))
 			{
 				f_add_2_related();
+				f_save(new t());
 			}
 			if (dg.Columns[e.ColumnIndex].GetType() == typeof(DataGridViewImageButtonDropColumn))
 			{
@@ -534,6 +604,8 @@ namespace kibicom.my_wd_helper.forms
 							(
 								"idsupplydoc =" + dg.Rows[e.RowIndex].Cells["dgc_idsupplydoc"].Value.ToString()
 							)[0].Delete();
+
+							f_save(new t());
 						}
 					}
 					else
@@ -542,11 +614,15 @@ namespace kibicom.my_wd_helper.forms
 						(
 							"idsupplydoc =" + dg.Rows[e.RowIndex].Cells["dgc_idsupplydoc"].Value.ToString()
 						)[0].Delete();
+
+						f_save(new t());
 					}
 				}
 
 				//f_add_2_related();
 			}
+
+			f_keep_win_shown(false);
 		}
 
 		private void dg_supply_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -573,11 +649,32 @@ namespace kibicom.my_wd_helper.forms
 			f_save(new t());
 		}
 
-
-		#endregion events
-
 		private void frm_product_supply_Shown(object sender, EventArgs e)
 		{
+			//MessageBox.Show("shown");
+
+			//подгружаем данные контекста
+			kibicom_mwh_frm_main h_frm = (kibicom_mwh_frm_main)Owner;
+
+			if (h_frm.args["wd"]["active_tab"].f_val().GetType() == typeof(Atechnology.ecad.Document.OrderForm))
+			{
+				//MessageBox.Show((h_frm.args["wd"]["orderform"]["ds"].f_val() == null).ToString());
+				this._args["ds"] = h_frm.args["wd"]["orderform"]["ds"];
+				this._args["o_dr_arr"] = h_frm.args["wd"]["orderform"]["o_dr_arr"];
+			}
+
+			if (h_frm.args["wd"]["active_tab"].f_val().GetType() == typeof(Atechnology.ecad.Document.OrderItemForm))
+			{
+				//MessageBox.Show((h_frm.args["wd"]["orderitemform"]["ds"].f_val() == null).ToString());
+				DataSet ds = h_frm.args["wd"]["orderitemform"]["ds"].f_val<DataSet>();
+				this._args["ds"].f_set(ds);
+				this._args["o_dr_arr"].f_set(ds.Tables["orders"].Select());
+			}
+
+			//наполняем таблиц
+			f_get_product_supply_wd(args);
+			f_get_related_supply_wd(args);
+
 			dg_supply.Focus();
 		}
 
@@ -587,6 +684,122 @@ namespace kibicom.my_wd_helper.forms
 			e.Row.Cells["dgc_dtdone"].Value = DateTime.Now.ToShortDateString();
 		}
 
+		private void dg_related_supply_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			DataGridView dg = (DataGridView)sender;
+
+			f_keep_win_shown(true);
+
+			if (dg.Columns[e.ColumnIndex].GetType() == typeof(DataGridViewImageButtonDropColumn))
+			{
+				if
+				(
+					MessageBox.Show
+					(
+						"Вы действительно хотите убрать\r\n этот документ из выбранных заказов?",
+						"Удаление",
+						MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation,
+						MessageBoxDefaultButton.Button2
+					) == DialogResult.Yes
+				)
+				{
+					((DataTable)dg_related_supply.DataSource).Select
+					(
+						"idsupplydoc =" + dg.Rows[e.RowIndex].Cells["dgc_rs_idsupplydoc"].Value.ToString()
+					)[0].Delete();
+
+					f_save(new t());
+				}
+
+				//f_add_2_related();
+			}
+
+			f_keep_win_shown(false);
+		}
+
+
+		#endregion events
+
+		private void dg_supply_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			
+		}
+
+		private void btn_close_Click(object sender, EventArgs e)
+		{
+			f_hide();
+		}
+
+		private void dg_supply_RowValidated(object sender, DataGridViewCellEventArgs e)
+		{
+			//долбанное событие вызывается при запуске 
+			//поэтому проверяем таблицы на наличие изменения и только тогда сохраняем
+
+			DataTable tab_supply = null;
+			DataTable tab_related_supply = null;
+
+			if (dg_supply.DataSource != null)
+			{
+				tab_supply = ((DataTable)dg_supply.DataSource).GetChanges();
+			}
+			if (dg_related_supply.DataSource != null)
+			{
+				tab_related_supply = ((DataTable)dg_related_supply.DataSource).GetChanges();
+			}
+			if (tab_supply != null && tab_related_supply!=null)
+			{
+				if (_args["tab_related_supply"].f_val() != null && _args["tab_supply"].f_val() != null)
+				{
+					f_save(new t());
+				}
+			}
+		}
+
+		private void frm_product_supply_RowChanged(object sender, DataRowChangeEventArgs e)
+		{
+			f_save(new t());
+		}
+
+		private void tab_related_supply_RowChanged(object sender, DataRowChangeEventArgs e)
+		{
+			f_save(new t());
+		}
+
+		private void frm_product_supply_VisibleChanged(object sender, EventArgs e)
+		{
+			//MessageBox.Show("shown");
+
+			//подгружаем данные контекста
+			kibicom_mwh_frm_main h_frm = (kibicom_mwh_frm_main)Owner;
+			if (!h_frm.args["wd"]["active_tab"].f_is_empty())
+			{
+				if (h_frm.args["wd"]["active_tab"].f_val().GetType() == typeof(Atechnology.ecad.Document.OrderForm))
+				{
+					//MessageBox.Show((h_frm.args["wd"]["orderform"]["ds"].f_val() == null).ToString());
+					this._args["ds"] = h_frm.args["wd"]["orderform"]["ds"];
+					this._args["o_dr_arr"] = h_frm.args["wd"]["orderform"]["o_dr_arr"];
+				}
+
+				if (h_frm.args["wd"]["active_tab"].f_val().GetType() == typeof(Atechnology.ecad.Document.OrderItemForm))
+				{
+					//MessageBox.Show((h_frm.args["wd"]["orderitemform"]["ds"].f_val() == null).ToString());
+					DataSet ds = h_frm.args["wd"]["orderitemform"]["ds"].f_val<DataSet>();
+					this._args["ds"].f_set(ds);
+					this._args["o_dr_arr"].f_set(ds.Tables["orders"].Select());
+				}
+			}
+
+			//наполняем таблиц
+			f_get_product_supply_wd(args);
+			f_get_related_supply_wd(args);
+
+			dg_supply.Focus();
+		}
+
+		private void dg_supply_DataError(object sender, DataGridViewDataErrorEventArgs e)
+		{
+			e.Cancel = true;
+		}
 
 
 

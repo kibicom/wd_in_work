@@ -669,6 +669,22 @@ namespace kibicom.my_wd_helper
 			frm.Top = args["top"].f_int();
 			frm.Left = args["left"].f_int();
 
+			//callback когда контрагент будет выбран
+			((ikibifrm)frm).args["f_done"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+
+				return new t();
+			}));
+
+			((ikibifrm)frm).args["f_leaved"] = new t(new t_f<t, t>(delegate(t args1)
+			{
+
+				t.f_f("f_leaved", args);
+
+				f_hide_all_not_under_mouse_cursor(new t() { { "under_mouse_cursor_to", true } });
+
+				return new t();
+			}));
 
 			if (((ikibifrm)frm).args["is_shown"].f_bool())
 			{
