@@ -31,6 +31,7 @@
 			this.btn_get_num = new System.Windows.Forms.Button();
 			this.txt_num = new System.Windows.Forms.TextBox();
 			this.btn_order_to_kibicom = new System.Windows.Forms.Button();
+			this.txt_order_name = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// btn_get_num
@@ -60,12 +61,20 @@
 			this.btn_order_to_kibicom.UseVisualStyleBackColor = true;
 			this.btn_order_to_kibicom.Click += new System.EventHandler(this.btn_order_to_kibicom_Click);
 			// 
+			// txt_order_name
+			// 
+			this.txt_order_name.Location = new System.Drawing.Point(190, 98);
+			this.txt_order_name.Name = "txt_order_name";
+			this.txt_order_name.Size = new System.Drawing.Size(200, 22);
+			this.txt_order_name.TabIndex = 1;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(659, 363);
 			this.Controls.Add(this.btn_order_to_kibicom);
+			this.Controls.Add(this.txt_order_name);
 			this.Controls.Add(this.txt_num);
 			this.Controls.Add(this.btn_get_num);
 			this.Name = "Form1";
@@ -80,6 +89,7 @@
 		private System.Windows.Forms.Button btn_get_num;
 		private System.Windows.Forms.TextBox txt_num;
 		private System.Windows.Forms.Button btn_order_to_kibicom;
+		private System.Windows.Forms.TextBox txt_order_name;
 	}
 }
 

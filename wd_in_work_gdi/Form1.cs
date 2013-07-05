@@ -23,8 +23,6 @@ namespace wd_in_work_gdi
 
 			kibicom_mwh_frm_main mwh = new kibicom_mwh_frm_main(new t());
 
-			
-
 			wd_josi_num = new t_wd_josi_num(new t()
 			{
 				{"josi_store", mwh.args["kwj"]["josi_store"]},

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DA2700E6-B433-4D6D-BB1A-89BF09D4B733}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>kibicom.my_wd_helper</RootNamespace>
     <AssemblyName>kibicom.my_wd_helper</AssemblyName>
@@ -74,13 +74,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\calc_progress_bar_wd.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
-    <Reference Include="DevExpress.Utils.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
-    <Reference Include="DevExpress.XtraBars.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\DevExpress.XtraBars.v8.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.XtraEditors.v8.2, Version=8.2.2.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1" />
+    <Reference Include="DevExpress.Data.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGrid.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraScheduler.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraScheduler.v10.2.Core, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="fastJSON">
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
     </Reference>
@@ -121,6 +121,12 @@
     </Compile>
     <Compile Include="forms\frm_add_supply.Designer.cs">
       <DependentUpon>frm_add_supply.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\frm_payments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frm_payments.Designer.cs">
+      <DependentUpon>frm_payments.cs</DependentUpon>
     </Compile>
     <Compile Include="t_atonet_kvl_wd_calc.cs" />
     <Compile Include="forms\address_info_form.cs">
@@ -267,6 +273,9 @@
     <EmbeddedResource Include="forms\frm_main.resx">
       <DependentUpon>frm_main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="forms\frm_payments.resx">
+      <DependentUpon>frm_payments.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="forms\frm_popup.resx">
       <DependentUpon>frm_popup.cs</DependentUpon>
     </EmbeddedResource>
@@ -286,6 +295,7 @@
     <EmbeddedResource Include="my_helper_3.resx">
       <DependentUpon>my_helper_3.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

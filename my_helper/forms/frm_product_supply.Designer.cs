@@ -45,24 +45,26 @@
 			this.dg_related_supply = new System.Windows.Forms.DataGridView();
 			this.txt_filter = new System.Windows.Forms.TextBox();
 			this.dg_supply = new System.Windows.Forms.DataGridView();
+			this.dgc_idsupplydoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_idcustomer = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.dgc_seller_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_addstr1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_dtcre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_dtdone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.tabproductsupplyBindingSource = new System.Windows.Forms.BindingSource(this.components);
+			this.kwj_testDataSet = new kibicom.my_wd_helper.kwj_testDataSet();
+			this.tab_product_supplyTableAdapter = new kibicom.my_wd_helper.kwj_testDataSetTableAdapters.tab_product_supplyTableAdapter();
 			this.dgc_rs_iddocrelation = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgc_rs_idsupplydoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgs_rs_order_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgc_rs_seller_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgc_rs_num = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgc_rs_addstr1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgc_rs_make_dt = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgc_rs_done_dt = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgc_rs_comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.tabproductsupplyBindingSource = new System.Windows.Forms.BindingSource(this.components);
-			this.kwj_testDataSet = new kibicom.my_wd_helper.kwj_testDataSet();
-			this.tab_product_supplyTableAdapter = new kibicom.my_wd_helper.kwj_testDataSetTableAdapters.tab_product_supplyTableAdapter();
-			this.dgc_idsupplydoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dgc_idcustomer = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.dgc_seller_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dgc_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dgc_dtcre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dgc_dtdone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dgc_comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dg_related_supply)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dg_supply)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabproductsupplyBindingSource)).BeginInit();
@@ -236,6 +238,7 @@
             this.dgs_rs_order_name,
             this.dgc_rs_seller_name,
             this.dgc_rs_num,
+            this.dgc_rs_addstr1,
             this.dgc_rs_make_dt,
             this.dgc_rs_done_dt,
             this.dgc_rs_comment});
@@ -266,6 +269,7 @@
             this.dgc_idcustomer,
             this.dgc_seller_name,
             this.dgc_name,
+            this.dgc_addstr1,
             this.dgc_dtcre,
             this.dgc_dtdone,
             this.dgc_comment});
@@ -282,6 +286,68 @@
 			this.dg_supply.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dg_supply_DefaultValuesNeeded);
 			this.dg_supply.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dg_supply_RowsAdded);
 			this.dg_supply.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_supply_RowValidated);
+			// 
+			// dgc_idsupplydoc
+			// 
+			this.dgc_idsupplydoc.HeaderText = "idsupplydoc";
+			this.dgc_idsupplydoc.Name = "dgc_idsupplydoc";
+			this.dgc_idsupplydoc.ReadOnly = true;
+			this.dgc_idsupplydoc.Visible = false;
+			// 
+			// dgc_idcustomer
+			// 
+			this.dgc_idcustomer.HeaderText = "Поставщик";
+			this.dgc_idcustomer.Name = "dgc_idcustomer";
+			this.dgc_idcustomer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgc_idcustomer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			// 
+			// dgc_seller_name
+			// 
+			this.dgc_seller_name.HeaderText = "Поставщик";
+			this.dgc_seller_name.Name = "dgc_seller_name";
+			this.dgc_seller_name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgc_seller_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dgc_seller_name.Visible = false;
+			// 
+			// dgc_name
+			// 
+			this.dgc_name.HeaderText = "Номер";
+			this.dgc_name.Name = "dgc_name";
+			// 
+			// dgc_addstr1
+			// 
+			this.dgc_addstr1.HeaderText = "Номер 1С";
+			this.dgc_addstr1.Name = "dgc_addstr1";
+			// 
+			// dgc_dtcre
+			// 
+			this.dgc_dtcre.HeaderText = "Дата заявки";
+			this.dgc_dtcre.Name = "dgc_dtcre";
+			// 
+			// dgc_dtdone
+			// 
+			this.dgc_dtdone.HeaderText = "Выполнена";
+			this.dgc_dtdone.Name = "dgc_dtdone";
+			// 
+			// dgc_comment
+			// 
+			this.dgc_comment.HeaderText = "Комментарий";
+			this.dgc_comment.Name = "dgc_comment";
+			// 
+			// tabproductsupplyBindingSource
+			// 
+			this.tabproductsupplyBindingSource.DataMember = "tab_product_supply";
+			this.tabproductsupplyBindingSource.DataSource = this.kwj_testDataSet;
+			this.tabproductsupplyBindingSource.CurrentChanged += new System.EventHandler(this.tabproductsupplyBindingSource_CurrentChanged);
+			// 
+			// kwj_testDataSet
+			// 
+			this.kwj_testDataSet.DataSetName = "kwj_testDataSet";
+			this.kwj_testDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+			// 
+			// tab_product_supplyTableAdapter
+			// 
+			this.tab_product_supplyTableAdapter.ClearBeforeFill = true;
 			// 
 			// dgc_rs_iddocrelation
 			// 
@@ -318,6 +384,12 @@
 			this.dgc_rs_num.Name = "dgc_rs_num";
 			this.dgc_rs_num.ReadOnly = true;
 			// 
+			// dgc_rs_addstr1
+			// 
+			this.dgc_rs_addstr1.HeaderText = "Номер 1С";
+			this.dgc_rs_addstr1.Name = "dgc_rs_addstr1";
+			this.dgc_rs_addstr1.ReadOnly = true;
+			// 
 			// dgc_rs_make_dt
 			// 
 			this.dgc_rs_make_dt.HeaderText = "Дата заявки";
@@ -335,63 +407,6 @@
 			this.dgc_rs_comment.HeaderText = "Комментарий";
 			this.dgc_rs_comment.Name = "dgc_rs_comment";
 			this.dgc_rs_comment.ReadOnly = true;
-			// 
-			// tabproductsupplyBindingSource
-			// 
-			this.tabproductsupplyBindingSource.DataMember = "tab_product_supply";
-			this.tabproductsupplyBindingSource.DataSource = this.kwj_testDataSet;
-			this.tabproductsupplyBindingSource.CurrentChanged += new System.EventHandler(this.tabproductsupplyBindingSource_CurrentChanged);
-			// 
-			// kwj_testDataSet
-			// 
-			this.kwj_testDataSet.DataSetName = "kwj_testDataSet";
-			this.kwj_testDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-			// 
-			// tab_product_supplyTableAdapter
-			// 
-			this.tab_product_supplyTableAdapter.ClearBeforeFill = true;
-			// 
-			// dgc_idsupplydoc
-			// 
-			this.dgc_idsupplydoc.HeaderText = "idsupplydoc";
-			this.dgc_idsupplydoc.Name = "dgc_idsupplydoc";
-			this.dgc_idsupplydoc.ReadOnly = true;
-			this.dgc_idsupplydoc.Visible = false;
-			// 
-			// dgc_idcustomer
-			// 
-			this.dgc_idcustomer.HeaderText = "Поставщик";
-			this.dgc_idcustomer.Name = "dgc_idcustomer";
-			this.dgc_idcustomer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dgc_idcustomer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			// 
-			// dgc_seller_name
-			// 
-			this.dgc_seller_name.HeaderText = "Поставщик";
-			this.dgc_seller_name.Name = "dgc_seller_name";
-			this.dgc_seller_name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dgc_seller_name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			this.dgc_seller_name.Visible = false;
-			// 
-			// dgc_name
-			// 
-			this.dgc_name.HeaderText = "Номер";
-			this.dgc_name.Name = "dgc_name";
-			// 
-			// dgc_dtcre
-			// 
-			this.dgc_dtcre.HeaderText = "Дата заявки";
-			this.dgc_dtcre.Name = "dgc_dtcre";
-			// 
-			// dgc_dtdone
-			// 
-			this.dgc_dtdone.HeaderText = "Выполнена";
-			this.dgc_dtdone.Name = "dgc_dtdone";
-			// 
-			// dgc_comment
-			// 
-			this.dgc_comment.HeaderText = "Комментарий";
-			this.dgc_comment.Name = "dgc_comment";
 			// 
 			// frm_product_supply
 			// 
@@ -447,20 +462,22 @@
 		private System.Windows.Forms.CheckBox chb_dtcre;
 		private System.Windows.Forms.Label lbl_dtcre;
 		private System.Windows.Forms.CheckBox chb_dt_done;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_idsupplydoc;
+		private System.Windows.Forms.DataGridViewComboBoxColumn dgc_idcustomer;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_seller_name;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_name;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_addstr1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_dtcre;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_dtdone;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_comment;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_iddocrelation;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_idsupplydoc;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgs_rs_order_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_seller_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_num;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_addstr1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_make_dt;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_done_dt;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_rs_comment;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_idsupplydoc;
-		private System.Windows.Forms.DataGridViewComboBoxColumn dgc_idcustomer;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_seller_name;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_name;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_dtcre;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_dtdone;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgc_comment;
 	}
 }

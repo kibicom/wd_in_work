@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using kibicom.wd;
 using kibicom;
 using Atechnology.DBConnections2;
+using kibicom.tlib.data_store_cli;
 
 namespace wd_in_work_gdi
 {
@@ -62,6 +63,8 @@ namespace wd_in_work_gdi
 			this["josi_end_point"] = new t(josi_end_point);
 		}
 
+		#region получение данных из базы WD
+
 		public t f_load_wd_order_ds(t args)
 		{
 
@@ -73,7 +76,7 @@ namespace wd_in_work_gdi
 			//получение строки заказа
 			DataTable tab_order = wd.f_tab_order(new t()
 			{
-				{"idorder","90538"}
+				{"idorder","100489"}
 
 			})["tab_order"].f_val<DataTable>();
 
@@ -87,6 +90,58 @@ namespace wd_in_work_gdi
 
 			return new t();
 		}
+
+		public t f_load_wd_order_to_get_payment(t args)
+		{
+
+			t_wd wd = new t_wd();
+
+			//инициализация соединения с базой
+			wd.f_init(new t());
+
+			DataTable tab= dbconn._db.GetDataTable
+			(
+				@"	select top 100 * 
+					from view_order_payment_sm 
+					where inwork_dt is not null and o_sm_int>=p_sm_int
+					order by idorder desc
+				"
+			);
+
+			t o_guid_arr = new t();
+			string o_guid_arr_str = "";
+			foreach (DataRow dr in tab.Rows)
+			{
+				o_guid_arr.Add(dr["guid"].ToString());
+				o_guid_arr_str = t_uti.fjoin(o_guid_arr_str, ',', dr["guid"].ToString());
+			}
+
+			t res= new t()
+			{
+				{"self", this},
+				{"tab",tab},
+				{"o_guid_arr", o_guid_arr},
+				{"o_guid_arr_str", o_guid_arr_str}
+			};
+			res["f_done"].f_set(new t_f<t, t>(delegate(t f)
+			{
+				t.f_f(f.f_f(), res);
+
+				return res;
+			}));
+			res["f_fail"].f_set(new t_f<t, t>(delegate(t f)
+			{
+				//t.f_f(f.f_f(), res);
+
+				return res;
+			}));
+
+			return res;
+
+		}
+
+		#endregion получение данных из базы WD
+
 
 		public t f_get_num(t args)
 		{
@@ -493,7 +548,7 @@ namespace wd_in_work_gdi
 			/*** продавец ***/
 			string seller_name = wd_o_dr["seller_name"].ToString();
 			string seller_guid = wd_o_dr["seller_guid"].ToString();
-
+			//MessageBox.Show(seller_guid);
 
 			/*** профиль фурнитура***/
 			string profsys_name = wd_o_dr["profsys_name"].ToString();
@@ -552,9 +607,9 @@ namespace wd_in_work_gdi
 							{"_no_update",true},
 							//_update_if_empty:true,
 							{"id",""},
-							{"name",""},
+							//{"name",""},
 							//{"wd_idseller", idseller},
-							{"dw_seller_guid", seller_guid},
+							{"wd_seller_guid", seller_guid},
 						}
 					}
 				},
@@ -911,7 +966,337 @@ namespace wd_in_work_gdi
 
 			return new t();
 		}
-	
+
+		public t f_get_payment(t args)
+		{
+			DataTable tab = args["tab"].f_val<DataTable>();
+			t o_guid_arr = args["o_guid_arr"];
+			RichTextBox rtxt_log = args["rtxt_log"].f_val<RichTextBox>();
+
+			/*** структура заказа ***/
+
+			//string json_str = o_guid_arr.f_json()["json_str"].f_str();
+
+			//MessageBox.Show("123");
+
+			//MessageBox.Show(json_str["json_str"].f_str());
+
+			t order = new t()
+			{
+				{"id",""},
+				{"wd_order_guid", o_guid_arr},
+				{"sm", ""},
+				{	"_important",new t()
+					{
+						"tab_payment"
+					}
+				},
+				{
+					"tab_payment", new t()
+					{
+						new t()
+						{
+							{"id",""},
+							{"name",""},
+							{"dt_make",""},
+							{"sm",""},
+							{"comment",""},
+							{"confirm",""},
+							{"wd_paymentdoc_guid", ""},
+							{
+								"tab_payment_way", new t()
+								{
+									new t()
+									{
+										{"id",""},
+										{"name",""}
+									}
+								}
+							}
+						}
+					}
+				}
+			};
+
+
+			string order_json = order.f_json()["json_str"].f_str();
+
+			rtxt_log.Text = order_json;
+
+			//MessageBox.Show(order_json);
+
+			//return new t();
+
+			t res = new t()
+			{
+				{"self", this}
+			};
+			res["f_done"].f_set(new t_f<t, t>(delegate(t f_arg)
+			{
+				//добавляем функцию в массив вызываемых когда _f_done true
+				res["f_arr"]["f_done"].Add(f_arg);
+
+				if (res["done_arr"]["f_done"].f_bool())
+				{
+					foreach (t f in (IList<t>)res["f_arr"]["f_done"])
+					{
+						t.f_f(f.f_f(), res);
+					}
+
+					res["f_arr"]["f_done"].Clear();
+				}
+
+				return res;
+			}));
+			res["f_fail"].f_set(new t_f<t, t>(delegate(t f_arg)
+			{
+				//добавляем функцию в массив вызываемых когда _f_done true
+				res["f_arr"]["f_fail"].Add(f_arg);
+
+				if (res["done_arr"]["f_fail"].f_bool())
+				{
+					foreach (t f in (IList<t>)res["f_arr"]["f_fail"])
+					{
+						t.f_f(f.f_f(), res);
+					}
+
+					res["f_arr"]["f_fail"].Clear();
+				}
+
+				return res;
+			}));
+			res["f_set"].f_set(new t_f<t, t>(delegate(t args1)
+			{
+				string f_name = args1["f_name"].f_str();
+				t f_args = args1["f_args"];
+				res["done_arr"][f_name].f_set(true);
+
+				foreach (t f in (IList<t>)res["f_arr"][f_name])
+				{
+					t.f_f(f.f_f(), f_args);
+				}
+
+				res["f_arr"][f_name].Clear();
+
+				return res;
+			}));
+
+
+
+			//выполняем запрос
+			josi_store.f_store(new t 
+			{
+				//{"res_dot_key_query_str",res_dot_key_query_str},
+				//когда возвращен ответ
+				//{"debug_group", "tstore_relat_one_to_many"},
+				//{"debug_group", "tstore_sql"},
+				{"method", "POST"},
+				{
+					"get_tab_arr", new t()
+					{
+						{"tab_order", new t(){order}}
+					}
+				},
+				{
+					"f_done",new t_f<t, t>(delegate(t args1)
+					{
+						t.f_f(res["f_set"].f_f(), new t() { { "f_name", "f_done"}, {"f_args", args1} });
+
+						//t.f_f(args["f_done"].f_f(), args1);
+
+						return res;
+					})
+				},
+				{
+					"f_fail",new t_f<t, t>(delegate(t args1)
+					{
+						t.f_f(res["f_set"].f_f(), new t() { { "f_name", "f_fail" } });
+
+						//t.f_f(args["f_done"].f_f(), args1);
+
+						return res;
+					})
+				},
+				//{"f_fail",args["f_fail"].f_f()},
+				{"encode_json",true},
+				{"cancel_prev",false},
+				{"needs", new t(){"is_auth_done","authenticated"}}		//когда выполниться процесс авторизации
+			});
+
+			
+
+			return res;
+		}
+
+		public t f_put_payment_wd(t args)
+		{
+			t payment = args["payment"];
+			t order=args["order"];
+
+			t_msslq_cli mssql_cli=new t_msslq_cli(new t()
+			{
+				{"conn", dbconn._db.command.Connection}
+			});
+
+			this["mssql_cli"].f_set(mssql_cli);
+
+			DataTable tab_payment = dbconn._db.GetDataTable("select top 0 * from paymentdoc");
+			tab_payment.TableName = "paymentdoc";
+			DataTable tab_paymentgroup = dbconn._db.GetDataTable("select * from paymentgroup");
+			DataRow dr_o=dbconn._db.GetDataRow("select * from orders where guid ='"+order["wd_order_guid"].f_str()+"' ");
+
+			//если у платежа нет guid из WD значит платеж новый
+			if (payment["wd_paymentdoc_guid"].f_is_empty())
+			{
+
+				DataRow dr = tab_payment.NewRow();
+
+				string idpaymentdoc = mssql_cli.f_exec_cmd(new t()
+				{
+					{"cmd" , "exec gen_id 'gen_paymentdoc'"},
+					{"exec_scalar", true}
+				})["res_cnt"].f_str();
+
+				Guid guid = Guid.NewGuid();
+
+				//MessageBox.Show(payment["tab_payment_way"][0]["name"].f_str());
+
+
+				DataRow[] pg_dr_arr = 
+					tab_paymentgroup.Select("name = '" + payment["tab_payment_way"][0]["name"].f_str()+"'");
+
+				dr["idpaymentdoc"] = idpaymentdoc;
+				dr["idorder"] = dr_o["idorder"].ToString();
+				dr["name"] = payment["name"].f_str();
+				dr["idpaymentdocgroup"] = f_get_idpaymentdocgroup(new t() { { "payment", payment } })["idpaymentdocgroup"].f_str();
+				dr["idpaymentgroup"] = (pg_dr_arr.Length > 0 ? "0" : pg_dr_arr[0]["idpaymentgroup"].ToString());
+				dr["iddocoper"] = 5;
+				dr["smbase"] = payment["sm"].f_str();
+				dr["comment"] = payment["comment"].f_str();
+				dr["guid"] = guid;
+
+				tab_payment.Rows.Add(dr);
+
+				mssql_cli.f_store_tab(new t()
+				{
+					{"tab", tab_payment}
+				});
+			}
+			else //иначе обновляем существующий по guid
+			{
+				/*
+				DataRow dr = tab_payment.NewRow();
+
+				dr["name"] = payment["name"].f_str();
+				dr["idpaymentgroup"] = tab_paymentgroup.Select("name = '" + payment["tab_payment_way"]["name"].f_str());
+				dr["smbase"] = payment["smbase"].f_str();
+				dr["comment"] = payment["comment"].f_str();
+				dr["guid"] = payment["wd_paymentdoc_guid"].f_str();
+
+				dr.SetModified();
+
+				mssql_cli.f_exec_cmd(new t()
+				{
+					{
+						"cmd" , @"update paymentdoc "
+								+"	set name="+payment["name"].f_str()+","
+								+"	set idpaymentgroup"+tab_paymentgroup.Select
+								(
+									"name = '" + payment["tab_payment_way"]["name"].f_str()
+								)+","
+								+"	set smbase"++","
+					},
+					{"exec_scalar", true}
+				})["res_cnt"].f_str();
+			*/
+			}
+
+			/*
+			string cmd = "insert "+tab_name+" (id, idgood, marking, idorder, name, qu) values ("+
+					t_sql_builder.f_db_val(tabres_id)+","+
+					t_sql_builder.f_db_val(mc_dr, "id_good")+","+
+					t_sql_builder.f_db_val(mc_dr, "marking_id")+","+
+					t_sql_builder.f_db_val(mc_dr, "idorder")+","+
+					t_sql_builder.f_db_val("good_needs")+","+
+					t_sql_builder.f_db_val(mc_dr, "qu")+")"
+			*/
+
+			return new t();
+		}
+
+		public t f_get_idpaymentdocgroup(t args)
+		{
+			t payment=args["payment"];
+
+			//MessageBox.Show(payment["dt_make"].f_str());
+
+			DateTime dt =DateTime.Parse(payment["dt_make"].f_str());
+
+			//получаем папку для года
+			string pg_id_year=f_get_paymentdocgroup(new t()
+			{
+				{"pg_name", dt.Year.ToString()},
+				{"where", " deleted is null and parentid is null and name = '"+dt.Year.ToString()+"'"},
+				{"pg_parentid", "null"}
+			})["pg_idpaymentdocgroup"].f_str();
+
+			//получаем папку для месяца
+			string pg_id_month = f_get_paymentdocgroup(new t()
+			{
+				{"pg_name", dt.Month.ToString()},
+				{"where", " deleted is null and parentid ="+pg_id_year+" and name = '"+dt.Month.ToString()+"'"},
+				{"pg_parentid", pg_id_year}
+			})["pg_idpaymentdocgroup"].f_str();
+
+			//получаем папку для дня
+			string pg_id_day = f_get_paymentdocgroup(new t()
+			{
+				{"pg_name", dt.Day.ToString()},
+				{"where", " deleted is null and parentid ="+pg_id_month+" and name = '"+dt.Day.ToString()+"'"},
+				{"pg_parentid", pg_id_month}
+			})["pg_idpaymentdocgroup"].f_str();
+
+
+			return new t() { { "idpaymentdocgroup", pg_id_day } };
+		}
+
+		public t f_get_paymentdocgroup(t args)
+		{
+			string where = args["where"].f_str();
+			string pg_name = args["pg_name"].f_str();
+			string pg_parentid = args["pg_parentid"].f_str();
+			string pg_idpaymentdocgroup="0";
+
+			t_msslq_cli mssql_cli = this["mssql_cli"].f_val<t_msslq_cli>();
+
+			//получаем папку платежей
+			DataRow dr_pg = dbconn._db.GetDataRow
+			(
+				"select * from paymentdocgroup where "+where
+			);
+
+			if (dr_pg == null)
+			{
+
+				pg_idpaymentdocgroup = mssql_cli.f_exec_cmd(new t()
+				{
+					{"cmd" , "exec gen_id 'gen_paymentdocgroup'"},
+					{"exec_scalar", true}
+				})["res_cnt"].f_str();
+
+				int exe_cnt = dbconn._db.Exec
+				(
+					@"insert paymentdocgroup (idpaymentdocgroup, name, parentid) 
+						values ("+pg_idpaymentdocgroup+", '"+pg_name+"', "+pg_parentid+") "
+				);
+			}
+			else
+			{
+				pg_idpaymentdocgroup=dr_pg["idpaymentdocgroup"].ToString();
+			}
+
+			return new t() { { "pg_idpaymentdocgroup", pg_idpaymentdocgroup } };
+		}
 
 	}
 }

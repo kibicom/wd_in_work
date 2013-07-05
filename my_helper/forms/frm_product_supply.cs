@@ -72,9 +72,9 @@ namespace kibicom.my_wd_helper.forms
 			
 
 			//наполняем таблицы
-			f_get_product_supply_wd(args);
-			f_get_related_supply_wd(args);
-			f_get_supply_customer_wd(args);
+			//f_get_product_supply_wd(args);
+			//f_get_related_supply_wd(args);
+			//f_get_supply_customer_wd(args);
 
 		}
 
@@ -142,6 +142,7 @@ namespace kibicom.my_wd_helper.forms
 			dgc_idcustomer.DataPropertyName = "idcustomer";
 			dgc_seller_name.DataPropertyName = "seller_name";
 			dgc_name.DataPropertyName = "name";
+			dgc_addstr1.DataPropertyName = "addstr1";
 			dgc_dtcre.DataPropertyName = "dtcre";
 			dgc_dtdone.DataPropertyName = "dtdone";
 			dgc_comment.DataPropertyName = "comment";
@@ -222,6 +223,7 @@ namespace kibicom.my_wd_helper.forms
 			dgc_rs_idsupplydoc.DataPropertyName = "idsupplydoc";
 			dgc_rs_seller_name.DataPropertyName = "customer_name";
 			dgc_rs_num.DataPropertyName = "name";
+			dgc_rs_addstr1.DataPropertyName = "addstr1";
 			dgc_rs_make_dt.DataPropertyName = "dtcre";
 			dgc_rs_done_dt.DataPropertyName = "dtdone";
 			dgc_rs_comment.DataPropertyName = "comment";
@@ -291,8 +293,11 @@ namespace kibicom.my_wd_helper.forms
 
 				//dr["iddocrelation"] = id.ToString();
 				dr["idsupplydoc"] = dg_r.Cells["dgc_idsupplydoc"].Value.ToString();
-				dr["customer_name"] = dg_r.Cells["dgc_seller_name"].Value.ToString();
+				//dr["idcustomer"] = dg_r.Cells["dgc_idcustomer"].Value.ToString();
+				dr["customer_name"] =
+					((DataGridViewComboBoxCell)dg_r.Cells["dgc_idcustomer"]).FormattedValue.ToString();
 				dr["name"] = dg_r.Cells["dgc_name"].Value.ToString();
+				dr["addstr1"] = dg_r.Cells["dgc_addstr1"].Value.ToString();
 				dr["dtcre"] = dg_r.Cells["dgc_dtcre"].Value.ToString();
 				dr["dtdone"] = dg_r.Cells["dgc_dtdone"].Value.ToString();
 				dr["comment"] = dg_r.Cells["dgc_comment"].Value.ToString();
@@ -367,10 +372,11 @@ namespace kibicom.my_wd_helper.forms
 				{
 					string cmd =
 					"insert supplydoc " +
-					"(idsupplydoc, name, dtcre, dtdoc, idcustomer, comment)" +
+					"(idsupplydoc, name, addstr1, dtcre, dtdoc, idcustomer, comment)" +
 					" values ("
 					+ t_sql_builder.f_db_val(dr, "idsupplydoc") + ","
 					+ t_sql_builder.f_db_val(dr, "name") + ","
+					+ t_sql_builder.f_db_val(dr, "addstr1") + ","
 					+ t_sql_builder.f_db_val(dr, "dtcre") + ","
 					+ t_sql_builder.f_db_val(dr, "dtdone") + ","
 					+ t_sql_builder.f_db_val(dr, "idcustomer") + ","
@@ -384,6 +390,7 @@ namespace kibicom.my_wd_helper.forms
 					string cmd =
 					"update supplydoc set "
 					+ " name=" + t_sql_builder.f_db_val(dr, "name") + ","
+					+ " addstr1=" + t_sql_builder.f_db_val(dr, "addstr1") + ","
 					+ " dtcre="+ t_sql_builder.f_db_val(dr, "dtcre") + ","
 					+ " dtdoc="+ t_sql_builder.f_db_val(dr, "dtdone") + ","
 					+ " idcustomer=" + t_sql_builder.f_db_val(dr, "idcustomer") + ","
@@ -414,6 +421,7 @@ namespace kibicom.my_wd_helper.forms
 			this.tab_product_supplyTableAdapter.Fill(this.kwj_testDataSet.tab_product_supply);
 
 		}
+		
 		private void tabproductsupplyBindingSource_CurrentChanged(object sender, EventArgs e)
 		{
 
@@ -746,7 +754,7 @@ namespace kibicom.my_wd_helper.forms
 			{
 				tab_related_supply = ((DataTable)dg_related_supply.DataSource).GetChanges();
 			}
-			if (tab_supply != null && tab_related_supply!=null)
+			if (tab_supply != null || tab_related_supply!=null)
 			{
 				if (_args["tab_related_supply"].f_val() != null && _args["tab_supply"].f_val() != null)
 				{
@@ -784,6 +792,11 @@ namespace kibicom.my_wd_helper.forms
 				{
 					//MessageBox.Show((h_frm.args["wd"]["orderitemform"]["ds"].f_val() == null).ToString());
 					DataSet ds = h_frm.args["wd"]["orderitemform"]["ds"].f_val<DataSet>();
+					if (ds == null)
+					{
+						return;
+					}
+					
 					this._args["ds"].f_set(ds);
 					this._args["o_dr_arr"].f_set(ds.Tables["orders"].Select());
 				}
@@ -792,6 +805,7 @@ namespace kibicom.my_wd_helper.forms
 			//наполняем таблиц
 			f_get_product_supply_wd(args);
 			f_get_related_supply_wd(args);
+			f_get_supply_customer_wd(args);
 
 			dg_supply.Focus();
 		}
