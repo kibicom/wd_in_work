@@ -101,7 +101,7 @@ namespace wd_in_work_gdi
 
 			DataTable tab= dbconn._db.GetDataTable
 			(
-				@"	select top 100 * 
+				@"	select top 10 * 
 					from view_order_payment_sm 
 					where inwork_dt is not null and o_sm_int>=p_sm_int
 					order by idorder desc
@@ -967,6 +967,8 @@ namespace wd_in_work_gdi
 			return new t();
 		}
 
+		#region платежи
+
 		public t f_get_payment(t args)
 		{
 			DataTable tab = args["tab"].f_val<DataTable>();
@@ -986,7 +988,7 @@ namespace wd_in_work_gdi
 				{"id",""},
 				{"wd_order_guid", o_guid_arr},
 				{"sm", ""},
-				{	"_important",new t()
+				{	"_important_sub",new t()
 					{
 						"tab_payment"
 					}
@@ -1132,6 +1134,19 @@ namespace wd_in_work_gdi
 		{
 			t payment = args["payment"];
 			t order=args["order"];
+			t payments_to_kibicom = args["payments_to_kibicom"];
+
+			//возвращаемые данные
+			t res = new t()
+			{
+				{"payments_to_kibicom",payments_to_kibicom},
+				{"self", this}
+			};
+
+			if (payment["dt_make"].f_is_empty() || payment["sm"].f_is_empty())
+			{
+				return res;
+			}
 
 			t_msslq_cli mssql_cli=new t_msslq_cli(new t()
 			{
@@ -1179,8 +1194,25 @@ namespace wd_in_work_gdi
 
 				mssql_cli.f_store_tab(new t()
 				{
-					{"tab", tab_payment}
+					{"tab", tab_payment},
+					{
+						"f_done", new t_f<t,t>(delegate (t args2)
+						{
+							//запоминаем сформированный guid и помещаем на отправку в кибиком
+							payment["wd_paymentdoc_guid"].f_set(guid.ToString().ToLower());
+							payments_to_kibicom.Add(payment);
+
+							res.f_when_done(new t()
+							{
+								{"f_name", "f_done"},
+								{"f_args",  new t(){{"payments_to_kibicom",payments_to_kibicom}}}
+							});
+							return new t();
+						})
+					}
 				});
+				
+
 			}
 			else //иначе обновляем существующий по guid
 			{
@@ -1221,7 +1253,7 @@ namespace wd_in_work_gdi
 					t_sql_builder.f_db_val(mc_dr, "qu")+")"
 			*/
 
-			return new t();
+			return res;
 		}
 
 		public t f_get_idpaymentdocgroup(t args)
@@ -1230,7 +1262,8 @@ namespace wd_in_work_gdi
 
 			//MessageBox.Show(payment["dt_make"].f_str());
 
-			DateTime dt =DateTime.Parse(payment["dt_make"].f_str());
+			DateTime dt = DateTime.Now;
+			DateTime.TryParse(payment["dt_make"].f_str(), out dt);
 
 			//получаем папку для года
 			string pg_id_year=f_get_paymentdocgroup(new t()
@@ -1298,5 +1331,38 @@ namespace wd_in_work_gdi
 			return new t() { { "pg_idpaymentdocgroup", pg_idpaymentdocgroup } };
 		}
 
+		public t f_put_payment_kibicom(t args)
+		{
+
+			t tab_payment=args["tab_payment"];
+
+			t ret = t.f_when_cre(args, this);
+			//выполняем запрос
+			josi_store.f_store(new t 
+			{
+				//{"res_dot_key_query_str",res_dot_key_query_str},
+				//когда возвращен ответ
+				//{"debug_group", "tstore_relat_one_to_many"},
+				{"debug_group", "tstore_sql"},
+				{"method", "POST"},
+				{
+					"put_tab_arr", new t()
+					{
+						{"tab_payment", tab_payment}
+					}
+				},
+				{"f_done_",args["f_done"].f_f()},
+				{"f_fail_",args["f_fail"].f_f()},
+				{"f_done",ret.f_when_done_f("f_done")},
+				{"f_fail",ret.f_when_done_f("f_fail")},
+				{"encode_json",true},
+				{"cancel_prev",false},
+				{"needs", new t(){"is_auth_done","authenticated"}}		//когда выполниться процесс авторизации
+			});
+
+			return ret;
+		}
+
+		#endregion платежи
 	}
 }

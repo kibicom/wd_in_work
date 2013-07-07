@@ -107,41 +107,61 @@ namespace wd_in_work_gdi
 									}
 
 
-									string kibicom_order_id = "";
-									//получаем декодированный json объект
+									//получаем декодированный json объект из ответа
 									Dictionary<string, object> resp_json = 
 											args3["resp_json"].f_val<Dictionary<string, object>>();
 
+									//преобразуем в t
 									t resp_json_t = t.f_dict_2_t(new t() { { "dict", resp_json } });
 
 									//MessageBox.Show("123");
-									
+
+									//накопитель создаваемых в WD новых платежей для синхронизации guid
+									t payments_to_kibicom = new t();
+
 									//перебираем заказы
 									foreach (t order in (IList<t>)resp_json_t["tab_order"])
 									{
+										//если для текущего заказа есть платежи
 										if (!order["tab_payment"].f_is_empty())
 										{
 											//перебираем платежи по текущему заказу
 											foreach (t payment in (IList<t>)order["tab_payment"])
 											{
+												//сохраняем или обновляем текущий платеж в WD
 												wd_josi_num.f_put_payment_wd(new t()
 												{
 													{"payment", payment},
-													{"order", order}
-												});
+													{"order", order},
+													{"payments_to_kibicom", payments_to_kibicom}
+												})
+												//если платеж успешно сохранен/обновлен в WD
+												.f_when("f_done", new t_f<t, t>(delegate (t args4)
+												{
+													//Сохраняем в Кибиком guid для новых только что добавленных 
+													//в WD платежей
+													wd_josi_num.f_put_payment_kibicom(new t()
+													{
+														{"tab_payment",payments_to_kibicom}
+													})
+													//если успешно сохранено в Кибиком
+													.f_when("f_done", new t_f<t, t>(delegate (t args5)
+													{
+														f_to_txt_log(args5["resp_str"].f_str());
+														return new t();
+													}))
+													//Если не удалось
+													.f_when("f_fail", new t_f<t, t>(delegate (t args5)
+													{
+														
+														return new t();
+													}));
+
+													return new t();
+												}));
 											}
 										}
 									}
-
-									if (args1["resp_str"].f_str().Contains("id"))
-									{
-										kibicom_order_id = t_dot.f_get_val_from_json_obj
-										(
-											args1["resp_json"].f_val(),
-											"tab_order.0.id"
-										).ToString();
-									}
-									
 
 									return new t();
 								}))
@@ -175,9 +195,31 @@ namespace wd_in_work_gdi
 			
 		}
 
+		
+
 		private void btn_stop_Click(object sender, EventArgs e)
 		{
 
 		}
+
+		public t f_to_txt_log(string text)
+		{
+			//выводим результат запроса в лог
+			if (rtxt_log.InvokeRequired)
+			{
+				rtxt_log.Invoke(new t_f<t, t>(delegate(t args5)
+				{
+					rtxt_log.Text += "\r\n\r\n" + text;
+					return new t();
+				}), new t(){{"text", text}});
+			}
+			else
+			{
+				rtxt_log.Text = text;
+				//return new t();
+			}
+			return new t();
+		}
+
 	}
 }
