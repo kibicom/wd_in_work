@@ -1192,6 +1192,7 @@ namespace wd_in_work_gdi
 
 				tab_payment.Rows.Add(dr);
 
+				
 				mssql_cli.f_store_tab(new t()
 				{
 					{"tab", tab_payment},
