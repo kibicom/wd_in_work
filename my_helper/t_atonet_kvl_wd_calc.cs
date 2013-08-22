@@ -25,7 +25,7 @@ namespace kibicom.my_wd_helper
 			//dbconn.Init("MultipleActiveResultSets=True;database=ecad_venta;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
 			//dbconn.Init("MultipleActiveResultSets=True;database=ecad_venta;server=localhost\\sqlexpress;Connection Timeout = 10;uid=sa;Password=82757662=z");
 			
-			dbconn.Init("MultipleActiveResultSets=True;database=ecad_etalon;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
+			//dbconn.Init("MultipleActiveResultSets=True;database=ecad_etalon;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
 			
 			dbconn._db = new dbconn();
 

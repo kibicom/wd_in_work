@@ -36,17 +36,20 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Atechnology.BrokerService">
+    <Reference Include="Atechnology.BrokerService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.BrokerService.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.Components, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.Components.dll</HintPath>
     </Reference>
-    <Reference Include="Atechnology.DBConnection">
+    <Reference Include="Atechnology.DBConnection, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.DBConnection.dll</HintPath>
     </Reference>
-    <Reference Include="Atechnology.DXF">
+    <Reference Include="Atechnology.DXF, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.DXF.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.ecad.Calc, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -61,17 +64,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Dictionary.dll</HintPath>
     </Reference>
-    <Reference Include="Atechnology.ecad.Document">
+    <Reference Include="Atechnology.ecad.Document, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Document.dll</HintPath>
     </Reference>
-    <Reference Include="Atechnology.ecad.Report">
+    <Reference Include="Atechnology.ecad.Report, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Report.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.ecad.Settings, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.ecad.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Atechnology.FrontalCAE">
+    <Reference Include="Atechnology.FrontalCAE, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.FrontalCAE.dll</HintPath>
     </Reference>
     <Reference Include="Atechnology.lineOPT.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -82,15 +88,43 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_net_build_\atechnology\Atechnology.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Atechnology.squareOPT.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.squareOPT.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.winDraw, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.winDraw.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.winDraw.Analize">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.winDraw.Analize.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.winDraw.Components">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.winDraw.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.winDraw.Model, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.winDraw.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Atechnology.winDraw.Tigral">
+      <HintPath>..\..\..\_net_build_\atechnology\Atechnology.winDraw.Tigral.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Data.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.PivotGrid.v10.2.Core, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.RichEdit.v10.2.Core, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraEditors.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraGrid.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPivotGrid.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.XtraRichEdit.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraScheduler.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraScheduler.v10.2.Core, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraVerticalGrid.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="fastJSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\dnclive\josi_sharp\josi\bin\Debug\fastJSON.dll</HintPath>
@@ -130,11 +164,35 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm_payment_srv.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frm_payment_srv.Designer.cs">
       <DependentUpon>frm_payment_srv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_work_monitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_work_monitor.Designer.cs">
+      <DependentUpon>frm_work_monitor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_work_monitor_3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_work_monitor_3.Designer.cs">
+      <DependentUpon>frm_work_monitor_3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="mf_bar_item.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="mf_bar_item.Designer.cs">
+      <DependentUpon>mf_bar_item.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,8 +200,20 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frm_payment_srv.resx">
       <DependentUpon>frm_payment_srv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_work_monitor.resx">
+      <DependentUpon>frm_work_monitor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_work_monitor_3.resx">
+      <DependentUpon>frm_work_monitor_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="mf_bar_item.resx">
+      <DependentUpon>mf_bar_item.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -175,11 +245,24 @@
       <Name>kibicom_wd_console_deb</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\loadinfo.net.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\loader.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\2.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\25.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(TargetPath) D:\git\_net_build_\
 copy $(TargetPath) %25HOMEPATH%25\Documents\GitHub\_net_build_\
-copy $(TargetPath) %25HOMEPATH%25\Dropbox\_net_build_\</PostBuildEvent>
+copy $(TargetPath) %25HOMEPATH%25\Dropbox\_net_build_\
+copy $(TargetPath) D:\venta\synchronize\orders\Dropbox\data\WinDraw2009\</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -69,6 +69,7 @@ namespace wd_in_work_gdi
 		{
 
 			t_wd wd = new t_wd();
+			string idorder = args["idorder"].f_str();
 
 			//инициализация соединения с базой
 			wd.f_init(new t());
@@ -76,7 +77,7 @@ namespace wd_in_work_gdi
 			//получение строки заказа
 			DataTable tab_order = wd.f_tab_order(new t()
 			{
-				{"idorder","100489"}
+				{"idorder",idorder}
 
 			})["tab_order"].f_val<DataTable>();
 
@@ -91,22 +92,53 @@ namespace wd_in_work_gdi
 			return new t();
 		}
 
+		public t f_load_wd_model_ds(t args)
+		{
+
+			t_wd wd = new t_wd();
+			string idorder = args["idorder"].f_str();
+			string idorderitem = args["idorderitem"].f_str();
+
+			//инициализация соединения с базой
+			wd.f_init(new t());
+
+			DataSet ds = new DataSet();
+
+			dbconn._db.command.CommandText =
+				"select * from model where deleted is null and idorderitem=" + idorderitem;
+
+			DataTable tab_wd_o = new DataTable("model");
+
+			dbconn._db.adapter.Fill(tab_wd_o);
+
+			//tab_wd_o.TableName = "model";
+
+			ds.Tables.Add(tab_wd_o);
+
+			//забираем сформированный dataset
+			this["ds"].f_set(ds);
+
+			return new t(){{"ds", ds}};
+		}
+
 		public t f_load_wd_order_to_get_payment(t args)
 		{
 
 			t_wd wd = new t_wd();
+			int portion = args["portion"].f_def(100).f_int();
 
 			//инициализация соединения с базой
 			wd.f_init(new t());
 
 			DataTable tab= dbconn._db.GetDataTable
 			(
-				@"	select top 10 * 
+				@"	select top 100 * 
 					from view_order_payment_sm 
 					where inwork_dt is not null and o_sm_int>=p_sm_int
-					order by idorder desc
+					and inwork_dt = '20130819'
 				"
 			);
+
 
 			t o_guid_arr = new t();
 			string o_guid_arr_str = "";
@@ -116,12 +148,22 @@ namespace wd_in_work_gdi
 				o_guid_arr_str = t_uti.fjoin(o_guid_arr_str, ',', dr["guid"].ToString());
 			}
 
+			t o_name_arr = new t();
+			string o_name_arr_str = "";
+			foreach (DataRow dr in tab.Rows)
+			{
+				o_name_arr.Add(dr["name"].ToString());
+				o_name_arr_str = t_uti.fjoin(o_name_arr_str, ',', dr["name"].ToString());
+			}
+
 			t res= new t()
 			{
 				{"self", this},
 				{"tab",tab},
 				{"o_guid_arr", o_guid_arr},
-				{"o_guid_arr_str", o_guid_arr_str}
+				{"o_guid_arr_str", o_guid_arr_str},
+				{"o_name_arr", o_name_arr},
+				{"o_name_arr_str", o_name_arr_str}
 			};
 			res["f_done"].f_set(new t_f<t, t>(delegate(t f)
 			{
@@ -142,6 +184,7 @@ namespace wd_in_work_gdi
 
 		#endregion получение данных из базы WD
 
+		#region заказы
 
 		public t f_get_num(t args)
 		{
@@ -502,10 +545,38 @@ namespace wd_in_work_gdi
 		private t _f_store_order_3(t args)
 		{
 
-			DataSet ds = args["ds"].f_val<DataSet>();
+			MessageBox.Show("try save order");
+
+			DataSet ds = args["ds"].f_def(this["ds"].f_val<DataSet>()).f_val<DataSet>();
+			string idorder = args["idorder"].f_str();
+			//idorder = "234234";
 			string kibicom_order_id = args["kibicom_order_id"].f_def("").f_str();
 
-			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
+
+			MessageBox.Show(args["ds"].f_val<DataSet>().Tables["orders"].Select("deleted is null").Length.ToString());
+			MessageBox.Show(idorder);
+
+			DataRow[] o_dr_arr = ds.Tables["orders"].Select("deleted is null and idorder=" + idorder);
+
+			MessageBox.Show(o_dr_arr.Length.ToString());
+
+			if (o_dr_arr.Length == 0)
+			{
+				t.f_f(args["f_fail"].f_f(), args.f_dub_drop(new string[] { "f_done", "f_fail" }).f_add(true, new t()
+				{
+					{
+						"err", new t()
+						{
+							{ "message", "не смог найти заказ idorder="+idorder}
+						}
+					}
+				}));
+				return new t();
+			}
+
+			MessageBox.Show("try save order 2");
+
+			DataRow o_dr = o_dr_arr[0];
 
 			//dbconn._db.command.CommandText =
 			//	"select * from view_kibicom_wd_order where idorder=" + o_dr["idorder"].ToString();
@@ -518,7 +589,20 @@ namespace wd_in_work_gdi
 			if (tab_wd_o.Rows.Count == 0)
 			{
 
-				t.f_f("f_fail", args);
+				t.f_f("f_fail", args.f_dub_drop(new string[] { "f_done", "f_fail" }).f_add(true, new t()
+				{
+					{
+						"err", new t()
+						{
+							{ 
+								"message", 
+								"select * from view_kibicom_wd_order where idorder=" 
+								+ o_dr["idorder"].ToString()
+								+"\r\nЗапрос вернул пустой результат..."
+							}
+						}
+					}
+				}));
 
 				return new t();
 			}
@@ -587,6 +671,7 @@ namespace wd_in_work_gdi
 				{"comment",order_comment},
 				{"wd_order_guid",order_guid},
 				{"sm", order_smbase},
+				{"is_real_order",0},
 				{
 					"tab_org_unit",new t()
 					{
@@ -776,7 +861,7 @@ namespace wd_in_work_gdi
 			};
 
 
-			string order_json = order.f_json()["json_str"].f_str();
+			//string order_json = order.f_json()["json_str"].f_str();
 
 			//MessageBox.Show(order_json);
 
@@ -796,7 +881,28 @@ namespace wd_in_work_gdi
 						{"tab_order", new t(){order}}
 					}
 				},
-				{"f_done",args["f_done"].f_f()},
+				{"f_done_",args["f_done"].f_f()},
+				{
+					"f_done", new t_f<t,t>(delegate(t args5)
+					{
+						if (kibicom_order_id == "")
+						{
+							if (args5["resp_str"].f_str().Contains("id"))
+							{
+								kibicom_order_id = t_dot.f_get_val_from_json_obj
+								(
+									args5["resp_json"].f_val(),
+									"tab_order.0.id"
+								).ToString();
+							}
+						}
+
+						t.f_f(args["f_done"].f_f(), args5.f_dub().
+							f_add(true, new t(){{"kibicom_order_id",kibicom_order_id}}));
+
+						return new t();
+					})
+				},
 				{"f_fail",args["f_fail"].f_f()},
 				{"encode_json",true},
 				{"cancel_prev",false},
@@ -861,7 +967,7 @@ namespace wd_in_work_gdi
 									
 									//MessageBox.Show("done");
 
-									t.f_f("f_done", args);
+									t.f_f(args["f_done"].f_f(), args2);
 
 									return new t();
 								})
@@ -891,44 +997,356 @@ namespace wd_in_work_gdi
 			return new t();
 		}
 
+		#endregion заказы
+
+		#region этапы
+
+		//отправляем этапы в Кибиком
 		public t f_put_order_diraction(t args)
 		{
 
-			string idseller = args["idseller"].f_def(0).f_str();
-			string login_name = args["login_name"].f_def(this["login_name"].f_val()).f_def("dnclive").f_str();
-			string pass = args["pass"].f_def(this["pass"].f_val()).f_def("135").f_str();
+			DataSet ds = args["ds"].f_def(this["ds"].f_val<DataSet>()).f_val<DataSet>();
+			string idorder = args["idorder"].f_str();
+			DataRow[] o_dr_arr = ds.Tables["orders"].Select("deleted is null and idorder="+idorder);
 
-			//авторизуемся
-			josi_store.f_login(new t()
+			MessageBox.Show(ds.Tables["orders"].Select("deleted is null").Length.ToString());
+			MessageBox.Show(idorder);
+
+			if (o_dr_arr.Length==0)
 			{
-				{"login_name",login_name}, 
-				{"pass",pass},
-				{	
-					//если и когда войти удалось
+				t.f_f(args["f_fail"].f_f(), args.f_dub_drop(new string[]{"f_done","f_fail"}).f_add(true, new t()
+				{
+					{
+						"err", new t()
+						{
+							{ "message", "не смог найти заказ idorder="+idorder}
+						}
+					}
+				}));
+				return new t();
+			}
+
+			DataRow o_dr = o_dr_arr[0];
+
+			//MessageBox.Show(josi_store.f_json()["json_str"].f_str());
+
+			string order_guid = o_dr["guid"].ToString();
+
+			//MessageBox.Show(order_guid);
+
+			t order_get = new t()
+			{
+				{"id",""},
+				{"wd_order_guid",order_guid}
+			};
+
+			//MessageBox.Show(order_guid);
+
+			//выполняем запрос kibicom id заказа по guid
+			josi_store.f_store(new t 
+			{
+				//{"res_dot_key_query_str",res_dot_key_query_str},
+				
+				{"method", "POST"},
+				//{"debug_group", "tstore_sql"},
+				{
+					"get_tab_arr", new t()
+					{
+						{"tab_order", new t(){order_get}}
+					}
+				},
+				{
+					//когда возвращен ответ
+					//когда получен id
+					//сохраняем заказ с учетом полученного id
 					"f_done", new t_f<t,t>(delegate(t args1)
 					{
-						//запрос номера
-						string res_dot_key_query_str = "kvl.0.f=service_wd_f_get_order_num&"+
-														"kvl.1.wd_idseller="+idseller;
-
-						//выполняем запрос
-						josi_store.f_query(new t 
+						string kibicom_order_id = "";
+						if (args1["resp_str"].f_str().Contains("id"))
 						{
-							{"res_dot_key_query_str",res_dot_key_query_str},
-							//когда возвращен ответ
-							{"f_done",args["f_done"].f_f()},
-							{"encode_json",true},
-							{"cancel_prev",false},
+							kibicom_order_id = t_dot.f_get_val_from_json_obj
+							(
+								args1["resp_json"].f_val(),
+								"tab_order.0.id"
+							).ToString();
+						}
+
+						t_f<t, t> f_store_dir = new t_f<t, t>(delegate(t args3)
+						{
+
+
+
+							return new t();
 						});
+
+						MessageBox.Show(kibicom_order_id);
+
+						//если в базе кибиком еще нет этого заказа
+						if (kibicom_order_id=="")
+						{
+
+							MessageBox.Show(ds.Tables["orders"].Select("deleted is null").Length.ToString());
+							MessageBox.Show(idorder);
+
+							//выполняем сохранение текущей информации по заказу
+							_f_store_order_3(new t().f_add(true, args).f_add(true, new t() 
+							{ 
+								{ "kibicom_order_id", kibicom_order_id },
+								{"ds", ds},
+								{"idorder", idorder},
+								{
+									//если заказ сохранен успешно
+									"f_done", new t_f<t,t>(delegate(t args2)
+									{
+										//сохраняем этапы
+										MessageBox.Show("done");
+
+										if (kibicom_order_id=="")
+										{
+											kibicom_order_id = args2["kibicom_order_id"].f_str();
+										}
+
+										_f_store_order_diraction_3(new t()
+										{
+											{ "kibicom_order_id", kibicom_order_id },
+											{"ds", ds},
+											{
+												//если заказ сохранен успешно
+												"f_done", new t_f<t,t>(delegate(t args3)
+												{
+													//сохраняем этапы
+
+
+													//MessageBox.Show("done");
+
+													t.f_f
+													(
+														args["f_done"].f_f(), 
+														args3.f_dub_drop(new string[] { "f_done", "f_fail" })
+													);
+
+													return new t();
+												})
+											},
+											{
+												"f_fail", new t_f<t,t>(delegate(t args3)
+												{
+
+													//MessageBox.Show("fail");
+
+													t.f_f(args["f_fail"].f_f(), args3);
+
+													return new t();
+												})
+											}
+										});
+
+										//t.f_f("f_done", args);
+
+										return new t();
+									})
+								},
+								{
+									"f_fail", new t_f<t,t>(delegate(t args2)
+									{
+
+										//MessageBox.Show("fail");
+
+										t.f_f(args["f_fail"].f_f(), args2);
+
+										return new t();
+									})
+								}
+							}));
+						}
+						else
+						{
+							_f_store_order_diraction_3(new t()
+							{
+								{ "kibicom_order_id", kibicom_order_id },
+								{"ds", ds},
+								{
+									//если заказ сохранен успешно
+									"f_done", new t_f<t,t>(delegate(t args2)
+									{
+										//сохраняем этапы
+
+
+										//MessageBox.Show("done");
+
+										//t new_args=args2.f_dub_drop(new string[]{"f_done","f_fail"});
+
+										t.f_f(args["f_done"].f_f(), args2.f_dub_drop
+										(
+											new string[] { "f_done", "f_fail" }
+										));
+
+										return new t();
+									})
+								},
+								{
+									"f_fail", new t_f<t,t>(delegate(t args2)
+									{
+
+										//MessageBox.Show("fail");
+
+										t.f_f(args["f_fail"].f_f(), args2);
+
+										return new t();
+									})
+								}
+							});
+						}
+
+						
 
 						return new t();
 					})
-				}
+				},
+				{"f_fail",args["f_fail"]},
+				{"encode_json",true},
+				{"cancel_prev",false},
+				{"needs", new t(){"is_auth_done","authenticated"}}		//когда выполниться процесс авторизации
 			});
 
 			return new t();
 		}
 
+		//сохранение этапов в Кибиком
+		private t _f_store_order_diraction_3(t args)
+		{
+			DataSet ds = args["ds"].f_def(this["ds"].f_val<DataSet>()).f_val<DataSet>();
+			string kibicom_order_id = args["kibicom_order_id"].f_def("").f_str();
+
+			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
+
+			//dbconn._db.command.CommandText =
+			//	"select * from view_kibicom_wd_order where idorder=" + o_dr["idorder"].ToString();
+
+			DataTable tab_wd_o_d = dbconn._db.GetDataTable
+				("select * from view_kibicom_wd_order_diraction where idorder=" + o_dr["idorder"].ToString());
+
+			//dbconn._db.adapter.Fill(tab_wd_o);
+
+			//MessageBox.Show(kibicom_order_id+" "+o_dr["idorder"].ToString()+" "+tab_wd_o_d.Rows.Count.ToString());
+
+			if (tab_wd_o_d.Rows.Count == 0)
+			{
+
+				t.f_f("f_fail", args);
+
+				return new t();
+			}
+
+			DataRow wd_o_dr = tab_wd_o_d.Rows[0];
+
+			string order_guid = wd_o_dr["order_guid"].ToString();
+			string is_real_order = wd_o_dr["is_real_order"].ToString();
+
+			//MessageBox.Show(is_real_order);
+
+			/*** профиль фурнитура***/
+			string profsys_name = wd_o_dr["profsys_name"].ToString();
+			string furnsys_name = wd_o_dr["furnsys_name"].ToString();
+
+			
+			/*** структура этапов заказа ***/
+
+			t order_diraction = new t();
+
+			foreach (DataRow dr in tab_wd_o_d.Rows)
+			{
+
+				//DateTime dt = new DateTime();
+				//DateTime.TryParse(dr["plandate"].ToString(), out dt);
+
+				//MessageBox.Show(dr["plandate"].ToString() + "\r\n" + dt.ToString());
+
+				order_diraction.Add(new t()
+				{
+					//{"_id_key", "wd_order_guid"},
+					{"wd_order_guid",dr["order_guid"].ToString()},
+					{"id",""},
+					{
+						"tab_stage", new t()
+						{
+							new t()
+							{
+								{"_id_key", "wd_diraction_guid"},
+								{"wd_diraction_guid",dr["diraction_guid"].ToString()},
+								{"name",dr["diraction_name"].ToString()},
+							}
+						}
+					},
+					{"plandt",t_uti.f_mssql_dt(dr["diraction_plandate"].ToString())},
+					{"factdt",t_uti.f_mssql_dt(dr["diraction_factdate"].ToString())},
+					{"comment",dr["diraction_comment"].ToString()}
+				});
+			}
+
+			/*** структура заказа ***/
+
+			t order = new t()
+			{
+				
+				{
+					"_relat",new t()
+					{
+						{
+							"one_to_many",new t()
+							{
+								"tab_doc_stage",
+							}
+						}
+					}
+				},
+				{"id",kibicom_order_id},
+				{"name",""},
+				{"dt_make",""},
+				{"is_credit",""},
+				{"is_vip",""},
+				{"discount_zp",""},
+				{"terminal",""},
+				{"comment",""},
+				{"sm", ""},
+				{"wd_order_guid",order_guid},
+				{"is_real_order", is_real_order},
+				{"tab_doc_stage",order_diraction}
+			};
+
+
+			//string order_json = order.f_json()["json_str"].f_str();
+
+			//MessageBox.Show(order_json);
+
+			//return new t();
+
+			//выполняем запрос
+			josi_store.f_store(new t 
+			{
+				//{"res_dot_key_query_str",res_dot_key_query_str},
+				//когда возвращен ответ
+				//{"debug_group", "tstore_relat_one_to_many"},
+				//{"debug_group", "tstore_drop_old"},
+				{"method", "POST"},
+				{
+					"put_tab_arr", new t()
+					{
+						{"tab_order", new t(){order}}
+					}
+				},
+				{"f_done",args["f_done"].f_f()},
+				{"f_fail",args["f_fail"].f_f()},
+				{"encode_json",true},
+				{"cancel_prev",false},
+				{"needs", new t(){"is_auth_done","authenticated"}}		//когда выполниться процесс авторизации
+			});
+
+			return new t();
+
+		}
+
+		//получение этапов из Кибиком
 		public t f_get_order_diraction(t args)
 		{
 
@@ -967,13 +1385,18 @@ namespace wd_in_work_gdi
 			return new t();
 		}
 
+		#endregion этапы
+
 		#region платежи
 
 		public t f_get_payment(t args)
 		{
 			DataTable tab = args["tab"].f_val<DataTable>();
 			t o_guid_arr = args["o_guid_arr"];
+			t o_name_arr = args["o_name_arr"];
 			RichTextBox rtxt_log = args["rtxt_log"].f_val<RichTextBox>();
+
+			t ret = t.f_when_cre(args, this);
 
 			/*** структура заказа ***/
 
@@ -986,13 +1409,15 @@ namespace wd_in_work_gdi
 			t order = new t()
 			{
 				{"id",""},
-				{"wd_order_guid", o_guid_arr},
+				//{"wd_order_guid", o_guid_arr},
+				{"name", o_name_arr},
 				{"sm", ""},
 				{	"_important_sub",new t()
 					{
 						"tab_payment"
 					}
 				},
+				{"_limit", new t(){4000}},
 				{
 					"tab_payment", new t()
 					{
@@ -1083,6 +1508,28 @@ namespace wd_in_work_gdi
 				return res;
 			}));
 
+			//если нет фильтра не по guid не по имени заказа
+			//не нужно выполнять запрос
+			if (o_guid_arr.f_is_empty() && o_name_arr.f_is_empty())
+			{
+
+				ret.f_when_done(new t()
+				{
+					{"f_name", "f_fail"},
+					{"f_args",  ret.f_fail(args, "в базе WD нет заказов для которых необходимо получить платежи.")}
+				});
+
+				/*
+				t.f_f(res["f_set"].f_f(), new t() 
+				{ 
+					{ "f_name", "f_fail" }, 
+					{ "f_args", new t(){{"message", "в базе WD нет заказов для которых необходимо получить платежи."}}},
+				});
+				*/
+
+				//return res;
+				return ret;
+			}
 
 
 			//выполняем запрос
@@ -1092,6 +1539,7 @@ namespace wd_in_work_gdi
 				//когда возвращен ответ
 				//{"debug_group", "tstore_relat_one_to_many"},
 				//{"debug_group", "tstore_sql"},
+				{"req_timeout", 30000},
 				{"method", "POST"},
 				{
 					"get_tab_arr", new t()
@@ -1102,21 +1550,35 @@ namespace wd_in_work_gdi
 				{
 					"f_done",new t_f<t, t>(delegate(t args1)
 					{
-						t.f_f(res["f_set"].f_f(), new t() { { "f_name", "f_done"}, {"f_args", args1} });
+						//t.f_f(res["f_set"].f_f(), new t() { { "f_name", "f_done"}, {"f_args", args1} });
+
+						ret.f_when_done(new t()
+						{
+							{"f_name", "f_done"},
+							{"f_args",  args1}
+						});
 
 						//t.f_f(args["f_done"].f_f(), args1);
 
-						return res;
+						//return res;
+						return ret;
 					})
 				},
 				{
 					"f_fail",new t_f<t, t>(delegate(t args1)
 					{
-						t.f_f(res["f_set"].f_f(), new t() { { "f_name", "f_fail" } });
+						//t.f_f(res["f_set"].f_f(), new t() { { "f_name", "f_fail" } });
+
+						ret.f_when_done(new t()
+						{
+							{"f_name", "f_fail"},
+							{"f_args",  args1}
+						});
 
 						//t.f_f(args["f_done"].f_f(), args1);
 
-						return res;
+						//return res;
+						return ret;
 					})
 				},
 				//{"f_fail",args["f_fail"].f_f()},
@@ -1127,7 +1589,7 @@ namespace wd_in_work_gdi
 
 			
 
-			return res;
+			return ret;
 		}
 
 		public t f_put_payment_wd(t args)
@@ -1135,13 +1597,21 @@ namespace wd_in_work_gdi
 			t payment = args["payment"];
 			t order=args["order"];
 			t payments_to_kibicom = args["payments_to_kibicom"];
+			t tab_order = args["tab_order"];
+			int order_i = args["order_i"].f_int();
+			int payment_i = args["payment_i"].f_int();
+
+			order = tab_order[order_i];
+			payment = order["tab_payment"][payment_i];
 
 			//возвращаемые данные
-			t res = new t()
-			{
-				{"payments_to_kibicom",payments_to_kibicom},
-				{"self", this}
-			};
+			//t res = new t()
+			//{
+			//	{"payments_to_kibicom",payments_to_kibicom},
+			//	{"self", this}
+			//};
+
+			t res = t.f_when_cre(args, this);
 
 			if (payment["dt_make"].f_is_empty() || payment["sm"].f_is_empty())
 			{
@@ -1158,7 +1628,11 @@ namespace wd_in_work_gdi
 			DataTable tab_payment = dbconn._db.GetDataTable("select top 0 * from paymentdoc");
 			tab_payment.TableName = "paymentdoc";
 			DataTable tab_paymentgroup = dbconn._db.GetDataTable("select * from paymentgroup");
-			DataRow dr_o=dbconn._db.GetDataRow("select * from orders where guid ='"+order["wd_order_guid"].f_str()+"' ");
+			//DataRow dr_o=dbconn._db.GetDataRow("select * from orders where guid ='"+order["wd_order_guid"].f_str()+"' ");
+			DataRow dr_o = dbconn._db.GetDataRow
+			(
+				"select * from orders where deleted is null and name = '" + order["name"].f_str() + "' "
+			);
 
 			//если у платежа нет guid из WD значит платеж новый
 			if (payment["wd_paymentdoc_guid"].f_is_empty())
@@ -1191,8 +1665,31 @@ namespace wd_in_work_gdi
 				dr["guid"] = guid;
 
 				tab_payment.Rows.Add(dr);
-
 				
+				mssql_cli.f_put_store_de(new t()
+				{
+					{"tab", tab_payment},
+					{"key_name", "idpaymentdoc"},
+					{
+						"f_done", new t_f<t,t>(delegate (t args2)
+						{
+							//запоминаем сформированный guid и помещаем на отправку в кибиком
+							payment["wd_paymentdoc_guid"].f_set(guid.ToString().ToLower());
+							payments_to_kibicom.Add(payment);
+
+							res.f_when_done(new t()
+							{
+								{"f_name", "f_done"},
+								{"f_args",  new t(){{"payments_to_kibicom",payments_to_kibicom}}}
+							});
+							return new t();
+						})
+					}
+				});
+
+				return res;
+				
+				/*
 				mssql_cli.f_store_tab(new t()
 				{
 					{"tab", tab_payment},
@@ -1212,11 +1709,18 @@ namespace wd_in_work_gdi
 						})
 					}
 				});
-				
+				*/
 
 			}
 			else //иначе обновляем существующий по guid
 			{
+				//***временно пока не работает обновление платежей
+				//елси текущий уже есть в баже WD просто переходи к следующему
+				res.f_when_done(new t()
+				{
+					{"f_name", "f_done"},
+					{"f_args",  new t(){{"payments_to_kibicom",payments_to_kibicom}}}
+				});
 				/*
 				DataRow dr = tab_payment.NewRow();
 
@@ -1334,17 +1838,27 @@ namespace wd_in_work_gdi
 
 		public t f_put_payment_kibicom(t args)
 		{
-
 			t tab_payment=args["tab_payment"];
 
 			t ret = t.f_when_cre(args, this);
+
+			//если нет платежей для синхронизации
+			if (tab_payment.Count < 1)
+			{
+				ret.f_when_done(new t()
+				{
+					{"f_name", "f_done"}
+				});
+				return ret;
+			}
+
 			//выполняем запрос
 			josi_store.f_store(new t 
 			{
 				//{"res_dot_key_query_str",res_dot_key_query_str},
-				//когда возвращен ответ
 				//{"debug_group", "tstore_relat_one_to_many"},
-				{"debug_group", "tstore_sql"},
+				//{"debug_group", "tstore_sql"},
+				{"req_timeout", 10000},
 				{"method", "POST"},
 				{
 					"put_tab_arr", new t()

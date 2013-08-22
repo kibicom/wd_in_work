@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading.Tasks;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace wd_in_work_gdi
+namespace frm_wd_print_etk
 {
 	static class Program
 	{
@@ -16,10 +16,7 @@ namespace wd_in_work_gdi
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			//Application.Run(new Form1());
-			//Application.Run(new frm_payment_srv());
-			//Application.Run(new Form2());
-			Application.Run(new frm_work_monitor());
+			Application.Run(new frm_wd_print_etk());
 		}
 	}
 }

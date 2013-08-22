@@ -70,7 +70,6 @@ namespace wd_in_work_gdi
 
 			timer = new System.Threading.Timer(new TimerCallback(delegate(object args)
 			{
-				
 				try
 				{
 					if (this.InvokeRequired)
@@ -80,17 +79,28 @@ namespace wd_in_work_gdi
 
 							timer.Dispose();
 
-							MessageBox.Show("tick");
+							//MessageBox.Show("tick");
 
+							//получаем заказы для которых необходимо получить платежи
 							wd_josi_num.f_load_wd_order_to_get_payment(new t())
 							.f_call("f_done", new t_f<t, t>(delegate (t args2)
 							{
+								//получаем платежи из Кибиком по этим заказам
 								wd_josi_num.f_get_payment(args2.f_add(true, new t()
 								{
 									{"rtxt_log",rtxt_log}
 								}))
-								.f_call("f_done", new t_f<t, t>(delegate (t args3)
+								//Если не удалось
+								.f_when("f_fail", new t_f<t, t>(delegate(t args5)
 								{
+
+									f_to_txt_log(args5["err"]["message"].f_str());
+
+									return new t();
+								}))
+								.f_when("f_done", new t_f<t, t>(delegate (t args3)
+								{
+									/*
 									//выводим результат запроса в лог
 									if (rtxt_log.InvokeRequired)
 									{
@@ -105,7 +115,7 @@ namespace wd_in_work_gdi
 										rtxt_log.Text = args3["resp_str"].f_str();
 										return new t();
 									}
-
+									*/
 
 									//получаем декодированный json объект из ответа
 									Dictionary<string, object> resp_json = 
@@ -119,54 +129,34 @@ namespace wd_in_work_gdi
 									//накопитель создаваемых в WD новых платежей для синхронизации guid
 									t payments_to_kibicom = new t();
 
-									//перебираем заказы
-									foreach (t order in (IList<t>)resp_json_t["tab_order"])
+									//int order_i = 0;
+									//int payment_i = 0;
+
+
+									//если не возвращен ни один заказ то нечего синхронизировать...
+									if (resp_json_t["tab_order"].Count == 0)
 									{
-										//если для текущего заказа есть платежи
-										if (!order["tab_payment"].f_is_empty())
-										{
-											//перебираем платежи по текущему заказу
-											foreach (t payment in (IList<t>)order["tab_payment"])
-											{
-												//сохраняем или обновляем текущий платеж в WD
-												wd_josi_num.f_put_payment_wd(new t()
-												{
-													{"payment", payment},
-													{"order", order},
-													{"payments_to_kibicom", payments_to_kibicom}
-												})
-												//если платеж успешно сохранен/обновлен в WD
-												.f_when("f_done", new t_f<t, t>(delegate (t args4)
-												{
-													//Сохраняем в Кибиком guid для новых только что добавленных 
-													//в WD платежей
-													wd_josi_num.f_put_payment_kibicom(new t()
-													{
-														{"tab_payment",payments_to_kibicom}
-													})
-													//если успешно сохранено в Кибиком
-													.f_when("f_done", new t_f<t, t>(delegate (t args5)
-													{
-														f_to_txt_log(args5["resp_str"].f_str());
-														return new t();
-													}))
-													//Если не удалось
-													.f_when("f_fail", new t_f<t, t>(delegate (t args5)
-													{
-														
-														return new t();
-													}));
-
-													return new t();
-												}));
-											}
-										}
+										f_to_txt_log("Нет платежей для синхронизации");
+										return new t();
 									}
+									
 
-									return new t();
-								}))
-								.f_call("f_fail", new t_f<t, t>(delegate(t args3)
-								{
+									//рекурсивно перебираем заказы и платежи
+									//сохраняем или обновляем текущий платеж в WD
+									wd_josi_num.f_put_payment_wd(new t()
+									{
+										//{"payment", payment},
+										//{"order", order},
+										{"payments_to_kibicom", payments_to_kibicom},
+										{"tab_order", resp_json_t["tab_order"]},
+										{"order_i", 0},
+										{"payment_i", 0}
+									})
+									//неудача
+									.f_when("f_fail", f_each_payment_f_fail)
+									//если платеж успешно сохранен/обновлен в WD
+									.f_when("f_done", f_each_payment_f_done);
+
 									return new t();
 								}));
 
@@ -174,6 +164,9 @@ namespace wd_in_work_gdi
 							}))
 							.f_call("f_fail", new t_f<t, t>(delegate (t args2)
 							{
+
+								f_to_txt_log("ошибка при получении заказов для синхронизации из WD");
+
 								return new t();
 							}));
 
@@ -190,12 +183,117 @@ namespace wd_in_work_gdi
 				}
 
 
-			}), new t(), 1000, 1000);
+			}), new t(), 1000, 100000);
 
 			
 		}
 
-		
+		public t f_each_payment_f_fail(t args4)
+		{
+			f_to_txt_log("не смог сохранить платеж в WD");
+			return new t();
+		}
+
+		public t f_each_payment_f_done(t args4)
+		{
+			t tab_order = args4["when"]["args"]["tab_order"];
+			t payments_to_kibicom =args4["when"]["args"]["payments_to_kibicom"];
+			int order_i = args4["when"]["args"]["order_i"].f_int();
+			int payment_i = args4["when"]["args"]["payment_i"].f_int();
+
+
+			//если текущий платеж в текущем заказе не последний
+			if (payment_i+1 < tab_order[order_i]["tab_payment"].Count)
+			{
+				//берем следующий платеж и сохраняем
+				wd_josi_num.f_put_payment_wd(new t()
+				{
+					//{"payment", payment},
+					//{"order", order},
+					{"payments_to_kibicom", payments_to_kibicom},
+					{"tab_order", tab_order},
+					{"order_i", order_i},
+					{"payment_i", ++payment_i}
+				})
+					//если очередной платеж успешно сохранен/обновлен в WD
+				.f_when("f_done", f_each_payment_f_done)
+					/*
+					.f_when("f_done", new t_f<t, t>(delegate(t args6)
+					{
+						args4["when"].f_when
+						(
+							"f_done",
+							args4["when"]["when_f"]["f_done"]["f_arr"][0].f_f()
+						);
+
+						return new t();
+					}))*/
+					//если сохранить не удалось
+				.f_when("f_fail", f_each_payment_f_fail);
+				/*
+				.f_when("f_fail", new t_f<t, t>(delegate(t args6)
+				{
+					args4["when"].f_when
+					(
+						"f_fail",
+						args4["when"]["when_f"]["f_fail"]["f_arr"][0].f_f()
+					);
+
+					return new t();
+				}));*/
+			}
+			else
+			{
+				//Сохраняем в Кибиком guid для новых только что добавленных 
+				//в WD платежей
+				wd_josi_num.f_put_payment_kibicom(new t()
+				{
+					{"tab_payment",payments_to_kibicom}
+				})
+				//если успешно сохранено в Кибиком
+				.f_when("f_done", new t_f<t, t>(delegate(t args5)
+				{
+					payments_to_kibicom.Clear();
+					f_to_txt_log(args5["resp_str"].f_str());
+
+					//если текущий заказ (платежи которого только что были сохранены)
+					//не последний (еще есть не обработынные)
+					if (order_i + 1 < tab_order.Count)
+					{
+
+						//берем следующий заказ и сохраняем его первый платеж
+						wd_josi_num.f_put_payment_wd(new t()
+						{
+							//{"payment", payment},
+							//{"order", order},
+							{"payments_to_kibicom", payments_to_kibicom},
+							{"tab_order", tab_order},
+							{"order_i", ++order_i},
+							{"payment_i", 0}
+						})
+							//если очередной платеж успешно сохранен/обновлен в WD
+						.f_when("f_done", f_each_payment_f_done)
+							//если сохранить не удалось
+						.f_when("f_fail", f_each_payment_f_fail);
+					}
+					else
+					{
+						f_to_txt_log("Синхронизация успешно выполнена");
+					}
+					return new t();
+				}))
+				//Если не удалось
+				.f_when("f_fail", new t_f<t, t>(delegate(t args5)
+				{
+
+					MessageBox.Show("Ошибка при сохранении в Кибиком");
+
+					return new t();
+				}));
+			}
+
+			return new t();
+		}
 
 		private void btn_stop_Click(object sender, EventArgs e)
 		{
@@ -215,7 +313,7 @@ namespace wd_in_work_gdi
 			}
 			else
 			{
-				rtxt_log.Text = text;
+				rtxt_log.Text += "\r\n\r\n"+text;
 				//return new t();
 			}
 			return new t();
