@@ -123,6 +123,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Deactivate += new System.EventHandler(this.frm_Deactivate);
+			this.Shown += new System.EventHandler(this.frm_in_work_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
