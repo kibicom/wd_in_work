@@ -12,6 +12,7 @@ using josi.store;
 using kibicom.tlib;
 using System.Runtime.InteropServices;
 using kibicom.my_wd_helper.forms;
+using wd_in_work_gdi;
 
 namespace kibicom.my_wd_helper
 {
@@ -78,11 +79,17 @@ namespace kibicom.my_wd_helper
 				//f_def("https://192.168.1.139/webproj/git/kibicom_venta/index.php");
 			this.args["josi_store"]["login_name"] = args["josi_store"]["login_name"].f_def("dnclive");
 			this.args["josi_store"]["pass"] = args["josi_store"]["pass"].f_def("4947");
+			this.args["josi_store"]["timeout"].f_set(5000);
+			this.args["josi_store"]["auth_try_count"].f_set(3);
+			this.args["josi_store"]["auth_try_timeout"].f_set(1500);
+			this.args["josi_store"]["auth_relogin_delay"].f_set(100000);
 
 			this.args["local_store"]["file_name"] = args["local_store"]["file_name"].f_def("kibicom_wd_josi.db");
 
+
 			//MessageBox.Show(this.args.f_json()["json_str"].f_str());
 
+			//объект для взаимодействия Кибиком WD Josi
 			this.args["kwj"]=new t_kwj(new t()
 			{
 				{"josi_store", this.args["josi_store"]},
@@ -110,6 +117,39 @@ namespace kibicom.my_wd_helper
 				}
 			});
 
+			//объект сохранения/получения заказов, этапов, платежей, номера и тд
+			//между Кибиком и WD он использует подключение josi_store от kwj
+			this.args["wd_josi_num"] = new t_wd_josi_num(new t()
+			{
+				{"josi_store", this.args["kwj"]["josi_store"]},
+				{"josi_end_point",this.args["josi_store"]["josi_end_point"]},
+				{"login_name",this.args["josi_store"]["login_name"]},
+				{"pass",this.args["josi_store"]["pass"]},
+				{"req_timeout", this.args["josi_store"]["timeout"]},
+				{"auth_try_count", this.args["josi_store"]["auth_try_count"]},
+				{"auth_try_timeout", this.args["josi_store"]["auth_try_timeout"]},
+				{"auth_relogin_timeout", this.args["josi_store"]["auth_relogin_timeout"]},
+				{
+					"f_done",new t_f<t,t>(delegate(t args1)
+					{
+
+						//MessageBox.Show("Залогинились...");
+
+						return new t();
+					})
+				},
+				{
+					"f_fail",new t_f<t,t>(delegate(t args1)
+					{
+
+						MessageBox.Show("Войти не удалось");
+
+						return new t();
+					})
+				},
+			});
+
+			//форма поиска заказчика
 			frm_customer_finder = new frm_finder_customer(new t()
 			{
 				{"owner", this},
@@ -140,6 +180,7 @@ namespace kibicom.my_wd_helper
 				},
 			});
 
+			//форма поиска адреса
 			frm_address_finder = new frm_finder_address(new t()
 			{
 				{"owner", this},
@@ -170,6 +211,7 @@ namespace kibicom.my_wd_helper
 				},
 			});
 
+			//форма поиска адрес/заказчик
 			frm_customer_address_finder = new frm_finder_customer_address(new t()
 			{
 				{"owner", this},
@@ -204,19 +246,20 @@ namespace kibicom.my_wd_helper
 			frm_in_work = new frm_in_work(new t()
 			{
 				{"owner", this},
+				{"f_shown", args["frm_in_work"]["f_shown"]},
 				{"f_give_to_work", args["f_give_to_work"]},
 				{"f_give_to_check",args["f_give_to_work"]}
 			});
 
 			
-			//форма получения сроков передачи в работу
+			//форма ведения заявок на снабжение
 			frm_product_supply = new frm_product_supply(new t()
 			{
 				{"owner", this},
 				{"kwj", this.args["kwj"]},
 			});
 			
-
+			//запоминаме нах все формы в аргументы
 			this.args["forms"]=new t()
 			{
 				{"frm_customer_address_finder", frm_customer_address_finder},
@@ -1126,11 +1169,23 @@ namespace kibicom.my_wd_helper
 		private void btn_close_Click(object sender, EventArgs e)
 		{
 			//ds.Close();
+			
 			foreach (Form frm in OwnedForms)
 			{
 				frm.Close();
 			}
 			Close();
+			 
+
+			//m_main_opt.Show();//(btn_close, new Point(0, button1.Height));
+
+			return;
+
+			foreach (Form frm in OwnedForms)
+			{
+				frm.Hide();
+			}
+			Hide();
 		}
 
 		private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
