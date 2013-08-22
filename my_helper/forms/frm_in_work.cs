@@ -53,6 +53,11 @@ namespace kibicom.my_wd_helper
 
 		#region события
 
+		private void frm_in_work_Shown(object sender, EventArgs e)
+		{
+			t.f_f("f_shown", this._args);
+		}
+
 		private void btn_give_to_check_Click(object sender, EventArgs e)
 		{
 			t.f_f("f_give_to_check", this._args);
@@ -198,5 +203,7 @@ namespace kibicom.my_wd_helper
 
 			return new t();
 		}
+
+		
 	}
 }
