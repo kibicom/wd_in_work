@@ -37,7 +37,7 @@ namespace kibicom.my_wd_helper.forms
 		{
 			InitializeComponent();
 
-			f_init_wd();
+			//f_init_wd();
 
 			Owner = args["owner"].f_val<Form>();
 			this._args["owner"].f_set(Owner);
@@ -118,7 +118,7 @@ namespace kibicom.my_wd_helper.forms
 			//создаем фильтр для выборки
 			string supply_where= f_make_supply_filter();
 
-			string order_by = " order by dtcre ";
+			string order_by = " order by dtcre desc ";
 
 			DataTable tab = dbconn._db.GetDataTable("select top 50 * from view_supply_1 where "+supply_where+order_by);
 			_args["tab_supply"].f_set(tab);
