@@ -37,12 +37,12 @@
 			this.de_dtmake = new DevExpress.XtraEditors.DateEdit();
 			this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
 			this.de_dtout = new DevExpress.XtraEditors.DateEdit();
+			this.pic_loader = new System.Windows.Forms.PictureBox();
 			this.pgc_1 = new DevExpress.XtraPivotGrid.PivotGridControl();
 			this.pivotGridField1 = new DevExpress.XtraPivotGrid.PivotGridField();
 			this.pivotGridField2 = new DevExpress.XtraPivotGrid.PivotGridField();
 			this.pivotGridField3 = new DevExpress.XtraPivotGrid.PivotGridField();
 			this.tableAdapterManager2 = new kibicom.my_wd_helper.kwj_testDataSetTableAdapters.TableAdapterManager();
-			this.pic_loader = new System.Windows.Forms.PictureBox();
 			this.tfl_main.SuspendLayout();
 			this.tfl_main_bar.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -50,8 +50,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.de_dtmake.Properties)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.de_dtout.Properties.VistaTimeProperties)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.de_dtout.Properties)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pgc_1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pic_loader)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pgc_1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableAdapterManager1
@@ -157,6 +157,16 @@
 			this.de_dtout.TabIndex = 0;
 			this.de_dtout.EditValueChanged += new System.EventHandler(this.de_dtout_EditValueChanged);
 			// 
+			// pic_loader
+			// 
+			this.pic_loader.Image = global::wd_in_work_gdi.Properties.Resources.loader_9;
+			this.pic_loader.Location = new System.Drawing.Point(3, 105);
+			this.pic_loader.Name = "pic_loader";
+			this.pic_loader.Size = new System.Drawing.Size(155, 86);
+			this.pic_loader.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.pic_loader.TabIndex = 2;
+			this.pic_loader.TabStop = false;
+			// 
 			// pgc_1
 			// 
 			this.pgc_1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -205,16 +215,6 @@
 			this.tableAdapterManager2.tab_product_supplyTableAdapter = null;
 			this.tableAdapterManager2.UpdateOrder = kibicom.my_wd_helper.kwj_testDataSetTableAdapters.TableAdapterManager.UpdateOrderOption.InsertUpdateDelete;
 			// 
-			// pic_loader
-			// 
-			this.pic_loader.Image = global::wd_in_work_gdi.Properties.Resources.loader_9;
-			this.pic_loader.Location = new System.Drawing.Point(3, 105);
-			this.pic_loader.Name = "pic_loader";
-			this.pic_loader.Size = new System.Drawing.Size(155, 86);
-			this.pic_loader.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.pic_loader.TabIndex = 2;
-			this.pic_loader.TabStop = false;
-			// 
 			// frm_work_monitor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -223,6 +223,7 @@
 			this.Controls.Add(this.tfl_main);
 			this.Name = "frm_work_monitor";
 			this.Text = "frm_work_monitor";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Shown += new System.EventHandler(this.frm_work_monitor_Shown);
 			this.tfl_main.ResumeLayout(false);
 			this.tfl_main_bar.ResumeLayout(false);
@@ -232,8 +233,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.de_dtmake.Properties)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.de_dtout.Properties.VistaTimeProperties)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.de_dtout.Properties)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pgc_1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pic_loader)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pgc_1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
