@@ -246,7 +246,7 @@
 			this.btn_close.FlatAppearance.BorderSize = 0;
 			this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btn_close.Image = global::kibicom.my_wd_helper.Properties.Resources.btn_more_1;
+			this.btn_close.Image = global::kibicom.my_wd_helper.Properties.Resources.btn_drop_1;
 			this.btn_close.Location = new System.Drawing.Point(217, 3);
 			this.btn_close.Name = "btn_close";
 			this.btn_close.Size = new System.Drawing.Size(40, 40);
