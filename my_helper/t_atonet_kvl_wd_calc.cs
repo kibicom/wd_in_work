@@ -20,6 +20,8 @@ namespace kibicom.my_wd_helper
 	{
 		delegate void t_d_f_calc(torder order);
 
+		dbconn db;
+
 		public t f_init_out(t args)
 		{
 			//dbconn.Init("MultipleActiveResultSets=True;database=ecad_venta;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
@@ -27,7 +29,7 @@ namespace kibicom.my_wd_helper
 			
 			//dbconn.Init("MultipleActiveResultSets=True;database=ecad_etalon;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
 			
-			dbconn._db = new dbconn();
+			db = new dbconn();
 
 			this["ds"].f_set(new DataSet());
 
@@ -80,7 +82,7 @@ namespace kibicom.my_wd_helper
 				atonet_fast.tatonet good_calc_atonet = new atonet_fast.tatonet();
 
 				//расчет изделий nerocalc
-				torder order = new torder(dbconn._db, o_dr);//, pb);
+				torder order = new torder(db, o_dr);//, pb);
 
 				//загружаем kvl конфигурацию матераилов в сеть
 				order.f_inject_good_kvl_conf(new t()
@@ -156,27 +158,27 @@ namespace kibicom.my_wd_helper
 
 			DataTable tab = new DataTable(tab_name);
 
-			dbconn._db.OpenDB();
+			db.OpenDB();
 
 			if (idorder != "")
 			{
-				dbconn._db.command.CommandText = "select * from orders where deleted is null and idorder=" + idorder;
+				db.command.CommandText = "select * from orders where deleted is null and idorder=" + idorder;
 			}
 
 			if (idorder == "")
 			{
-				dbconn._db.CloseDB();
+				db.CloseDB();
 				return new t() { { "tab_order", tab } };
 			}
 
-			dbconn._db.adapter.Fill(tab);
+			db.adapter.Fill(tab);
 
 			if (!ds.Tables.Contains(tab_name))
 			{
 				ds.Tables.Add(tab);
 			}
 
-			dbconn._db.CloseDB();
+			db.CloseDB();
 
 			return new t() { { tab_name, tab } };
 		}
@@ -194,7 +196,7 @@ namespace kibicom.my_wd_helper
 			}
 			*/
 			//расчет изделий nerocalc
-			torder order = new torder(dbconn._db, o_dr, true);//, pb);
+			torder order = new torder(db, o_dr, true);//, pb);
 
 			t_d_f_calc d_f_calc = new t_d_f_calc(delegate(torder ord)
 			{

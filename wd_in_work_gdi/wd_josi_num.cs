@@ -20,6 +20,8 @@ namespace wd_in_work_gdi
 
 		public t_store josi_store;
 
+		dbconn db;
+
 		public t_wd_josi_num()
 		{
 			josi_store = new t_store(new t()
@@ -74,6 +76,8 @@ namespace wd_in_work_gdi
 			//инициализация соединения с базой
 			wd.f_init(new t());
 
+			db = new dbconn();
+
 			//получение строки заказа
 			DataTable tab_order = wd.f_tab_order(new t()
 			{
@@ -84,7 +88,7 @@ namespace wd_in_work_gdi
 			//инициализация расчета заказа
 			//при этом будет сформирован dataset заказа
 			//это наша цель
-			torder order = new torder(dbconn._db, tab_order.Rows[0]);//, pb);
+			torder order = new torder(db, tab_order.Rows[0]);//, pb);
 
 			//забираем сформированный dataset
 			this["ds"].f_set(order.args.ds);
@@ -104,12 +108,14 @@ namespace wd_in_work_gdi
 
 			DataSet ds = new DataSet();
 
-			dbconn._db.command.CommandText =
+			db = new dbconn();
+
+			db.command.CommandText =
 				"select * from model where deleted is null and idorderitem=" + idorderitem;
 
 			DataTable tab_wd_o = new DataTable("model");
 
-			dbconn._db.adapter.Fill(tab_wd_o);
+			db.adapter.Fill(tab_wd_o);
 
 			//tab_wd_o.TableName = "model";
 
@@ -130,7 +136,9 @@ namespace wd_in_work_gdi
 			//инициализация соединения с базой
 			wd.f_init(new t());
 
-			DataTable tab= dbconn._db.GetDataTable
+			db = new dbconn();
+
+			DataTable tab= db.GetDataTable
 			(
 				@"	select top 100 * 
 					from view_order_payment_sm 
@@ -214,16 +222,17 @@ namespace wd_in_work_gdi
 		{
 
 			DataSet ds = args["ds"].f_val<DataSet>();
+			db = new dbconn();
 			string kibicom_order_id = args["kibicom_order_id"].f_def("").f_str();
 
 			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
 
-			dbconn._db.command.CommandText = 
+			db.command.CommandText = 
 				"select * from view_kibicom_wd_order where idorder=" + o_dr["idorder"].ToString();
 
 			DataTable tab_wd_o=null;
 
-			dbconn._db.adapter.Fill(tab_wd_o);
+			db.adapter.Fill(tab_wd_o);
 
 			//string idseller = o_dr["idseller"].ToString();
 			string order_name = o_dr["name"].ToString();
@@ -548,6 +557,7 @@ namespace wd_in_work_gdi
 			MessageBox.Show("try save order");
 
 			DataSet ds = args["ds"].f_def(this["ds"].f_val<DataSet>()).f_val<DataSet>();
+			db = new dbconn();
 			string idorder = args["idorder"].f_str();
 			//idorder = "234234";
 			string kibicom_order_id = args["kibicom_order_id"].f_def("").f_str();
@@ -578,13 +588,13 @@ namespace wd_in_work_gdi
 
 			DataRow o_dr = o_dr_arr[0];
 
-			//dbconn._db.command.CommandText =
+			//db.command.CommandText =
 			//	"select * from view_kibicom_wd_order where idorder=" + o_dr["idorder"].ToString();
 
-			DataTable tab_wd_o = dbconn._db.GetDataTable
+			DataTable tab_wd_o = db.GetDataTable
 				("select * from view_kibicom_wd_order where idorder=" + o_dr["idorder"].ToString());
 
-			//dbconn._db.adapter.Fill(tab_wd_o);
+			//db.adapter.Fill(tab_wd_o);
 
 			if (tab_wd_o.Rows.Count == 0)
 			{
@@ -1216,17 +1226,18 @@ namespace wd_in_work_gdi
 		private t _f_store_order_diraction_3(t args)
 		{
 			DataSet ds = args["ds"].f_def(this["ds"].f_val<DataSet>()).f_val<DataSet>();
+			db = new dbconn();
 			string kibicom_order_id = args["kibicom_order_id"].f_def("").f_str();
 
 			DataRow o_dr = ds.Tables["orders"].Select("deleted is null")[0];
 
-			//dbconn._db.command.CommandText =
+			//db.command.CommandText =
 			//	"select * from view_kibicom_wd_order where idorder=" + o_dr["idorder"].ToString();
 
-			DataTable tab_wd_o_d = dbconn._db.GetDataTable
+			DataTable tab_wd_o_d = db.GetDataTable
 				("select * from view_kibicom_wd_order_diraction where idorder=" + o_dr["idorder"].ToString());
 
-			//dbconn._db.adapter.Fill(tab_wd_o);
+			//db.adapter.Fill(tab_wd_o);
 
 			//MessageBox.Show(kibicom_order_id+" "+o_dr["idorder"].ToString()+" "+tab_wd_o_d.Rows.Count.ToString());
 
@@ -1604,6 +1615,8 @@ namespace wd_in_work_gdi
 			order = tab_order[order_i];
 			payment = order["tab_payment"][payment_i];
 
+			db = new dbconn();
+
 			//возвращаемые данные
 			//t res = new t()
 			//{
@@ -1620,16 +1633,16 @@ namespace wd_in_work_gdi
 
 			t_msslq_cli mssql_cli=new t_msslq_cli(new t()
 			{
-				{"conn", dbconn._db.command.Connection}
+				{"conn", db.command.Connection}
 			});
 
 			this["mssql_cli"].f_set(mssql_cli);
 
-			DataTable tab_payment = dbconn._db.GetDataTable("select top 0 * from paymentdoc");
+			DataTable tab_payment = db.GetDataTable("select top 0 * from paymentdoc");
 			tab_payment.TableName = "paymentdoc";
-			DataTable tab_paymentgroup = dbconn._db.GetDataTable("select * from paymentgroup");
-			//DataRow dr_o=dbconn._db.GetDataRow("select * from orders where guid ='"+order["wd_order_guid"].f_str()+"' ");
-			DataRow dr_o = dbconn._db.GetDataRow
+			DataTable tab_paymentgroup = db.GetDataTable("select * from paymentgroup");
+			//DataRow dr_o=db.GetDataRow("select * from orders where guid ='"+order["wd_order_guid"].f_str()+"' ");
+			DataRow dr_o = db.GetDataRow
 			(
 				"select * from orders where deleted is null and name = '" + order["name"].f_str() + "' "
 			);
@@ -1800,6 +1813,7 @@ namespace wd_in_work_gdi
 
 		public t f_get_paymentdocgroup(t args)
 		{
+			db = new dbconn();
 			string where = args["where"].f_str();
 			string pg_name = args["pg_name"].f_str();
 			string pg_parentid = args["pg_parentid"].f_str();
@@ -1808,7 +1822,7 @@ namespace wd_in_work_gdi
 			t_msslq_cli mssql_cli = this["mssql_cli"].f_val<t_msslq_cli>();
 
 			//получаем папку платежей
-			DataRow dr_pg = dbconn._db.GetDataRow
+			DataRow dr_pg = db.GetDataRow
 			(
 				"select * from paymentdocgroup where "+where
 			);
@@ -1822,7 +1836,7 @@ namespace wd_in_work_gdi
 					{"exec_scalar", true}
 				})["res_cnt"].f_str();
 
-				int exe_cnt = dbconn._db.Exec
+				int exe_cnt = db.Exec
 				(
 					@"insert paymentdocgroup (idpaymentdocgroup, name, parentid) 
 						values ("+pg_idpaymentdocgroup+", '"+pg_name+"', "+pg_parentid+") "

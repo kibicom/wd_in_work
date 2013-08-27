@@ -19,11 +19,21 @@ namespace kibicom.my_wd_helper.forms
 	public partial class frm_product_supply : frm_popup
 	{
 
-		public void f_init_wd()
-		{
-			dbconn.Init("MultipleActiveResultSets=True;database=ecad_venta;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
+		dbconn db;
 
-			dbconn._db = new dbconn();
+		public void f_init_wd_out()
+		{
+			//dbconn.Init("MultipleActiveResultSets=True;database=ecad_venta;server=192.168.1.201;Connection Timeout = 10;uid=sa;Password=82757662=z");
+
+			db = new dbconn();
+
+			this._args["ds"].f_set(new DataSet());
+		}
+
+		public void f_init_wd_in()
+		{
+
+			db = new dbconn();
 
 			this._args["ds"].f_set(new DataSet());
 		}
@@ -37,7 +47,9 @@ namespace kibicom.my_wd_helper.forms
 		{
 			InitializeComponent();
 
-			//f_init_wd();
+			//f_init_wd_out();
+			f_init_wd_in();
+
 
 			Owner = args["owner"].f_val<Form>();
 			this._args["owner"].f_set(Owner);
@@ -46,7 +58,7 @@ namespace kibicom.my_wd_helper.forms
 			this._args["ds"] = args["ds"].f_def(_args["ds"].f_val<DataSet>());
 			this._args["o_dr_arr"] = args["o_dr_arr"];
 
-			this._args["o_dr_arr"].f_set(dbconn._db.GetDataTable("select top 1 * from view_orders").Select());
+			this._args["o_dr_arr"].f_set(db.GetDataTable("select top 1 * from view_orders").Select());
 
 			this._args["tab_supply_changed"].f_set(false);
 
@@ -120,7 +132,7 @@ namespace kibicom.my_wd_helper.forms
 
 			string order_by = " order by dtcre desc ";
 
-			DataTable tab = dbconn._db.GetDataTable("select top 50 * from view_supply_1 where "+supply_where+order_by);
+			DataTable tab =  db.GetDataTable("select top 50 * from view_supply_1 where "+supply_where+order_by);
 			_args["tab_supply"].f_set(tab);
 			tab.TableName="tab_supply";
 			//tab.RowChanging += frm_product_supply_RowChanged;
@@ -161,7 +173,7 @@ namespace kibicom.my_wd_helper.forms
 
 			string order_by = " order by dtcre ";
 
-			DataTable tab = dbconn._db.GetDataTable("select idcustomer, name from customer "+where+order_by);
+			DataTable tab = db.GetDataTable("select idcustomer, name from customer "+where+order_by);
 			_args["tab_customer"].f_set(tab);
 			tab.TableName = "tab_customer";
 			//tab.RowChanging += frm_product_supply_RowChanged;
@@ -197,7 +209,7 @@ namespace kibicom.my_wd_helper.forms
 			}
 			//in_idorder = "(" + in_idorder + ")";
 
-			DataTable tab = dbconn._db.GetDataTable
+			DataTable tab = db.GetDataTable
 			(
 				"select * from view_related_supply_group "+ 
 				"where idsupplydoc in "+
@@ -326,7 +338,7 @@ namespace kibicom.my_wd_helper.forms
 					if (rs_dr.RowState==DataRowState.Added)
 					{
 						//запрашиваем из базы строку на данную комбинацию документа снабзения и заказа
-						DataRow dr_dr = dbconn._db.GetDataRow
+						DataRow dr_dr = db.GetDataRow
 						(
 							"select iddocrelation from docrelation where idparentdoc="
 							+ rs_dr["idsupplydoc"].ToString() + " and idchilddoc="
@@ -347,7 +359,7 @@ namespace kibicom.my_wd_helper.forms
 											+ dr["idorder"].ToString() + ","
 											+ "4,1)";
 
-							dbconn._db.Exec(sql_cmd);
+							db.Exec(sql_cmd);
 						}
 					}
 					if (rs_dr.RowState == DataRowState.Deleted)
@@ -358,7 +370,7 @@ namespace kibicom.my_wd_helper.forms
 						+ " and idparentdoc=" + rs_dr["idsupplydoc", DataRowVersion.Original].ToString()
 						+ " and idchilddoc=" + dr["idorder", DataRowVersion.Original].ToString();
 
-						dbconn._db.Exec(cmd);
+						db.Exec(cmd);
 					}
 				}
 			}
@@ -382,7 +394,7 @@ namespace kibicom.my_wd_helper.forms
 					+ t_sql_builder.f_db_val(dr, "idcustomer") + ","
 					+ t_sql_builder.f_db_val(dr, "comment") + ")";
 
-					dbconn._db.Exec(cmd);
+					db.Exec(cmd);
 					dr.AcceptChanges();
 				}
 				if (dr.RowState == DataRowState.Modified)
@@ -397,7 +409,7 @@ namespace kibicom.my_wd_helper.forms
 					+ " comment="+ t_sql_builder.f_db_val(dr, "comment")
 					+ " where idsupplydoc=" + t_sql_builder.f_db_val(dr, "idsupplydoc");
 
-					dbconn._db.Exec(cmd);
+					db.Exec(cmd);
 				}
 				if (dr.RowState == DataRowState.Deleted)
 				{
@@ -405,7 +417,7 @@ namespace kibicom.my_wd_helper.forms
 					"update supplydoc set deleted=getdate() where idsupplydoc=" 
 					+dr["idsupplydoc", DataRowVersion.Original].ToString();
 
-					dbconn._db.Exec(cmd);
+					db.Exec(cmd);
 				}
 			}
 			tab_supply.AcceptChanges();
@@ -495,7 +507,7 @@ namespace kibicom.my_wd_helper.forms
 				{
 
 					//запрашиваем из базы строку на данную комбинацию документа снабзения и заказа
-					DataRow dr_dr=dbconn._db.GetDataRow
+					DataRow dr_dr=db.GetDataRow
 					(
 						"select iddocrelation from docrelation where idparantdoc="
 						+dg_r.Cells["dgc_idsupplydoc"].Value.ToString() + " and idchilddoc="
@@ -516,7 +528,7 @@ namespace kibicom.my_wd_helper.forms
 										+ dr["idorder"].ToString() + ","
 										+ "4,1)";
 
-						dbconn._db.Exec(sql_cmd);
+						db.Exec(sql_cmd);
 					}
 				}
 			}
@@ -589,7 +601,7 @@ namespace kibicom.my_wd_helper.forms
 				)
 				{
 					//запрашиваем из базы строку на данную комбинацию документа снабзения и заказа
-					DataRow dr_dr = dbconn._db.GetDataRow
+					DataRow dr_dr = db.GetDataRow
 					(
 						"select iddocrelation from docrelation where idparentdoc="
 						+ dg.Rows[e.RowIndex].Cells["dgc_idsupplydoc"].Value.ToString()
